@@ -1,1 +1,3 @@
 Aquí ira la estructura generada de la base de datos como respaldos y copias de Seguridad
+
+Carpeta 1: Diagrama de Entidad-Relación de la base de datos Buffet
