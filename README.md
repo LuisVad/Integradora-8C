@@ -4,7 +4,7 @@ Aquí estará la super integradora de 8vo cuatrimestre de las siguientes materia
 - Administración de Bases de Datos
 - Seguridad en el Desarollo de Aplicaciones
 
-El repositorio contará con dos carpetas: uno de Backend que se realizará en Spring y otro de Frontend que se realizará en VueJS
+El repositorio contará con tres carpetas: uno de Backend que se realizará en Spring, otro de Frontend que se realizará en VueJS y otro de Base de Datos para Copias de Seguridad/Diagramas y el Script
 
 Integrantes
 - Bahena Castillo Luis Eduardo
