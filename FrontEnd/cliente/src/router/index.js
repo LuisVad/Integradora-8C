@@ -4,12 +4,15 @@ import Error404 from "../views/ErrorPages/Error404.vue";
 import Login from "../views/Login.vue";
 import CreateCount from "../views/CreateCount.vue";
 import RecoverPasssword from "../views/RecoverPassword.vue";  
+import LandingPage from "../views/LandingPage.vue";
 
 Vue.use(VueRouter);
 const routes = [
   //la ruta base
   {
     path: "/",
+    name: "landingpage",
+    component: LandingPage,
   },
   {
     path: "/",

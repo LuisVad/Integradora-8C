@@ -1,7 +1,9 @@
 <template>
   <div class="background-login">
     <div class="formContainerLogin">
+      <b-link class="nav-link" href="/">
       <b-img class="logoFromForms" src="src\img\logoApp.jpeg" fluid alt="Logo"></b-img>
+      </b-link>
       <h3>Bienvenido</h3>
       <form @submit.prevent="login">
         <div class="form-group">

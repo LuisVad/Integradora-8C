@@ -1,22 +1,25 @@
 .background-login {
-  background-color: #9a221a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.background {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+
 }
 
-.formContainerLogin{
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-    width: 30%;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-
+.formContainerLogin {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  width: 30%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 
 /* genericos */
@@ -29,7 +32,6 @@
 .link:hover {
   color: #9a221a;
 }
-
 
 .btnRed {
   background-color: #9a221a;
@@ -47,9 +49,16 @@
   background-color: #b32d24;
 }
 
-.logoFromForms{
+.logoFromForms {
   width: 100px;
   height: 100px;
   margin-bottom: 20px;
   border-radius: 50%;
+}
+.LandingBackground {
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
