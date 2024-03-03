@@ -20,17 +20,17 @@ public class Personal {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "id_personal", columnDefinition = "char")
+    @Column(name = "id_personal")
     private String idPersonal;
 
     //Aquí ira relación categorias_personal_id_categoria
 
     //Aquí ira relación usuarios_id_usuario
 
-    @Column(name = "ultima_modificacion")
+    @Column(name = "ultima_modificacion", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp ultimaModificacion;
 
-    @Column(name = "active", columnDefinition = "char(1)")
+    @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE")
     private char active;
 
 }

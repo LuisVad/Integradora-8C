@@ -27,9 +27,9 @@ public class PersonalEvento {
 
     //Aquí ira relación eventos_id_evento
 
-    @Column(name = "ultima_modificacion")
+    @Column(name = "ultima_modificacion", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp ultimaModificacion;
 
-    @Column(name = "active", columnDefinition = "char(1)")
+    @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE")
     private char active;
 }

@@ -20,28 +20,31 @@ public class Usuarios {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "id_usuario", columnDefinition = "char")
+    @Column(name = "id_usuario")
     private String idUsuario;
 
-    @Column(name = "nombres", columnDefinition = "clob")
+    @Column(name = "nombres", columnDefinition = "VARCHAR(50) NOT NULL")
     private String nombres;
 
-    @Column(name = "primer_apellido", columnDefinition = "clob")
+    @Column(name = "primer_apellido", columnDefinition = "VARCHAR(50) NOT NULL")
     private String primerApellido;
 
-    @Column(name = "segundo_apellido", columnDefinition = "clob")
+    @Column(name = "segundo_apellido", columnDefinition = "VARCHAR(50) NOT NULL")
     private String segundoApellido;
 
-    @Column(name = "telefono", columnDefinition = "clob")
+    @Column(name = "telefono", columnDefinition = "CHAR(10) NOT NULL")
     private String telefono;
 
-    @Column(name = "correo", columnDefinition = "clob")
+    @Column(name = "correo", columnDefinition = "VARCHAR(255) NOT NULL")
     private String correo;
 
-    @Column(name = "ultima_modificacion")
+    @Column(name = "contrasena", columnDefinition = "VARCHAR(255) NOT NULL")
+    private String contrasena;
+
+    @Column(name = "ultima_modificacion", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp ultimaModificacion;
 
-    @Column(name = "active", columnDefinition = "char(1)")
+    @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE")
     private char active;
 
     //Aquí ira relación roles_id_rol

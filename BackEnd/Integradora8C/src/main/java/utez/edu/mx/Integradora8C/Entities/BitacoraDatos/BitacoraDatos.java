@@ -1,42 +1,46 @@
 package utez.edu.mx.Integradora8C.Entities.BitacoraDatos;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
-import java.sql.Timestamp;
 
 @Entity
-@Table(name = "bitacora_datos")
+@Table(name = "bitacora")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class BitacoraDatos {
-
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "id_movimiento", columnDefinition = "char")
-    private String idMovimiento;
+    private String id;
+    @Column(columnDefinition = "json")
+    @Type(JsonType.class)
+    private JsonNode datos;
 
-    @Column(name = "tipo_peticion", columnDefinition = "clob")
-    private String tipoPeticion;
+    @Column(name = "metodo", columnDefinition = "VARCHAR(10) NOT NULL", nullable = false)
+    private String metodo;
 
-    @Column(name = "carga_json", columnDefinition = "clob")
-    private String cargaJson;
+    @Column(name = "ruta_solicitada", columnDefinition = "VARCHAR(100) NOT NULL", nullable = false)
+    private String rutaSolicitada;
 
-    @Column(name = "ip", columnDefinition = "clob")
+    @Column(name = "ip", columnDefinition = "VARCHAR(15) NOT NULL", nullable = false)
     private String ip;
 
-    @Column(name = "creado_el")
-    private Timestamp creadoEl;
+    @Column(name = "agente_usuario", columnDefinition = "VARCHAR(255) NOT NULL", nullable = false)
+    private String agenteUsuario;
 
-    @Column(name = "active", columnDefinition = "char(1)")
-    private char active;
+    @Column(name = "estado_http", columnDefinition = "INT NOT NULL", nullable = false)
+    private int estadoHttp;
 
-    //Aquí ira relación usuarios_id_usuario
+    @Column(name = "creado_en", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private String creadoEn;
 }
