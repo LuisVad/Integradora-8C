@@ -16,9 +16,7 @@ public class PersonalDto {
     //Columna idPersonal
     private String idPersonal;
 
-    //Aquí ira relación categorias_personal_id_categoria
 
-    //Aquí ira relación usuarios_id_usuario
 
     //Columna ultimaModificacion
     private Timestamp ultimaModificacion;

@@ -60,7 +60,7 @@ public class BitacoraFilter extends OncePerRequestFilter {
         }
         JsonNode node = ObjectMapper.valueToTree(jsonNode);
         bitacora.setDatos(node);
-        bitacora.setCreadoEn(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Timestamp(System.currentTimeMillis())));
+        bitacora.setCreadoEn(new Timestamp(System.currentTimeMillis()));
         multiReadResponse.copyBodyToResponse();
         try {
             if (request.getMethod().equals(HttpMethod.PUT.name()) || request.getMethod().equals(HttpMethod.POST.name()) || request.getMethod().equals(HttpMethod.DELETE.name())) {

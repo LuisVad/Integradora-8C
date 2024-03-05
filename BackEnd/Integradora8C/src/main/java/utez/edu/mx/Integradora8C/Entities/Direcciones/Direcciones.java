@@ -23,25 +23,25 @@ public class Direcciones {
     @Column(name = "id_direccion")
     private String idDireccion;
 
-    @Column(name = "calle", columnDefinition = "VARCHAR(100) NOT NULL", nullable = false)
+    @Column(name = "calle", columnDefinition = "TEXT NOT NULL", nullable = false)
     private String calle;
 
-    @Column(name = "colonia", columnDefinition = "VARCHAR(100) NOT NULL", nullable = false)
+    @Column(name = "colonia", columnDefinition = "TEXT NOT NULL", nullable = false)
     private String colonia;
 
-    @Column(name = "numero", columnDefinition = "VARCHAR(10) NOT NULL", nullable = false)
+    @Column(name = "numero", columnDefinition = "TEXT")
     private String numero;
 
-    @Column(name = "codigo_postal", columnDefinition = "VARCHAR(5) NOT NULL", nullable = false)
+    @Column(name = "codigo_postal", columnDefinition = "TEXT NOT NULL", nullable = false)
     private String codigoPostal;
 
-    @Column(name = "municipio", columnDefinition = "VARCHAR(100) NOT NULL", nullable = false)
+    @Column(name = "municipio", columnDefinition = "TEXT NOT NULL", nullable = false)
     private String municipio;
 
-    @Column(name = "estado", columnDefinition = "VARCHAR(100) NOT NULL", nullable = false)
+    @Column(name = "estado", columnDefinition = "TEXT NOT NULL", nullable = false)
     private String estado;
 
-    @Column(name = "referencias", columnDefinition = "VARCHAR(255) NOT NULL", nullable = true)
+    @Column(name = "referencias", columnDefinition = "TEXT")
     private String referencias;
 
     @Column(name = "ultima_modificacion", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

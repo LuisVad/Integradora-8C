@@ -1,4 +1,4 @@
-package utez.edu.mx.Integradora8C.Entities.PersonalEvento;
+package utez.edu.mx.Integradora8C.Entities.ServiciosPaquete;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,40 +6,33 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import utez.edu.mx.Integradora8C.Entities.Eventos.Eventos;
-import utez.edu.mx.Integradora8C.Entities.Personal.Personal;
+import utez.edu.mx.Integradora8C.Entities.Paquetes.Paquetes;
+import utez.edu.mx.Integradora8C.Entities.Servicios.Servicios;
 
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "personal_evento")
+@Table(name = "servicios_paquete")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class PersonalEvento {
-
+public class ServiciosPaquete {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "id_personal_evento")
-    private String idPersonalEvento;
-
-    //Aquí ira relación personal_id_personal
-
+    @Column(name = "id_servicio_paquete")
+    private String idServicioPaquete;
     @ManyToOne
-    @JoinColumn(name = "id_personal")
-    private Personal personal;
-
-    //Aquí ira relación eventos_id_evento
-
+    @JoinColumn(name = "id_paquete")
+    private Paquetes paquete;
     @ManyToOne
-    @JoinColumn(name = "id_evento")
-    private Eventos eventos;
-
+    @JoinColumn(name = "id_servicio")
+    private Servicios servicio;
     @Column(name = "ultima_modificacion", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp ultimaModificacion;
-
     @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private char active;
+    private boolean active;
+
+
 }

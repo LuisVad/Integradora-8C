@@ -1,5 +1,7 @@
 package utez.edu.mx.Integradora8C.Dtos.Roles;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,18 +14,12 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 public class RolesDto {
-
-    //Columna idRol
     private String idRol;
-
-    //Columna nombre
+    @NotBlank(message = "El nombre no puede ser nulo")
+    @Size(min = 3, max = 50, message = "El nombre debe tener entre 3 y 50 caracteres")
     private String nombre;
-
-    //Columna ultimaModificacion
     private Timestamp ultimaModificacion;
+    @NotBlank(message = "El active no puede ser nulo")
+    private Boolean active;
 
-    //Columna active
-    private char active;
-
-    //Relación
 }

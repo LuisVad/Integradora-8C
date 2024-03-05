@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import utez.edu.mx.Integradora8C.Entities.Roles.Roles;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Entity
 @Table(name = "usuarios")
@@ -23,29 +25,31 @@ public class Usuarios {
     @Column(name = "id_usuario")
     private String idUsuario;
 
-    @Column(name = "nombres", columnDefinition = "VARCHAR(50) NOT NULL")
+    @Column(name = "nombres", columnDefinition = "TEXT NOT NULL")
     private String nombres;
 
-    @Column(name = "primer_apellido", columnDefinition = "VARCHAR(50) NOT NULL")
+    @Column(name = "primer_apellido", columnDefinition = "TEXT NOT NULL")
     private String primerApellido;
 
-    @Column(name = "segundo_apellido", columnDefinition = "VARCHAR(50) NOT NULL")
+    @Column(name = "segundo_apellido", columnDefinition = "TEXT NOT NULL")
     private String segundoApellido;
 
-    @Column(name = "telefono", columnDefinition = "CHAR(10) NOT NULL")
+    @Column(name = "telefono", columnDefinition = "TEXT NOT NULL")
     private String telefono;
 
-    @Column(name = "correo", columnDefinition = "VARCHAR(255) NOT NULL")
+    @Column(name = "correo", columnDefinition = "TEXT NOT NULL")
     private String correo;
 
-    @Column(name = "contrasena", columnDefinition = "VARCHAR(255) NOT NULL")
+    @Column(name = "contrasena", columnDefinition = "TEXT NOT NULL")
     private String contrasena;
 
     @Column(name = "ultima_modificacion", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp ultimaModificacion;
 
     @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private char active;
+    private Boolean active;
 
-    //Aquí ira relación roles_id_rol
+    @ManyToMany(mappedBy = "usuarios", cascade = CascadeType.MERGE)
+    private Set<Roles> roles;
+
 }
