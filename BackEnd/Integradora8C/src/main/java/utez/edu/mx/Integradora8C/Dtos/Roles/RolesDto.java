@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import utez.edu.mx.Integradora8C.Entities.Roles.Roles;
 
 import java.sql.Timestamp;
 
@@ -21,5 +22,12 @@ public class RolesDto {
     private Timestamp ultimaModificacion;
     @NotBlank(message = "El active no puede ser nulo")
     private Boolean active;
+
+
+    public Roles toEntity(){
+        Timestamp ultimaModificacion = this.ultimaModificacion == null ? new Timestamp(System.currentTimeMillis()) : this.ultimaModificacion;
+        Roles role = new Roles(idRol, nombre, ultimaModificacion, active, null);
+        return role;
+    }
 
 }
