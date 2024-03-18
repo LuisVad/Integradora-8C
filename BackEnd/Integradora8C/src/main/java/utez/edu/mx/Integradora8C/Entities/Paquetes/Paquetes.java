@@ -33,5 +33,5 @@ public class Paquetes {
     @Column(name = "ultima_modificacion", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp ultimaModificacion;
     @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private boolean active;
+    private Boolean active;
 }

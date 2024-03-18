@@ -27,6 +27,6 @@ public class CategoriasPersonalDto {
 
     public CategoriasPersonal toEntity(){
         Timestamp ultimaModificacion = this.ultimaModificacion == null ? new Timestamp(System.currentTimeMillis()) : this.ultimaModificacion;
-        return new CategoriasPersonal(idCategoria, nombre, ultimaModificacion, active);
+        return new CategoriasPersonal(idCategoria, nombre, ultimaModificacion, true);
     }
 }

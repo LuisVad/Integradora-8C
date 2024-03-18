@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.Integradora8C.Entities.BitacoraDatos.BitacoraDatos;
 import utez.edu.mx.Integradora8C.Entities.BitacoraDatos.BitacoraDatosRepository;
-import utez.edu.mx.Integradora8C.utils.Response;
+import utez.edu.mx.Integradora8C.Utils.Response;
 
 import java.util.List;
 
@@ -16,9 +16,9 @@ public class BitacoraDatosServices {
     private BitacoraDatosRepository repository;
 
     @Transactional(readOnly = true)
-    public Response<List<BitacoraDatos>> getAll(){
+    public Response<List<BitacoraDatos>> getAll() {
         return new Response<>(
-                this.repository.findAll(),
+                this.repository.findAllByActiveOrderByCreadoEnDesc(),
                 false,
                 200,
                 "OK"

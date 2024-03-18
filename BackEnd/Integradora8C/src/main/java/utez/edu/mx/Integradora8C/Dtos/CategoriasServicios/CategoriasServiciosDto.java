@@ -28,6 +28,6 @@ public class CategoriasServiciosDto {
 
     public CategoriasServicios toEntity(){
         Timestamp ultimaModificacion = this.ultimaModificacion == null ? new Timestamp(System.currentTimeMillis()) : this.ultimaModificacion;
-        return new CategoriasServicios(idCategoria, nombre, ultimaModificacion, active);
+        return new CategoriasServicios(idCategoria, nombre, ultimaModificacion, true);
     }
 }

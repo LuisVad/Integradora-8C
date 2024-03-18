@@ -41,7 +41,7 @@ public class BitacoraDatos {
     @Column(name = "agente_usuario", columnDefinition = "TEXT NOT NULL", nullable = false)
     private String agenteUsuario;
 
-    @Column(name = "estado_http", columnDefinition = "TINYINT NOT NULL", nullable = false)
+    @Column(name = "estado_http", columnDefinition = "SMALLINT NOT NULL", nullable = false)
     private int estadoHttp;
 
     @Column(name = "creado_en", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

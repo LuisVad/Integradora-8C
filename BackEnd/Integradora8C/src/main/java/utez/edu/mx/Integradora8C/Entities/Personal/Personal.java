@@ -37,6 +37,6 @@ public class Personal {
     private Timestamp ultimaModificacion;
 
     @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private char active;
+    private Boolean active;
 
 }

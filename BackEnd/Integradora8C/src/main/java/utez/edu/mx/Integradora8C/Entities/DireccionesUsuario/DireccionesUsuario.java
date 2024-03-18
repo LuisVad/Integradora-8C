@@ -9,6 +9,8 @@ import org.hibernate.annotations.GenericGenerator;
 import utez.edu.mx.Integradora8C.Entities.Direcciones.Direcciones;
 import utez.edu.mx.Integradora8C.Entities.Usuarios.Usuarios;
 
+import java.sql.Timestamp;
+
 @Entity
 @Table(name = "direcciones_usuario")
 @AllArgsConstructor
@@ -27,4 +29,8 @@ public class DireccionesUsuario {
     @ManyToOne
     @JoinColumn(name = "id_usuario")
     private Usuarios usuarios;
+    @Column(name = "ultima_modificacion", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp ultimaModificacion;
+    @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean active;
 }

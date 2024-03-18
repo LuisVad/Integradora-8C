@@ -1,4 +1,4 @@
-package utez.edu.mx.Integradora8C.utils;
+package utez.edu.mx.Integradora8C.Utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

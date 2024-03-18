@@ -35,6 +35,6 @@ public class PaquetesDto {
 
     public Paquetes toEntity(){
         Timestamp ultimaModificacion = this.ultimaModificacion == null ? new Timestamp(System.currentTimeMillis()) : this.ultimaModificacion;
-        return new Paquetes(idPaquete, nombre, descripcion, recomendadoPara, imagen, numeroPedidos, ultimaModificacion, active);
+        return new Paquetes(idPaquete, nombre, descripcion, recomendadoPara, imagen, numeroPedidos, ultimaModificacion, true);
     }
 }

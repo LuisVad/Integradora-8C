@@ -1,6 +1,6 @@
 package utez.edu.mx.Integradora8C.Dtos.Eventos;
 
-
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,10 +17,13 @@ public class EventosDto {
 
     private String idEvento;
 
+    @NotBlank(message = "La fecha y hora de inicio no pueden ser nulas")
     private Timestamp fechaHoraInicio;
 
+    @NotBlank(message = "La fecha y hora de fin no pueden ser nulas")
     private Timestamp fechaHoraFin;
 
+    @NotBlank(message = "El número de personas no puede ser nulo")
     private Long numeroPersonas;
 
     private Double costoTotal;
@@ -33,6 +36,6 @@ public class EventosDto {
 
     public Eventos toEntity(){
         Timestamp ultimaModificacion = this.ultimaModificacion == null ? new Timestamp(System.currentTimeMillis()) : this.ultimaModificacion;
-        return new Eventos(idEvento, fechaHoraInicio, fechaHoraFin, numeroPersonas, costoTotal, personalizado, ultimaModificacion, active);
+        return new Eventos(idEvento, fechaHoraInicio, fechaHoraFin, numeroPersonas, costoTotal, personalizado, ultimaModificacion, true);
     }
 }

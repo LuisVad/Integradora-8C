@@ -1,8 +1,10 @@
-package utez.edu.mx.Integradora8C.Dtos.DireccionesDto;
+package utez.edu.mx.Integradora8C.Dtos.Direcciones;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import utez.edu.mx.Integradora8C.Entities.Direcciones.Direcciones;
+
+import java.sql.Timestamp;
 
 public class DireccionesDto {
 
@@ -34,5 +36,12 @@ public class DireccionesDto {
     @Size(max = 200, message = "Las referencias deben tener maximo 200 caracteres")
     private String referencias;
 
+    private Timestamp ultimaModificacion;
+
     private Boolean active;
+
+    public Direcciones toEntity() {
+        Timestamp ultimaModificacion = this.ultimaModificacion == null ? new Timestamp(System.currentTimeMillis()) : this.ultimaModificacion;
+        return new Direcciones(idDireccion, calle, colonia, numero, codigoPostal, municipio, estado, referencias, ultimaModificacion, true);
+    }
 }

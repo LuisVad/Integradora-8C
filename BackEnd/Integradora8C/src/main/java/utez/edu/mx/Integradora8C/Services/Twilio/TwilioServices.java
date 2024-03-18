@@ -6,7 +6,7 @@ import com.twilio.type.PhoneNumber;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import utez.edu.mx.Integradora8C.utils.Response;
+import utez.edu.mx.Integradora8C.Utils.Response;
 
 @Service
 @Transactional
