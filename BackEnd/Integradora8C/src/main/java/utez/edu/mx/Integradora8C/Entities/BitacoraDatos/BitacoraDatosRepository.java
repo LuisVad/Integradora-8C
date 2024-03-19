@@ -7,5 +7,4 @@ import java.util.List;
 
 @Repository
 public interface BitacoraDatosRepository extends JpaRepository<BitacoraDatos, String> {
-    List<BitacoraDatos> findAllByActiveOrderByCreadoEnDesc();
 }

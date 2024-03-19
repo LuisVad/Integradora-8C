@@ -1,6 +1,7 @@
 package utez.edu.mx.Integradora8C.Services.Usuarios;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.Integradora8C.Entities.Usuarios.Usuarios;
@@ -15,10 +16,12 @@ import java.util.Optional;
 @Transactional
 public class UsuariosServices {
     private final UsuariosRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UsuariosServices(UsuariosRepository repository) {
+    public UsuariosServices(UsuariosRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
@@ -26,9 +29,18 @@ public class UsuariosServices {
         return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(true), false, 200, "OK");
     }
 
+    @Transactional(readOnly = true)
+    public Optional<Usuarios> getByCorreo(String correo) {
+        return this.repository.findByCorreoAndActive(correo, true);
+    }
+
+
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Usuarios> insert(Usuarios Usuarios) {
-        return new Response<>(this.repository.save(Usuarios), false, 200, "OK");
+        Usuarios.setContrasena(this.passwordEncoder.encode(Usuarios.getContrasena()));
+        Usuarios resultado = this.repository.save(Usuarios);
+        resultado.getRoles().forEach(rol -> this.repository.saveUserRole(Usuarios.getIdUsuario(), rol.getIdRol()));
+        return new Response<>(resultado, false, 200, "OK");
     }
 
     @Transactional(rollbackFor = {SQLException.class})
@@ -49,4 +61,10 @@ public class UsuariosServices {
         }
         return new Response<>(null, true, 400, "No encontrado");
     }
+
+    public long count() {
+        return this.repository.count();
+    }
+
+
 }

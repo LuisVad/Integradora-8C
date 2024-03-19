@@ -18,7 +18,7 @@ public class BitacoraDatosServices {
     @Transactional(readOnly = true)
     public Response<List<BitacoraDatos>> getAll() {
         return new Response<>(
-                this.repository.findAllByActiveOrderByCreadoEnDesc(),
+                this.repository.findAll(),
                 false,
                 200,
                 "OK"
