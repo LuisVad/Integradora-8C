@@ -42,7 +42,6 @@ public class UsuariosDto {
     @Size(min = 3, max = 255, message = "La contraseña debe tener entre 3 y 255 caracteres")
     private String contrasena;
     private Timestamp ultimaModificacion;
-    @NotBlank(message = "El active no puede ser nulo")
     private Boolean active;
     @NotBlank(message = "Los roles no pueden ser nulos")
     private Set<Roles> roles;
