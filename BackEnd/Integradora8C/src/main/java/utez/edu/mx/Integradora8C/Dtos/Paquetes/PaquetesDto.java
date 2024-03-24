@@ -3,11 +3,18 @@ package utez.edu.mx.Integradora8C.Dtos.Paquetes;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import utez.edu.mx.Integradora8C.Entities.Paquetes.Paquetes;
 
 import java.sql.Timestamp;
 
-
+@Setter
+@AllArgsConstructor
+@Getter
+@NoArgsConstructor
 public class PaquetesDto {
 
     private String idPaquete;
@@ -35,6 +42,6 @@ public class PaquetesDto {
 
     public Paquetes toEntity(){
         Timestamp ultimaModificacion = this.ultimaModificacion == null ? new Timestamp(System.currentTimeMillis()) : this.ultimaModificacion;
-        return new Paquetes(idPaquete, nombre, descripcion, recomendadoPara, imagen, numeroPedidos, ultimaModificacion, true);
+        return new Paquetes(idPaquete, nombre, descripcion, recomendadoPara, imagen, numeroPedidos, ultimaModificacion, active);
     }
 }

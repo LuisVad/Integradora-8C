@@ -28,6 +28,6 @@ public class DireccionesUsuariosDto {
 
     public DireccionesUsuario toEntity() {
         Timestamp ultimaModificacion = this.ultimaModificacion == null ? new Timestamp(System.currentTimeMillis()) : this.ultimaModificacion;
-        return new DireccionesUsuario(idDireccionUsuario, direcciones, usuarios, ultimaModificacion, true);
+        return new DireccionesUsuario(idDireccionUsuario, direcciones, usuarios, ultimaModificacion, active);
     }
 }

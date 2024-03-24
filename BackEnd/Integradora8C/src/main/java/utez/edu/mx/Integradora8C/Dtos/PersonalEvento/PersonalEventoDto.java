@@ -32,7 +32,7 @@ public class PersonalEventoDto {
         personalEvento.setPersonal(this.personal);
         personalEvento.setEventos(this.eventos);
         personalEvento.setUltimaModificacion(this.ultimaModificacion);
-        personalEvento.setActive(true);
+        personalEvento.setActive(active);
         return personalEvento;
     }
 }
