@@ -2,10 +2,18 @@ package utez.edu.mx.Integradora8C.Dtos.Direcciones;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import utez.edu.mx.Integradora8C.Entities.Direcciones.Direcciones;
 
 import java.sql.Timestamp;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class DireccionesDto {
 
     private String idDireccion;
@@ -42,6 +50,6 @@ public class DireccionesDto {
 
     public Direcciones toEntity() {
         Timestamp ultimaModificacion = this.ultimaModificacion == null ? new Timestamp(System.currentTimeMillis()) : this.ultimaModificacion;
-        return new Direcciones(idDireccion, calle, colonia, numero, codigoPostal, municipio, estado, referencias, ultimaModificacion, true);
+        return new Direcciones(idDireccion, calle, colonia, numero, codigoPostal, municipio, estado, referencias, ultimaModificacion, active);
     }
 }
