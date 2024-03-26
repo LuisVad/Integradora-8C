@@ -55,3 +55,18 @@ EndPoints
     ]
     }
 }
+
+# insert servicios ***/fooster-api/servicios/ method POST
+
+{
+  "nombre": "Nombre del Servicio 2",
+  "descripcion": "Descripción del Servicio 2",
+  "precio": 40.0,
+  "precio_descuento": 50.0,
+  "imagen": "ruta2/a/la/imagen.jpg",
+  "existencias": 1001,
+  "categoria": {
+    "idCategoria": "d7f2a0eb-98c0-4da7-83a7-233fcb26f6bb"
+  },
+  "active": true
+}
