@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("${apiPrefix}/usuarios")
+@CrossOrigin(value = {"*"})
 public class UsuariosController {
     private final UsuariosServices services;
 
