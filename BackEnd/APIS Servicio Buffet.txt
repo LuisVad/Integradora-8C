@@ -26,3 +26,32 @@ EndPoints
     ]
     }
 }
+
+# update personal ***/fooster-api/personal/   method PUT 
+# JSON 
+{
+    "categoria": {
+            "idCategoria": "261e457a-9753-4357-98a7-0b2ae92dbf6a"
+        },
+                    "idPersonal": "abc4fc84-4aaf-48b3-8aef-3818cdd57661",
+
+    "active": true,
+    "usuarios": {
+        "idPersonal": "abc4fc84-4aaf-48b3-8aef-3818cdd57661",
+        "nombres": "Juan 2",
+        "primerApellido": "Pérez 2",
+        "segundoApellido": "Gómez 2",
+        "telefono": "1234567890  2",
+        "correo": "juan2@example.com",
+        "contrasena": "contraseña123",
+        "active": true,
+        "roles": [
+        {
+            "idRol": "3ab228ec-a90d-496c-811b-d404347f1d24",
+            "nombre": "PERSONAL",
+            "ultimaModificacion": "2024-03-24T02:13:37.000+00:00",
+            "active": true
+        }
+    ]
+    }
+}
