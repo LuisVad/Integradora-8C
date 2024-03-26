@@ -36,6 +36,6 @@ public class ServiciosDto {
 
     public Servicios toEntity(){
         Timestamp ultimaModificacion = this.ultimaModificacion == null ? new Timestamp(System.currentTimeMillis()) : this.ultimaModificacion;
-        return new Servicios(idServicio, nombre, descripcion, precio, precio_descuento, imagen, existencias, categoria, ultimaModificacion, true);
+        return new Servicios(idServicio, nombre, descripcion, precio, precio_descuento, imagen, existencias, categoria, ultimaModificacion, active);
     }
 }
