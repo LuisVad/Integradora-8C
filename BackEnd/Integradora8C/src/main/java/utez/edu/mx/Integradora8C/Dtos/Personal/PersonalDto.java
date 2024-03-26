@@ -19,10 +19,8 @@ public class PersonalDto {
 
     private String idPersonal;
 
-    @NotBlank(message = "El usuario no puede ser nulo")
     private Usuarios usuarios;
 
-    @NotBlank(message = "La categoria no puede ser nula")
     private CategoriasPersonal categoria;
 
     private Timestamp ultimaModificacion;

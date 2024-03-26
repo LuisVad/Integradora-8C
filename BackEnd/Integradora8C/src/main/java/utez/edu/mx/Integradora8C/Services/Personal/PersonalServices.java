@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.Integradora8C.Entities.Personal.Personal;
 import utez.edu.mx.Integradora8C.Entities.Personal.PersonalRepository;
+import utez.edu.mx.Integradora8C.Entities.Usuarios.Usuarios;
+import utez.edu.mx.Integradora8C.Entities.Usuarios.UsuariosRepository;
 import utez.edu.mx.Integradora8C.Utils.Response;
 
 import java.sql.SQLException;
@@ -15,6 +17,8 @@ import java.util.Optional;
 @Transactional
 public class PersonalServices {
     private final PersonalRepository repository;
+    @Autowired
+    private UsuariosRepository usuariosRepository;
 
     @Autowired
     public PersonalServices(PersonalRepository repository) {
@@ -27,15 +31,19 @@ public class PersonalServices {
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public Response<Personal> insert(Personal Personal) {
-        return new Response<>(this.repository.save(Personal), false, 200, "OK");
+    public Response<Personal> insert(Personal personal) {
+        Usuarios usuarios = this.usuariosRepository.save(personal.getUsuarios());
+        personal.setUsuarios(usuarios);
+        return new Response<>(this.repository.save(personal), false, 200, "OK");
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public Response<Personal> update(Personal Personal) {
-        Optional<Personal> entityUpdate = this.repository.findById(Personal.getIdPersonal());
+    public Response<Personal> update(Personal personal) {
+        Optional<Personal> entityUpdate = this.repository.findById(personal.getIdPersonal());
         if (entityUpdate.isPresent()) {
-            return new Response<>(this.repository.saveAndFlush(Personal), false, 200, "OK");
+            Usuarios usuarios = this.usuariosRepository.save(personal.getUsuarios());
+            personal.setUsuarios(usuarios);
+            return new Response<>(this.repository.saveAndFlush(personal), false, 200, "OK");
         }
         return new Response<>(null, true, 400, "No encontrado");
     }

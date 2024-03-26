@@ -24,19 +24,14 @@ public class Personal {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "id_personal")
     private String idPersonal;
-
     @ManyToOne
     @JoinColumn(name = "id_usuario")
     private Usuarios usuarios;
-
     @ManyToOne
     @JoinColumn(name = "id_categoria")
     private CategoriasPersonal categoria;
-
     @Column(name = "ultima_modificacion", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp ultimaModificacion;
-
     @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE")
     private Boolean active;
-
 }
