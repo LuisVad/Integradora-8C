@@ -35,7 +35,4 @@ public class Eventos {
     private Timestamp ultimaModificacion;
     @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE")
     private Boolean active;
-
-
-
 }
