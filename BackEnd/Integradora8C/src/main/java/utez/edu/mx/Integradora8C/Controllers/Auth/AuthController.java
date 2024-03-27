@@ -9,7 +9,7 @@ import utez.edu.mx.Integradora8C.Utils.Response;
 
 @RestController
 @RequestMapping("${apiPrefix}/auth")
-@CrossOrigin(origins = {"*"})
+@CrossOrigin(value = {"*"})
 public class AuthController {
     private final AuthService service;
 
