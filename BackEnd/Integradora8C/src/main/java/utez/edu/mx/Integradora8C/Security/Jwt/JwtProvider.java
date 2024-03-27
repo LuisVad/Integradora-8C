@@ -8,11 +8,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import java.util.logging.Logger;
+
 
 import java.security.Key;
 import java.util.Date;
 @Service
 public class JwtProvider {
+
+    Logger logger = Logger.getLogger(JwtProvider.class.getName());
 
     @Value("${jwt.secret}")
     private String secret;
@@ -44,8 +48,10 @@ public class JwtProvider {
             if (token != null) return parseJwtClaims(token);
             return null;
         } catch (ExpiredJwtException e) {
+            logger.severe(e.getMessage());
             throw e;
         } catch (Exception e) {
+            logger.severe(e.getMessage());
             throw e;
         }
     }
@@ -62,9 +68,9 @@ public class JwtProvider {
             parseJwtClaims(token);
             return claims.getExpiration().after(new Date());
         } catch (MalformedJwtException | UnsupportedJwtException | ExpiredJwtException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
         return false;
     }

@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import utez.edu.mx.Integradora8C.Dtos.Auth.UsuarioTokenDto;
 import utez.edu.mx.Integradora8C.Entities.Usuarios.Usuarios;
 import utez.edu.mx.Integradora8C.Security.Jwt.JwtProvider;
 import utez.edu.mx.Integradora8C.Services.Usuarios.UsuariosServices;
@@ -22,7 +23,7 @@ import java.util.logging.Logger;
 @Transactional
 public class AuthService {
 
-    private Logger logger = Logger.getLogger(AuthService.class.getName());
+    private final Logger logger = Logger.getLogger(AuthService.class.getName());
 
     private final UsuariosServices service;
 
@@ -42,19 +43,20 @@ public class AuthService {
         try {
             Optional<Usuarios> foundUser = service.getByCorreo(username);
             if (foundUser.isEmpty())
-                return new ResponseEntity<>(new Response(null, true, 404, "UserNotFound"), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new Response(null, true, 404, "Usuario no encontrado"), HttpStatus.NOT_FOUND);
             Usuarios user = foundUser.get();
             if (!user.getActive())
-                return new ResponseEntity<>(new Response(null, true, 401, "Inactive"), HttpStatus.BAD_REQUEST);
-
+                return new ResponseEntity<>(new Response(null, true, 401, "Usuario inactivo"), HttpStatus.UNAUTHORIZED);
             Authentication auth = manager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
             SecurityContextHolder.getContext().setAuthentication(auth);
             String token = provider.generateToken(auth);
-            return new ResponseEntity<>(new Response(token, false, 200, "OK"), HttpStatus.OK);
+            Usuarios usuario = service.getByCorreo(username).get();
+            UsuarioTokenDto data = new UsuarioTokenDto(usuario, token);
+            return new ResponseEntity<>(new Response(data, false, 200, "OK"), HttpStatus.OK);
         } catch (Exception e) {
             this.logger.severe(e.getMessage());
-            String message = "CredentialsMismatch";
-            if (e instanceof DisabledException) message = "UserDisabled";
+            String message = "Credenciales incorrectas";
+            if (e instanceof DisabledException) message = "Usuario inactivo";
             return new ResponseEntity<>(new Response(null, true, 401, message), HttpStatus.BAD_REQUEST);
         }
     }

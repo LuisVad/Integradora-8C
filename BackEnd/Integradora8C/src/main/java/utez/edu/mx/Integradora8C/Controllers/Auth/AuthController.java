@@ -17,8 +17,8 @@ public class AuthController {
         this.service = service;
     }
 
-    @PostMapping("/signin")
+    @PostMapping("/")
     public ResponseEntity<Response> signIn(@RequestBody SignDto dto) {
-        return service.signIn(dto.getUsername(), dto.getPassword());
+        return service.signIn(dto.getCorreo(), dto.getContrasenia());
     }
 }

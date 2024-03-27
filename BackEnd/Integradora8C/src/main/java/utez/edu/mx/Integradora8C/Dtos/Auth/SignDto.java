@@ -8,8 +8,8 @@ import lombok.Data;
 public class SignDto {
     @NotBlank
     @NotEmpty
-    private String username;
+    private String correo;
     @NotBlank
     @NotEmpty
-    private String password;
+    private String contrasenia;
 }
