@@ -9,4 +9,5 @@ import java.util.List;
 public interface CategoriasPersonalRepository extends JpaRepository<CategoriasPersonal, String> {
 
     List<CategoriasPersonal> findAllByActiveOrderByUltimaModificacionDesc(Boolean active);
+    CategoriasPersonal findByNombreAndActive(String nombre, Boolean active);
 }

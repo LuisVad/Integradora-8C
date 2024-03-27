@@ -6,12 +6,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import utez.edu.mx.Integradora8C.Dtos.CategoriasPersonal.CategoriasPersonalDto;
+import utez.edu.mx.Integradora8C.Dtos.Personal.PersonalDto;
 import utez.edu.mx.Integradora8C.Dtos.Roles.RolesDto;
 import utez.edu.mx.Integradora8C.Dtos.Usuarios.UsuariosDto;
+import utez.edu.mx.Integradora8C.Entities.CategoriasPersonal.CategoriasPersonal;
 import utez.edu.mx.Integradora8C.Entities.CategoriasPersonal.CategoriasPersonalRepository;
 import utez.edu.mx.Integradora8C.Entities.Roles.Roles;
 import utez.edu.mx.Integradora8C.Entities.Roles.RolesRepository;
 import utez.edu.mx.Integradora8C.Entities.Usuarios.Usuarios;
+import utez.edu.mx.Integradora8C.Services.Personal.PersonalServices;
 import utez.edu.mx.Integradora8C.Services.Usuarios.UsuariosServices;
 
 import java.sql.Timestamp;
@@ -23,14 +26,16 @@ public class AppConfig {
 
     private final RolesRepository rolesRepository;
     private final UsuariosServices usuariosServices;
+    private final PersonalServices personalServices;
 
     private final CategoriasPersonalRepository categoriasPersonalRepository;
 
 
     @Autowired
-    public AppConfig(RolesRepository rolesRepository, UsuariosServices usuariosServices, CategoriasPersonalRepository categoriasPersonalRepository) {
+    public AppConfig(RolesRepository rolesRepository, UsuariosServices usuariosServices, PersonalServices personalServices, CategoriasPersonalRepository categoriasPersonalRepository) {
         this.rolesRepository = rolesRepository;
         this.usuariosServices = usuariosServices;
+        this.personalServices = personalServices;
         this.categoriasPersonalRepository = categoriasPersonalRepository;
     }
 
@@ -66,9 +71,36 @@ public class AppConfig {
                 if (roles.getNombre().equals("CLIENTE")) {
                     Set<Roles> rolesUser = new HashSet<>();
                     rolesUser.add(roles);
-                    UsuariosDto usuariosDto = new UsuariosDto(null, "Juan", "Camaney", "Ramirez", "7777909014", "juancamaney@gmail.com", "cliente", new Timestamp(System.currentTimeMillis()), true, rolesUser);
+                    UsuariosDto usuariosDto = new UsuariosDto(null, "Juan", "Camaney", "Ramirez", "7777909014", "juancamaney@yopmail.com", "cliente", new Timestamp(System.currentTimeMillis()), true, rolesUser);
                     Usuarios usuarios = usuariosDto.toEntity();
                     usuariosServices.insert(usuarios);
+                }
+                if (roles.getNombre().equals("PERSONAL")) {
+                    String[] nombres = {"Juan", "Pedro", "Maria", "Jose", "Luis", "Ana", "Rosa", "Carlos", "Jorge", "Fernando", "Ricardo", "Roberto"};
+                    String[] apellidos = {"Rodriguez", "Juarez", "Jimenez", "Gonzalez", "Perez", "Lopez", "Garcia", "Hernandez", "Martinez", "Torres", "Sanchez", "Ramirez"};
+
+                    for (int i = 0; i < 400; i++) {
+                        if (i <= 100){
+                            Set<Roles> rolesUser = new HashSet<>();
+                            rolesUser.add(roles);
+                            UsuariosDto usuariosDto = new UsuariosDto(null, nombres[(int) (Math.random() * 12)], apellidos[(int) (Math.random() * 12)], apellidos[(int) (Math.random() * 12)], "7777909013", "usuario" + i + "@yopmail.com", "personal", new Timestamp(System.currentTimeMillis()), true, rolesUser);
+                            Usuarios usuarios = usuariosDto.toEntity();
+                            usuariosServices.insert(usuarios);
+                            CategoriasPersonal categoriasPersonal = categoriasPersonalRepository.findByNombreAndActive("Chef", true);
+                            PersonalDto personalDto = new PersonalDto(null, usuarios, categoriasPersonal, new Timestamp(System.currentTimeMillis()), true);
+                            personalServices.insert(personalDto.toEntity());
+                        }else {
+                            Set<Roles> rolesUser = new HashSet<>();
+                            rolesUser.add(roles);
+                            UsuariosDto usuariosDto = new UsuariosDto(null, nombres[(int) (Math.random() * 12)], apellidos[(int) (Math.random() * 12)], apellidos[(int) (Math.random() * 12)], "7777909013", "usuario" + i + "@yopmail.com", "personal", new Timestamp(System.currentTimeMillis()), true, rolesUser);
+                            Usuarios usuarios = usuariosDto.toEntity();
+                            usuariosServices.insert(usuarios);
+                            CategoriasPersonal categoriasPersonal = categoriasPersonalRepository.findByNombreAndActive("Mesero", true);
+                            PersonalDto personalDto = new PersonalDto(null, usuarios, categoriasPersonal, new Timestamp(System.currentTimeMillis()), true);
+                            personalServices.insert(personalDto.toEntity());
+
+                        }
+                    }
                 }
             });
         }
