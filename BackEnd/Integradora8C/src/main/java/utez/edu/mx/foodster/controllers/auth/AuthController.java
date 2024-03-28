@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.foodster.dtos.auth.SignDto;
+import utez.edu.mx.foodster.dtos.auth.UsuarioTokenDto;
 import utez.edu.mx.foodster.services.auth.AuthService;
 import utez.edu.mx.foodster.utils.Response;
 
@@ -19,7 +20,7 @@ public class AuthController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Response> signIn(@RequestBody @Valid SignDto dto) {
-        return service.signIn(dto.getCorreo(), dto.getContrasenia());
+    public ResponseEntity<Response<UsuarioTokenDto>> login(@RequestBody @Valid SignDto dto) {
+        return service.login(dto.getCorreo(), dto.getContrasenia());
     }
 }

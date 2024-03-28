@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface UsuariosRepository extends JpaRepository<Usuarios, String> {
     List<Usuarios> findAllByActiveOrderByUltimaModificacionDesc(Boolean active);
 
-    Optional<Usuarios> findByCorreoAndActive(String correo, Boolean active);
+    Usuarios findByCorreoAndActive(String correo, Boolean active);
 
     @Modifying
     @Query(value = "INSERT INTO usuarios_roles (id_rol,id_usuario) VALUES (:roleId, :userId);", nativeQuery = true)

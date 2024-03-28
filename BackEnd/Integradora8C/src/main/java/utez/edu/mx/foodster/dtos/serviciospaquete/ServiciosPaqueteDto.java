@@ -25,7 +25,7 @@ public class ServiciosPaqueteDto {
     private boolean active;
 
     public ServiciosPaquete toEntity(){
-        Timestamp ultimaModificacion = this.ultimaModificacion == null ? new Timestamp(System.currentTimeMillis()) : this.ultimaModificacion;
+        this.ultimaModificacion = new Timestamp(System.currentTimeMillis());
         return new ServiciosPaquete(idServicioPaquete, paquete, servicio, ultimaModificacion, active);
     }
 }

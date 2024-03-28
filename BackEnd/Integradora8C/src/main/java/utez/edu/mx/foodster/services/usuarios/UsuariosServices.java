@@ -28,7 +28,7 @@ public class UsuariosServices {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Usuarios> getByCorreo(String correo) {
+    public Usuarios getByCorreo(String correo) {
         return this.repository.findByCorreoAndActive(correo, true);
     }
 

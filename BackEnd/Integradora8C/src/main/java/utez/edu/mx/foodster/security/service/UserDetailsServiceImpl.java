@@ -10,8 +10,6 @@ import utez.edu.mx.foodster.entities.usuarios.Usuarios;
 import utez.edu.mx.foodster.entities.usuarios.UsuariosRepository;
 import utez.edu.mx.foodster.security.entity.UserDetailsImpl;
 
-import java.util.Optional;
-
 @Service
 @Transactional
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -25,8 +23,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Usuarios> foundUser = this.repository.findByCorreoAndActive(username, true);
-        if (foundUser.isPresent()) return UserDetailsImpl.build(foundUser.get());
+        Usuarios foundUser = this.repository.findByCorreoAndActive(username, true);
+        if (foundUser != null) return UserDetailsImpl.build(foundUser);
         throw new UsernameNotFoundException("UserNotFound");
     }
 }
