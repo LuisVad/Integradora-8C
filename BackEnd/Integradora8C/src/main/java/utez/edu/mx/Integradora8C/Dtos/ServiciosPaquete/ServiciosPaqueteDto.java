@@ -26,6 +26,6 @@ public class ServiciosPaqueteDto {
 
     public ServiciosPaquete toEntity(){
         Timestamp ultimaModificacion = this.ultimaModificacion == null ? new Timestamp(System.currentTimeMillis()) : this.ultimaModificacion;
-        return new ServiciosPaquete(idServicioPaquete, paquete, servicio, ultimaModificacion, true);
+        return new ServiciosPaquete(idServicioPaquete, paquete, servicio, ultimaModificacion, active);
     }
 }
