@@ -1,7 +1,10 @@
 package utez.edu.mx.foodster.services.direccionesusuario;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import utez.edu.mx.foodster.entities.direcciones.Direcciones;
+import utez.edu.mx.foodster.entities.direcciones.DireccionesRepository;
 import utez.edu.mx.foodster.entities.direccionesusuario.DireccionesUsuario;
 import utez.edu.mx.foodster.entities.direccionesusuario.DireccionesUsuarioRepository;
 import utez.edu.mx.foodster.entities.usuarios.Usuarios;
@@ -16,6 +19,8 @@ import java.util.Optional;
 public class DireccionesUsuarioServices {
     private final DireccionesUsuarioRepository repository;
     private final UsuariosRepository usuariosRepository;
+    @Autowired
+    private DireccionesRepository direccionesRepository;
 
     public DireccionesUsuarioServices(DireccionesUsuarioRepository repository, UsuariosRepository usuariosRepository) {
         this.repository = repository;
@@ -51,6 +56,8 @@ public class DireccionesUsuarioServices {
     }
     @Transactional(rollbackFor = {SQLDataException.class})
     public Response<DireccionesUsuario> insert(DireccionesUsuario direccionesUsuario){
+        Direcciones direcciones = this.direccionesRepository.save(direccionesUsuario.getDirecciones());
+        direccionesUsuario.setDirecciones(direcciones);
         return new Response<>(
                 this.repository.save(direccionesUsuario),
                 false,
