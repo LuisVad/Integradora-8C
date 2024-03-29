@@ -26,6 +26,10 @@ public class PersonalController {
     public ResponseEntity<Response<List<Personal>>> getAll() {
         return new ResponseEntity<>(this.services.getAll(), HttpStatus.OK);
     }
+    @GetMapping("/status/{status}")
+    public ResponseEntity<Response<List<Personal>>> getAllByStatus(@PathVariable("status") Boolean status) {
+        return new ResponseEntity<>(this.services.getAllByStatus(status), HttpStatus.OK);
+    }
 
     @PostMapping("/")
     public ResponseEntity<Response<Personal>> insert(@RequestBody @Valid PersonalDto personalDto) {
@@ -40,5 +44,9 @@ public class PersonalController {
     @DeleteMapping("/{uid}")
     public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") String uid) {
         return new ResponseEntity<>(this.services.delete(uid), HttpStatus.OK);
+    }
+    @DeleteMapping("/status/{uid}")
+    public ResponseEntity<Response<Boolean>> changeStatus(@PathVariable("uid") String uid) {
+        return new ResponseEntity<>(this.services.changeStatus(uid), HttpStatus.OK);
     }
 }

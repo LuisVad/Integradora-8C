@@ -30,14 +30,23 @@ public class PersonalServices {
     }
 
     @Transactional(readOnly = true)
-    public Response<List<Personal>> getAll() {
-        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(true), false, 200, "OK");
+    public Response<List<Personal>> getAllByStatus(Boolean status) {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status), false, 200, "OK");
+    }
+    @Transactional(readOnly = true)
+    public Response<List<Personal>> getAll(){
+        return new Response<>(
+                this.repository.findAll(),
+                false,
+                200,
+                "OK"
+        );
     }
 
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Personal> insert(Personal personal) {
         Optional<Usuarios> exist = this.usuariosRepository.findByCorreo(personal.getUsuarios().getCorreo());
-        if(exist.isEmpty()){
+        if(exist.isPresent()){
             return new Response<>(
                     null,
                     true,
@@ -69,6 +78,16 @@ public class PersonalServices {
         if (personal.isPresent()) {
             this.repository.delete(personal.get());
             return new Response<>(true, false, 200, "Eliminado correctamente");
+        }
+        return new Response<>(null, true, 400, "No encontrado");
+    }
+    @Transactional(rollbackFor = {SQLException.class})
+    public Response<Boolean> changeStatus(String id) {
+        Optional<Personal> personal = this.repository.findById(id);
+        if (personal.isPresent()) {
+            personal.get().setActive(!personal.get().getActive());
+            this.repository.saveAndFlush(personal.get());
+            return new Response<>(true, false, 200, "Estatus cambiado correctamente");
         }
         return new Response<>(null, true, 400, "No encontrado");
     }
