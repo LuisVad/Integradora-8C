@@ -25,6 +25,15 @@ public class CategoriasPersonalServices {
     public Response<List<CategoriasPersonal>> getAll() {
         return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(true), false, 200, "OK");
     }
+    @Transactional(readOnly = true)
+    public Response<List<CategoriasPersonal>> getAllByStatus(Boolean status){
+        return new Response<>(
+                this.repository.findAllByActiveOrderByUltimaModificacionDesc(status),
+                false,
+                200,
+                "OK"
+        );
+    }
 
     @Transactional(rollbackFor = {SQLException.class})
     public Response<CategoriasPersonal> insert(CategoriasPersonal categoriasPersonal) {

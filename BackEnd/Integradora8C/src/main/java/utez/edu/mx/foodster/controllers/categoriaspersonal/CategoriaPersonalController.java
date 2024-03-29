@@ -25,6 +25,13 @@ public class CategoriaPersonalController {
     public ResponseEntity<Response<List<CategoriasPersonal>>> getAll() {
         return new ResponseEntity<>(this.services.getAll(), HttpStatus.OK);
     }
+    @GetMapping("/status/{status}")
+    public ResponseEntity<Response<List<CategoriasPersonal>>> getAllByStatus(@PathVariable("status") Boolean status){
+        return new ResponseEntity<>(
+                this.services.getAllByStatus(status),
+                HttpStatus.OK
+        );
+    }
 
     @PostMapping("/")
     public ResponseEntity<Response<CategoriasPersonal>> insert(@RequestBody @Valid CategoriasPersonalDto categoriasPersonalDto) {
