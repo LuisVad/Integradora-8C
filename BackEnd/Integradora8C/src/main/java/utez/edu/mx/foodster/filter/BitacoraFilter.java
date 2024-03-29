@@ -22,11 +22,11 @@ import java.sql.Timestamp;
 public class BitacoraFilter extends OncePerRequestFilter {
 
     private final BitacoraDatosRepository bitacoraRepository;
-    private final ObjectMapper ObjectMapper;
+    private final ObjectMapper objectMapper;
 
-    public BitacoraFilter(BitacoraDatosRepository bitacoraRepository, ObjectMapper ObjectMapper) {
+    public BitacoraFilter(BitacoraDatosRepository bitacoraRepository, ObjectMapper objectMapper) {
         this.bitacoraRepository = bitacoraRepository;
-        this.ObjectMapper = ObjectMapper;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class BitacoraFilter extends OncePerRequestFilter {
         filterChain.doFilter(multiReadRequest, multiReadResponse);
         String body = multiReadRequest.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
         String responseBody = new String(multiReadResponse.getContentAsByteArray(), response.getCharacterEncoding());
-        ObjectNode jsonNode = ObjectMapper.createObjectNode();
+        ObjectNode jsonNode = objectMapper.createObjectNode();
         BitacoraDatos bitacora = new BitacoraDatos();
         String token = request.getHeader("Authorization");
         if (token != null) {
@@ -49,17 +49,17 @@ public class BitacoraFilter extends OncePerRequestFilter {
         bitacora.setEstadoHttp(response.getStatus());
         jsonNode.put("token", token);
         try {
-            jsonNode.set("cuerpo", ObjectMapper.readTree(body));
+            jsonNode.set("cuerpo", objectMapper.readTree(body));
         } catch (JsonProcessingException e) {
             jsonNode.put("cuerpo", "JSON invalido");
         }
         // colocamos lo que le dio de response
         try {
-            jsonNode.set("respuesta", ObjectMapper.readTree(responseBody));
+            jsonNode.set("respuesta", objectMapper.readTree(responseBody));
         } catch (JsonProcessingException e) {
             jsonNode.put("respuesta", "JSON invalido");
         }
-        JsonNode node = ObjectMapper.valueToTree(jsonNode);
+        JsonNode node = objectMapper.valueToTree(jsonNode);
         bitacora.setDatos(node);
         bitacora.setCreadoEn(new Timestamp(System.currentTimeMillis()));
         multiReadResponse.copyBodyToResponse();

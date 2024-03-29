@@ -25,24 +25,24 @@ public class PersonalEventoServices {
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public Response<PersonalEvento> insert(PersonalEvento PersonalEvento) {
-        return new Response<>(this.repository.save(PersonalEvento), false, 200, "OK");
+    public Response<PersonalEvento> insert(PersonalEvento personalEvento) {
+        return new Response<>(this.repository.save(personalEvento), false, 200, "OK");
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public Response<PersonalEvento> update(PersonalEvento PersonalEvento) {
-        Optional<PersonalEvento> entityUpdate = this.repository.findById(PersonalEvento.getIdPersonalEvento());
+    public Response<PersonalEvento> update(PersonalEvento personalEvento) {
+        Optional<PersonalEvento> entityUpdate = this.repository.findById(personalEvento.getIdPersonalEvento());
         if (entityUpdate.isPresent()) {
-            return new Response<>(this.repository.saveAndFlush(PersonalEvento), false, 200, "OK");
+            return new Response<>(this.repository.saveAndFlush(personalEvento), false, 200, "OK");
         }
         return new Response<>(null, true, 400, "No encontrado");
     }
 
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Boolean> delete(String id) {
-        Optional<PersonalEvento> PersonalEvento = this.repository.findById(id);
-        if (PersonalEvento.isPresent()) {
-            this.repository.delete(PersonalEvento.get());
+        Optional<PersonalEvento> personalEvento = this.repository.findById(id);
+        if (personalEvento.isPresent()) {
+            this.repository.delete(personalEvento.get());
             return new Response<>(true, false, 200, "Eliminado correctamente");
         }
         return new Response<>(null, true, 400, "No encontrado");

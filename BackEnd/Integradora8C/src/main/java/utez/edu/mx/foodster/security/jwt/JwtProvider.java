@@ -1,6 +1,10 @@
 package utez.edu.mx.foodster.security.jwt;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.impl.DefaultClaims;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,11 +12,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import java.util.logging.Logger;
-
 
 import java.security.Key;
 import java.util.Date;
+import java.util.logging.Logger;
+
 @Service
 public class JwtProvider {
 
@@ -22,8 +26,6 @@ public class JwtProvider {
     private String secret;
     @Value("${jwt.expiration}")
     private long expiration;
-    private final String TOKEN_HEADER = "Authorization";
-    private final String TOKEN_TYPE = "Bearer ";
 
     public String generateToken(Authentication auth) {
         UserDetails user = (UserDetails) auth.getPrincipal();
@@ -46,20 +48,24 @@ public class JwtProvider {
         try {
             String token = resolveToken(req);
             if (token != null) return parseJwtClaims(token);
-            return null;
+            return new DefaultClaims();
         } catch (ExpiredJwtException e) {
-            logger.severe(e.getMessage());
+            String contextualInfo = "The JWT token has expired. Additional Info: " + e.getMessage();
+            logger.severe(contextualInfo);
             throw e;
         } catch (Exception e) {
-            logger.severe(e.getMessage());
+            String contextualInfo = "An error occurred while trying to resolve the JWT token. Additional Info: " + e.getMessage();
+            logger.severe(contextualInfo);
             throw e;
+
         }
     }
 
     public String resolveToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader(TOKEN_HEADER);
-        if (bearerToken != null && bearerToken.startsWith(TOKEN_TYPE)) return bearerToken.replace(TOKEN_TYPE, "");
-        // bearerToken.substring(TOKEN_TYPE.length());
+        String tokenHeader = "Authorization";
+        String bearerToken = req.getHeader(tokenHeader);
+        String tokenType = "Bearer ";
+        if (bearerToken != null && bearerToken.startsWith(tokenType)) return bearerToken.replace(tokenType, "");
         return null;
     }
 
@@ -67,8 +73,6 @@ public class JwtProvider {
         try {
             parseJwtClaims(token);
             return claims.getExpiration().after(new Date());
-        } catch (MalformedJwtException | UnsupportedJwtException | ExpiredJwtException e) {
-            logger.severe(e.getMessage());
         } catch (Exception e) {
             logger.severe(e.getMessage());
         }

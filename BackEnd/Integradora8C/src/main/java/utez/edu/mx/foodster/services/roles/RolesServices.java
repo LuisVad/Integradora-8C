@@ -27,24 +27,24 @@ public class RolesServices {
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public Response<Roles> insert(Roles Roles) {
-        return new Response<>(this.repository.save(Roles), false, 200, "OK");
+    public Response<Roles> insert(Roles roles) {
+        return new Response<>(this.repository.save(roles), false, 200, "OK");
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public Response<Roles> update(Roles Roles) {
-        Optional<Roles> entityUpdate = this.repository.findById(Roles.getIdRol());
+    public Response<Roles> update(Roles roles) {
+        Optional<Roles> entityUpdate = this.repository.findById(roles.getIdRol());
         if (entityUpdate.isPresent()) {
-            return new Response<>(this.repository.saveAndFlush(Roles), false, 200, "OK");
+            return new Response<>(this.repository.saveAndFlush(roles), false, 200, "OK");
         }
         return new Response<>(null, true, 400, "No encontrado");
     }
 
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Boolean> delete(String id) {
-        Optional<Roles> Roles = this.repository.findById(id);
-        if (Roles.isPresent()) {
-            this.repository.delete(Roles.get());
+        Optional<Roles> roles = this.repository.findById(id);
+        if (roles.isPresent()) {
+            this.repository.delete(roles.get());
             return new Response<>(true, false, 200, "Eliminado correctamente");
         }
         return new Response<>(null, true, 400, "No encontrado");

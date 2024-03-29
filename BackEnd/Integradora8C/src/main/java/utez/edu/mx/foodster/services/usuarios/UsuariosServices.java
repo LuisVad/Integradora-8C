@@ -34,27 +34,27 @@ public class UsuariosServices {
 
 
     @Transactional(rollbackFor = {SQLException.class})
-    public Response<Usuarios> insert(Usuarios Usuarios) {
-        Usuarios.setContrasena(this.passwordEncoder.encode(Usuarios.getContrasena()));
-        Usuarios resultado = this.repository.save(Usuarios);
-        resultado.getRoles().forEach(rol -> this.repository.saveUserRole(Usuarios.getIdUsuario(), rol.getIdRol()));
+    public Response<Usuarios> insert(Usuarios usuarios) {
+        usuarios.setContrasena(this.passwordEncoder.encode(usuarios.getContrasena()));
+        Usuarios resultado = this.repository.save(usuarios);
+        resultado.getRoles().forEach(rol -> this.repository.saveUserRole(usuarios.getIdUsuario(), rol.getIdRol()));
         return new Response<>(resultado, false, 200, "OK");
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public Response<Usuarios> update(Usuarios Usuarios) {
-        Optional<Usuarios> entityUpdate = this.repository.findById(Usuarios.getIdUsuario());
+    public Response<Usuarios> update(Usuarios usuarios) {
+        Optional<Usuarios> entityUpdate = this.repository.findById(usuarios.getIdUsuario());
         if (entityUpdate.isPresent()) {
-            return new Response<>(this.repository.saveAndFlush(Usuarios), false, 200, "OK");
+            return new Response<>(this.repository.saveAndFlush(usuarios), false, 200, "OK");
         }
         return new Response<>(null, true, 400, "No encontrado");
     }
 
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Boolean> delete(String id) {
-        Optional<Usuarios> Usuarios = this.repository.findById(id);
-        if (Usuarios.isPresent()) {
-            this.repository.delete(Usuarios.get());
+        Optional<Usuarios> usuarios = this.repository.findById(id);
+        if (usuarios.isPresent()) {
+            this.repository.delete(usuarios.get());
             return new Response<>(true, false, 200, "Eliminado correctamente");
         }
         return new Response<>(null, true, 400, "No encontrado");

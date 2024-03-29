@@ -29,7 +29,7 @@ public class MainSecurity {
 
     @Value("${apiPrefix}")
     private String apiPrefix;
-    private final String[] WHITE_LIST = {
+    private final String[] whiteList = {
             apiPrefix + "/auth/**"
     };
     private final UserDetailsServiceImpl service;
@@ -67,7 +67,7 @@ public class MainSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(Customizer.withDefaults()).csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers(WHITE_LIST).permitAll()
+                        req.requestMatchers(whiteList).permitAll()
                                 /*.requestMatchers(apiPrefix + "/usuarios/**").hasAnyAuthority("ADMIN")*/
                                 .anyRequest().permitAll()
                 )

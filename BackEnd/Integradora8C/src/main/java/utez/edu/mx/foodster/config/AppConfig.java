@@ -86,12 +86,13 @@ public class AppConfig {
 
     private void processRole(Roles roles) {
         String roleName = roles.getNombre();
-        if (roleName.equals("ADMIN")) {
-            saveUser(roles, "Cristian", "Jimenez", "Rodriguez", "7777909055", "redalphasiete@gmail.com", "admin");
-        } else if (roleName.equals("CLIENTE")) {
-            saveUser(roles, "Juan", "Camaney", "Ramirez", "7777909014", "juancamaney@yopmail.com", "cliente");
-        } else if (roleName.equals("PERSONAL")) {
-            createPersonalUsers(roles);
+        switch (roleName) {
+            case "ADMIN" ->
+                    saveUser(roles, "Cristian", "Jimenez", "Rodriguez", "7777909055", "redalphasiete@gmail.com", "admin");
+            case "CLIENTE" ->
+                    saveUser(roles, "Juan", "Camaney", "Ramirez", "7777909014", "juancamaney@yopmail.com", "cliente");
+            case "PERSONAL" -> createPersonalUsers(roles);
+            default -> throw new IllegalStateException("Unexpected value: " + roleName);
         }
     }
 

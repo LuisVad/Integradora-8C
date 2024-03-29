@@ -32,8 +32,8 @@ public class DireccionesUsuarioServices {
         );
     }
     @Transactional(readOnly = true)
-    public Response<List<DireccionesUsuario>> getAllByUsuarios(String id_usuario){
-        Optional<Usuarios> usuario = this.usuariosRepository.findById(id_usuario);
+    public Response<List<DireccionesUsuario>> getAllByUsuarios(String idUsuario){
+        Optional<Usuarios> usuario = this.usuariosRepository.findById(idUsuario);
         if(usuario.isPresent()){
             return new Response<>(
                     this.repository.findAllByUsuarios(usuario.get()),
@@ -46,7 +46,7 @@ public class DireccionesUsuarioServices {
                 null,
                 true,
                 400,
-                "No encontrado"
+                "No encontramos nada con el usuario"
         );
     }
     @Transactional(rollbackFor = {SQLDataException.class})

@@ -49,9 +49,9 @@ public class PersonalServices {
 
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Boolean> delete(String id) {
-        Optional<Personal> Personal = this.repository.findById(id);
-        if (Personal.isPresent()) {
-            this.repository.delete(Personal.get());
+        Optional<Personal> personal = this.repository.findById(id);
+        if (personal.isPresent()) {
+            this.repository.delete(personal.get());
             return new Response<>(true, false, 200, "Eliminado correctamente");
         }
         return new Response<>(null, true, 400, "No encontrado");
