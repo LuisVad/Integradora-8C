@@ -16,6 +16,13 @@ EndPoints
             ]
 }
 
+# auth - login ***/foodster-api/auth/ method POST 
+{
+    "correo":"c@example.com",
+    "contrasenia":"12345"
+}
+
+
 # save personal ***/foodster-api/personal/   method POST 
 # JSON 
 {
