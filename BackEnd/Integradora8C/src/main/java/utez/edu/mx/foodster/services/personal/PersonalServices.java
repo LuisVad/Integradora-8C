@@ -1,6 +1,5 @@
 package utez.edu.mx.foodster.services.personal;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,15 +17,15 @@ import java.util.Optional;
 @Service
 @Transactional
 public class PersonalServices {
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final PersonalRepository repository;
     private final UsuariosRepository usuariosRepository;
 
 
-    public PersonalServices(PersonalRepository repository, UsuariosRepository usuariosRepository) {
+    public PersonalServices(PersonalRepository repository, UsuariosRepository usuariosRepository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.usuariosRepository = usuariosRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
@@ -69,7 +68,7 @@ public class PersonalServices {
             personal.setUsuarios(usuarios);
             return new Response<>(this.repository.saveAndFlush(personal), false, 200, "OK");
         }
-        return new Response<>(null, true, 400, "No encontrado");
+        return new Response<>(null, true, 400, "No encontrado para actualizar");
     }
 
     @Transactional(rollbackFor = {SQLException.class})
@@ -79,7 +78,7 @@ public class PersonalServices {
             this.repository.delete(personal.get());
             return new Response<>(true, false, 200, "Eliminado correctamente");
         }
-        return new Response<>(null, true, 400, "No encontrado");
+        return new Response<>(null, true, 400, "No encontrado para eliminar");
     }
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Boolean> changeStatus(String id) {
@@ -89,6 +88,6 @@ public class PersonalServices {
             this.repository.saveAndFlush(personal.get());
             return new Response<>(true, false, 200, "Estatus cambiado correctamente");
         }
-        return new Response<>(null, true, 400, "No encontrado");
+        return new Response<>(null, true, 400, "No encontrado para cambiar estatus");
     }
 }

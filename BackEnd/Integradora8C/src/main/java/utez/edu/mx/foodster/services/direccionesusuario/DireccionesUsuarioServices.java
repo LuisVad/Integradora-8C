@@ -1,6 +1,5 @@
 package utez.edu.mx.foodster.services.direccionesusuario;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.foodster.entities.direcciones.Direcciones;
@@ -19,12 +18,12 @@ import java.util.Optional;
 public class DireccionesUsuarioServices {
     private final DireccionesUsuarioRepository repository;
     private final UsuariosRepository usuariosRepository;
-    @Autowired
-    private DireccionesRepository direccionesRepository;
+    private final DireccionesRepository direccionesRepository;
 
-    public DireccionesUsuarioServices(DireccionesUsuarioRepository repository, UsuariosRepository usuariosRepository) {
+    public DireccionesUsuarioServices(DireccionesUsuarioRepository repository, UsuariosRepository usuariosRepository, DireccionesRepository direccionesRepository) {
         this.repository = repository;
         this.usuariosRepository = usuariosRepository;
+        this.direccionesRepository = direccionesRepository;
     }
 
     @Transactional(readOnly = true)

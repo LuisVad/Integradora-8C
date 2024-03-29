@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import utez.edu.mx.foodster.security.jwt.JwtAuthenticationFilter;
+import utez.edu.mx.foodster.security.jwt.JwtProvider;
 import utez.edu.mx.foodster.security.service.UserDetailsServiceImpl;
 
 @Configuration
@@ -32,9 +33,13 @@ public class MainSecurity {
     private final String[] whiteList = {
             apiPrefix + "/auth/**"
     };
+    private final JwtProvider provider;
+
+
     private final UserDetailsServiceImpl service;
 
-    public MainSecurity(UserDetailsServiceImpl service) {
+    public MainSecurity(JwtProvider provider, UserDetailsServiceImpl service) {
+        this.provider = provider;
         this.service = service;
     }
 
@@ -60,7 +65,7 @@ public class MainSecurity {
 
     @Bean
     public JwtAuthenticationFilter filter() {
-        return new JwtAuthenticationFilter();
+        return new JwtAuthenticationFilter(provider, service);
     }
 
     @Bean
