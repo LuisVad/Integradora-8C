@@ -61,7 +61,7 @@ public class ServiciosPaqueteServices {
                 null,
                 true,
                 400,
-                "No encontrado"
+                "No encontrado para actualizar"
         );
     }
     @Transactional(rollbackFor = {SQLDataException.class})
@@ -80,7 +80,7 @@ public class ServiciosPaqueteServices {
                 null,
                 true,
                 400,
-                "No encontrado"
+                "No encontrado para eliminar"
         );
     }
     @Transactional(rollbackFor = {SQLDataException.class})
@@ -99,7 +99,7 @@ public class ServiciosPaqueteServices {
                 null,
                 true,
                 400,
-                "No encontrado"
+                "No encontrado para cambiar estatus"
         );
     }
 }

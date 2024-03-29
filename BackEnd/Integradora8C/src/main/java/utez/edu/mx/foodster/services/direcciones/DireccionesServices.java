@@ -60,7 +60,7 @@ public class DireccionesServices {
                 null,
                 true,
                 400,
-                "No encontrado"
+                "No encontrado para actualizar"
         );
     }
     @Transactional(rollbackFor = {SQLException.class})
@@ -79,7 +79,7 @@ public class DireccionesServices {
                 null,
                 true,
                 400,
-                "No encontrado"
+                "No encontrado para eliminar"
         );
     }
     @Transactional(rollbackFor = {SQLException.class})
@@ -99,7 +99,7 @@ public class DireccionesServices {
                 null,
                 true,
                 400,
-                "No encontrado"
+                "No encontrado para cambiar status"
         );
     }
 }
