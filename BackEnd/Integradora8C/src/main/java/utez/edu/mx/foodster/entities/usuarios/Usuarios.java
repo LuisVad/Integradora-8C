@@ -9,6 +9,7 @@ import org.hibernate.annotations.UuidGenerator;
 import utez.edu.mx.foodster.entities.roles.Roles;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -39,7 +40,9 @@ public class Usuarios {
     private Timestamp ultimaModificacion;
     @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE")
     private Boolean active;
-    @ManyToMany(mappedBy = "usuarios", cascade = CascadeType.MERGE)
-    private Set<Roles> roles;
+    @ManyToMany
+    @JoinTable(name = "usuarios_roles", joinColumns = @JoinColumn(name = "id_usuario"),
+            inverseJoinColumns = @JoinColumn(name = "id_rol"))
+    private Set<Roles> roles = new HashSet<>();
 
 }

@@ -42,7 +42,6 @@ public class UsuariosDto {
     private String contrasena;
     private Timestamp ultimaModificacion;
     private Boolean active;
-    @NotBlank(message = "Los roles no pueden ser nulos")
     private Set<Roles> roles;
 
     public Usuarios toEntity() {

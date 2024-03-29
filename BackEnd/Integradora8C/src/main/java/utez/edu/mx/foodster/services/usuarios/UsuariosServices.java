@@ -36,9 +36,11 @@ public class UsuariosServices {
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Usuarios> insert(Usuarios usuarios) {
         usuarios.setContrasena(this.passwordEncoder.encode(usuarios.getContrasena()));
-        Usuarios resultado = this.repository.save(usuarios);
-        resultado.getRoles().forEach(rol -> this.repository.saveUserRole(usuarios.getIdUsuario(), rol.getIdRol()));
-        return new Response<>(resultado, false, 200, "OK");
+        return new Response<>(
+                this.repository.save(usuarios),
+                false,
+                200,
+                "OK");
     }
 
     @Transactional(rollbackFor = {SQLException.class})
