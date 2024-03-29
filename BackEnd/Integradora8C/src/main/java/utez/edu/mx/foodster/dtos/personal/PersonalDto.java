@@ -27,6 +27,7 @@ public class PersonalDto {
     private Boolean active;
 
     public Personal toEntity() {
-        this.ultimaModificacion = new Timestamp(System.currentTimeMillis());        return new Personal(idPersonal, usuarios, categoria, ultimaModificacion, active);
+        this.ultimaModificacion = new Timestamp(System.currentTimeMillis());
+        return new Personal(idPersonal, usuarios, categoria, ultimaModificacion, active);
     }
 }

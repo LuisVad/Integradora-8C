@@ -1,5 +1,7 @@
 package utez.edu.mx.foodster.services.personal;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.foodster.entities.personal.Personal;
@@ -9,12 +11,15 @@ import utez.edu.mx.foodster.entities.usuarios.UsuariosRepository;
 import utez.edu.mx.foodster.utils.Response;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
 public class PersonalServices {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     private final PersonalRepository repository;
     private final UsuariosRepository usuariosRepository;
 
@@ -31,6 +36,17 @@ public class PersonalServices {
 
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Personal> insert(Personal personal) {
+        Optional<Usuarios> exist = this.usuariosRepository.findByCorreo(personal.getUsuarios().getCorreo());
+        if(exist.isEmpty()){
+            return new Response<>(
+                    null,
+                    true,
+                    400,
+                    "Correo ya registrado"
+            );
+        }
+        personal.getUsuarios().setUltimaModificacion(new Timestamp(System.currentTimeMillis()));
+        personal.getUsuarios().setContrasena(this.passwordEncoder.encode(personal.getUsuarios().getContrasena()));
         Usuarios usuarios = this.usuariosRepository.save(personal.getUsuarios());
         personal.setUsuarios(usuarios);
         return new Response<>(this.repository.save(personal), false, 200, "OK");
