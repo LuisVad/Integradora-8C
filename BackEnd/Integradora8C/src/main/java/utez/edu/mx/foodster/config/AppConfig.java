@@ -19,6 +19,7 @@ import utez.edu.mx.foodster.services.usuarios.UsuariosServices;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 @Configuration
@@ -26,6 +27,8 @@ public class AppConfig {
 
     private final RolesRepository rolesRepository;
     private final UsuariosServices usuariosServices;
+
+    private final Random random = new Random();
     private final PersonalServices personalServices;
 
     private final CategoriasPersonalRepository categoriasPersonalRepository;
@@ -46,65 +49,75 @@ public class AppConfig {
 
     @PostConstruct
     public void init() {
-        if (rolesRepository.count() == 0) {
-            RolesDto rolesDto = new RolesDto(null, "ADMIN", new Timestamp(System.currentTimeMillis()), true);
-            rolesRepository.save(rolesDto.toEntity());
-            rolesDto = new RolesDto(null, "CLIENTE", new Timestamp(System.currentTimeMillis()), true);
-            rolesRepository.save(rolesDto.toEntity());
-            rolesDto = new RolesDto(null, "PERSONAL", new Timestamp(System.currentTimeMillis()), true);
-            rolesRepository.save(rolesDto.toEntity());
-        }
-        if (categoriasPersonalRepository.count() == 0) {
-            categoriasPersonalRepository.save(new CategoriasPersonalDto(null, "Mesero", new Timestamp(System.currentTimeMillis()), true).toEntity());
-            categoriasPersonalRepository.save(new CategoriasPersonalDto(null, "Chef", new Timestamp(System.currentTimeMillis()), true).toEntity());
-        }
-
-        if (usuariosServices.count() == 0) {
-            rolesRepository.findAllByActiveOrderByUltimaModificacionDesc(true).forEach(roles -> {
-                if (roles.getNombre().equals("ADMIN")) {
-                    Set<Roles> rolesUser = new HashSet<>();
-                    rolesUser.add(roles);
-                    UsuariosDto usuariosDto = new UsuariosDto(null, "Cristian", "Rodriguez", "Rodriguez", "7777909013", "redalphasiete@gmail.com", "admin", new Timestamp(System.currentTimeMillis()), true, rolesUser);
-                    Usuarios usuarios = usuariosDto.toEntity();
-                    usuariosServices.insert(usuarios);
-                }
-                if (roles.getNombre().equals("CLIENTE")) {
-                    Set<Roles> rolesUser = new HashSet<>();
-                    rolesUser.add(roles);
-                    UsuariosDto usuariosDto = new UsuariosDto(null, "Juan", "Camaney", "Ramirez", "7777909014", "juancamaney@yopmail.com", "cliente", new Timestamp(System.currentTimeMillis()), true, rolesUser);
-                    Usuarios usuarios = usuariosDto.toEntity();
-                    usuariosServices.insert(usuarios);
-                }
-                if (roles.getNombre().equals("PERSONAL")) {
-                    String[] nombres = {"Juan", "Pedro", "Maria", "Jose", "Luis", "Ana", "Rosa", "Carlos", "Jorge", "Fernando", "Ricardo", "Roberto"};
-                    String[] apellidos = {"Rodriguez", "Juarez", "Jimenez", "Gonzalez", "Perez", "Lopez", "Garcia", "Hernandez", "Martinez", "Torres", "Sanchez", "Ramirez"};
-
-                    for (int i = 0; i < 100; i++) {
-                        if (i <= 50){
-                            Set<Roles> rolesUser = new HashSet<>();
-                            rolesUser.add(roles);
-                            UsuariosDto usuariosDto = new UsuariosDto(null, nombres[(int) (Math.random() * 12)], apellidos[(int) (Math.random() * 12)], apellidos[(int) (Math.random() * 12)], "7777909013", "usuario" + i + "@yopmail.com", "personal", new Timestamp(System.currentTimeMillis()), true, rolesUser);
-                            Usuarios usuarios = usuariosDto.toEntity();
-                            usuariosServices.insert(usuarios);
-                            CategoriasPersonal categoriasPersonal = categoriasPersonalRepository.findByNombreAndActive("Chef", true);
-                            PersonalDto personalDto = new PersonalDto(null, usuarios, categoriasPersonal, new Timestamp(System.currentTimeMillis()), true);
-                            personalServices.insert(personalDto.toEntity());
-                        }else {
-                            Set<Roles> rolesUser = new HashSet<>();
-                            rolesUser.add(roles);
-                            UsuariosDto usuariosDto = new UsuariosDto(null, nombres[(int) (Math.random() * 12)], apellidos[(int) (Math.random() * 12)], apellidos[(int) (Math.random() * 12)], "7777909013", "usuario" + i + "@yopmail.com", "personal", new Timestamp(System.currentTimeMillis()), true, rolesUser);
-                            Usuarios usuarios = usuariosDto.toEntity();
-                            usuariosServices.insert(usuarios);
-                            CategoriasPersonal categoriasPersonal = categoriasPersonalRepository.findByNombreAndActive("Mesero", true);
-                            PersonalDto personalDto = new PersonalDto(null, usuarios, categoriasPersonal, new Timestamp(System.currentTimeMillis()), true);
-                            personalServices.insert(personalDto.toEntity());
-
-                        }
-                    }
-                }
-            });
-        }
-
-
+        initRoles();
+        initCategories();
+        initUsers();
     }
+
+    private void initRoles() {
+        if (rolesRepository.count() != 0) return;
+
+        saveRole("ADMIN");
+        saveRole("CLIENTE");
+        saveRole("PERSONAL");
+    }
+
+    private void saveRole(String roleName) {
+        RolesDto rolesDto = new RolesDto(null, roleName, new Timestamp(System.currentTimeMillis()), true);
+        rolesRepository.save(rolesDto.toEntity());
+    }
+
+    private void initCategories() {
+        if (categoriasPersonalRepository.count() != 0) return;
+
+        saveCategory("Mesero");
+        saveCategory("Chef");
+    }
+
+    private void saveCategory(String categoryName) {
+        categoriasPersonalRepository.save(new CategoriasPersonalDto(null, categoryName, new Timestamp(System.currentTimeMillis()), true).toEntity());
+    }
+
+    private void initUsers() {
+        if (usuariosServices.count() != 0) return;
+
+        rolesRepository.findAllByActiveOrderByUltimaModificacionDesc(true).forEach(this::processRole);
+    }
+
+    private void processRole(Roles roles) {
+        String roleName = roles.getNombre();
+        if (roleName.equals("ADMIN")) {
+            saveUser(roles, "Cristian", "Jimenez", "Rodriguez", "7777909055", "redalphasiete@gmail.com", "admin");
+        } else if (roleName.equals("CLIENTE")) {
+            saveUser(roles, "Juan", "Camaney", "Ramirez", "7777909014", "juancamaney@yopmail.com", "cliente");
+        } else if (roleName.equals("PERSONAL")) {
+            createPersonalUsers(roles);
+        }
+    }
+
+    private void saveUser(Roles roles, String name, String lastName1, String lastName2, String phone, String email, String password) {
+        Set<Roles> rolesUser = new HashSet<>();
+        rolesUser.add(roles);
+        UsuariosDto usuariosDto = new UsuariosDto(null, name, lastName1, lastName2, phone, email, password, new Timestamp(System.currentTimeMillis()), true, rolesUser);
+        Usuarios usuarios = usuariosDto.toEntity();
+        usuariosServices.insert(usuarios);
+    }
+
+    private void createPersonalUsers(Roles roles) {
+    String[] nombres = {"Juan", "Pedro", "Maria", "Jose", "Luis", "Ana", "Rosa", "Carlos", "Jorge", "Fernando", "Ricardo", "Roberto"};
+    String[] apellidos = {"Rodriguez", "Juarez", "Jimenez", "Gonzalez", "Perez", "Lopez", "Garcia", "Hernandez", "Martinez", "Torres", "Sanchez", "Ramirez"};
+
+    for (int i = 0; i < 100; i++) {
+        String name = nombres[random.nextInt(nombres.length)];
+        String lastName1 = apellidos[random.nextInt(apellidos.length)];
+        String lastName2 = apellidos[random.nextInt(apellidos.length)];
+        String email = "usuario" + i + "@yopmail.com";
+        saveUser(roles, name, lastName1, lastName2, "7777909013", email, "personal");
+
+        String categoryName = i <= 50 ? "Chef" : "Mesero";
+        CategoriasPersonal categoriasPersonal = categoriasPersonalRepository.findByNombreAndActive(categoryName, true);
+        PersonalDto personalDto = new PersonalDto(null, usuariosServices.getByCorreo(email), categoriasPersonal, new Timestamp(System.currentTimeMillis()), true);
+        personalServices.insert(personalDto.toEntity());
+    }
+}
 }

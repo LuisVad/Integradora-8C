@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UuidGenerator;
 import utez.edu.mx.foodster.entities.categoriaspersonal.CategoriasPersonal;
 import utez.edu.mx.foodster.entities.usuarios.Usuarios;
 
@@ -21,7 +21,7 @@ public class Personal {
 
     @Id
     @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid")
+    @UuidGenerator
     @Column(name = "id_personal")
     private String idPersonal;
     @ManyToOne

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UuidGenerator;
 import utez.edu.mx.foodster.entities.roles.Roles;
 
 import java.sql.Timestamp;
@@ -20,8 +20,7 @@ import java.util.Set;
 public class Usuarios {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid")
+    @UuidGenerator
     @Column(name = "id_usuario")
     private String idUsuario;
     @Column(name = "nombres", columnDefinition = "TEXT NOT NULL")

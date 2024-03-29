@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.sql.Timestamp;
 
@@ -18,7 +18,7 @@ import java.sql.Timestamp;
 public class Eventos {
     @Id
     @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid")
+    @UuidGenerator
     @Column(name = "id_evento")
     private String idEvento;
     @Column(name = "fecha_hora_inicio", columnDefinition = "TIMESTAMP NOT NULL")

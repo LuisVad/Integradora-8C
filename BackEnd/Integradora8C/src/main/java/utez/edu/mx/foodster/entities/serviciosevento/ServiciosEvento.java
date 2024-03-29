@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UuidGenerator;
 import utez.edu.mx.foodster.entities.eventos.Eventos;
 import utez.edu.mx.foodster.entities.servicios.Servicios;
 
@@ -21,7 +21,7 @@ import java.sql.Timestamp;
 public class ServiciosEvento {
     @Id
     @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid")
+    @UuidGenerator
     @Column(name = "id_servicio_evento")
     private String idServicioEvento;
     @ManyToOne
