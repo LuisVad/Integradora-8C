@@ -37,16 +37,17 @@ public class AuthService {
     private final MailService emailService;
 
     private final TwilioServices twilioService;
-    HtmlMessageRender htmlRender;
+    private final HtmlMessageRender htmlRender;
 
 
     @Autowired
-    public AuthService(UsuariosServices service, AuthenticationManager manager, JwtProvider provider, MailService emailService, TwilioServices twilioService) {
+    public AuthService(UsuariosServices service, AuthenticationManager manager, JwtProvider provider, MailService emailService, TwilioServices twilioService, HtmlMessageRender htmlRender) {
         this.service = service;
         this.manager = manager;
         this.provider = provider;
         this.emailService = emailService;
         this.twilioService = twilioService;
+        this.htmlRender = htmlRender;
     }
 
     @Transactional(readOnly = true)

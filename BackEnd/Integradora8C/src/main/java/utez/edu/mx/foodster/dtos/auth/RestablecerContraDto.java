@@ -14,7 +14,5 @@ public class RestablecerContraDto {
     private String token;
     @NotBlank
     private String contrasenia;
-    @NotBlank
-    private String confirmarContrasenia;
 }
 
