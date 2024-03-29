@@ -1,4 +1,11 @@
 EndPoints 
+
+# auth - login ***/foodster-api/auth/ method POST 
+{
+    "correo":"c@example.com",
+    "contrasenia":"12345"
+}
+
 # save usuarios ***/foodster-api/usuarios/ method POST 
 
 {
@@ -15,14 +22,6 @@ EndPoints
                 }
             ]
 }
-
-# auth - login ***/foodster-api/auth/ method POST 
-{
-    "correo":"c@example.com",
-    "contrasenia":"12345"
-}
-
-
 # save personal ***/foodster-api/personal/   method POST 
 # JSON 
 {
@@ -92,3 +91,72 @@ EndPoints
   },
   "active": true
 }
+
+# insert categoriasPersonal **/foodster-api/categorias-personal/   method POST
+{
+   "nombre": "prueba",
+   "active":true
+}
+
+# insert categoriasServicios **/foodster-api/categorias-servicios/   methos POST
+{
+   "nombre": "prueba",
+   "active":true
+}
+
+# insert direcciones **/foodster-api/direcciones/  methos POST
+{
+  "calle": "Calle Ejemplo",
+  "colonia": "Colonia Ejemplo",
+  "numero": "123",
+  "codigoPostal": "12345",
+  "municipio": "Municipio Ejemplo",
+  "estado": "Estado Ejemplo",
+  "referencias": "Referencias Ejemplo",
+  "active": true
+}
+
+# insert direccionesUsuario **/foodster-api/direcciones-usuario/ method POST
+{
+  "direcciones": {
+    "calle": "Calle Ejemplo",
+    "colonia": "Colonia Ejemplo",
+    "numero": "123",
+    "codigoPostal": "12345",
+    "municipio": "Municipio Ejemplo",
+    "estado": "Estado Ejemplo",
+    "referencias": "Referencias Ejemplo",
+    "active": true
+  },
+  "usuarios": {
+    "idUsuario": "dc254013-9f4d-4ad5-a128-e9b16b9402ec"
+  },
+  "active": true
+}
+
+### select direcciones por usuario /direcciones-usuario/usuario/{uid} method GET 
+
+
+## insert eventos /eventos/ method post 
+{
+  "fechaHoraInicio": "2024-03-28T12:00:00Z",
+  "fechaHoraFin": "2024-03-28T15:00:00Z",
+  "numeroPersonas": 10,
+  "costoTotal": 250.5,
+  "personalizado": true,
+  "active": true
+}
+
+## insert paquetes /paquetes/ method post 
+{
+  "nombre": "Nombre del paquete",
+  "descripcion": "Descripción del paquete",
+  "recomendadoPara": "Recomendado para quién",
+  "imagen": "url_de_la_imagen.jpg",
+  "numeroPedidos": 100,
+  "active": true
+}
+
+
+
+
