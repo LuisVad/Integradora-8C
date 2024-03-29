@@ -12,7 +12,7 @@ import utez.edu.mx.foodster.utils.Response;
 import java.util.List;
 
 @RestController
-@RequestMapping("${apiPrefix}/categoria-personal")
+@RequestMapping("${apiPrefix}/categorias-personal")
 @CrossOrigin(value = {"*"})
 public class CategoriaPersonalController {
     private final CategoriasPersonalServices services;
