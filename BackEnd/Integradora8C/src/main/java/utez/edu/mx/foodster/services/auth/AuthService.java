@@ -10,10 +10,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import utez.edu.mx.foodster.dtos.auth.CambioResponseDto;
 import utez.edu.mx.foodster.dtos.auth.UsuarioTokenDto;
 import utez.edu.mx.foodster.entities.usuarios.Usuarios;
 import utez.edu.mx.foodster.security.jwt.JwtProvider;
+import utez.edu.mx.foodster.services.mailservice.MailService;
+import utez.edu.mx.foodster.services.twilio.TwilioServices;
 import utez.edu.mx.foodster.services.usuarios.UsuariosServices;
+import utez.edu.mx.foodster.utils.HtmlMessageRender;
 import utez.edu.mx.foodster.utils.Response;
 
 import java.util.logging.Logger;
@@ -30,11 +34,19 @@ public class AuthService {
 
     private final JwtProvider provider;
 
+    private final MailService emailService;
+
+    private final TwilioServices twilioService;
+    HtmlMessageRender htmlRender;
+
+
     @Autowired
-    public AuthService(UsuariosServices service, AuthenticationManager manager, JwtProvider provider) {
+    public AuthService(UsuariosServices service, AuthenticationManager manager, JwtProvider provider, MailService emailService, TwilioServices twilioService) {
         this.service = service;
         this.manager = manager;
         this.provider = provider;
+        this.emailService = emailService;
+        this.twilioService = twilioService;
     }
 
     @Transactional(readOnly = true)
@@ -42,7 +54,7 @@ public class AuthService {
         try {
             Usuarios foundUser = service.getByCorreo(username);
             if (foundUser == null)
-                return new ResponseEntity<>(new Response<>(null, true, 404, "Usuario no encontrado"), HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new Response<>(null, true, 404, "Usuario no encontrado para login"), HttpStatus.NOT_FOUND);
             if (Boolean.FALSE.equals(foundUser.getActive())) {
                 return new ResponseEntity<>(new Response<>(null, true, 401, "Usuario inactivo"), HttpStatus.UNAUTHORIZED);
             }
@@ -58,4 +70,35 @@ public class AuthService {
             return new ResponseEntity<>(new Response<>(null, true, 401, message), HttpStatus.BAD_REQUEST);
         }
     }
+
+    public ResponseEntity<Response<CambioResponseDto>> resetPassword(String correo) {
+        Usuarios user = service.getByCorreo(correo);
+        if (user == null) {
+            return new ResponseEntity<>(new Response<>(null, true, 404, "Usuario no encontrado"), HttpStatus.NOT_FOUND);
+        }
+        String token = provider.generatePasswordResetToken(correo);
+        String url = "http://localhost:5173/restablecer?token=" + token;
+        String message = htmlRender.renderRecover(user.getNombres(), url);
+        try {
+            emailService.sendHtmlMessage(correo, "Recuperar contraseña", message);
+            twilioService.sendSMS(user.getTelefono(), "Para recuperar tu contraseña, visita " + url);
+            return new ResponseEntity<>(new Response<>(new CambioResponseDto(correo), false, 200, "Correo enviado"), HttpStatus.OK);
+        } catch (Exception e) {
+            this.logger.severe(e.getMessage());
+            return new ResponseEntity<>(new Response<>(null, true, 500, "Error al enviar correo"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    public ResponseEntity<Response<CambioResponseDto>> confirmResetPassword(String token, String password) {
+        String correo = provider.getEmailFromPasswordResetToken(token);
+        Usuarios user = service.getByCorreo(correo);
+        if (user == null) {
+            return new ResponseEntity<>(new Response<>(null, true, 404, "Usuario no encontrado"), HttpStatus.NOT_FOUND);
+        }
+        user.setContrasena(password);
+        service.insert(user);
+        return new ResponseEntity<>(new Response<>(new CambioResponseDto(correo), false, 200, "Contraseña actualizada"), HttpStatus.OK);
+    }
+
 }

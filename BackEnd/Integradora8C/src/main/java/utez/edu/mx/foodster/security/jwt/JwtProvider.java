@@ -1,9 +1,6 @@
 package utez.edu.mx.foodster.security.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.DefaultClaims;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -77,6 +74,30 @@ public class JwtProvider {
             logger.severe(e.getMessage());
         }
         return false;
+    }
+
+    public String generatePasswordResetToken(String email) {
+        return Jwts.builder().setSubject(email).setIssuedAt(new Date()).setExpiration(new Date(new Date().getTime() + expiration * 1000L)).signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
+    }
+
+    public boolean validatePasswordResetToken(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
+            return true;
+        } catch (MalformedJwtException e) {
+            logger.severe("Token mal formado");
+        } catch (UnsupportedJwtException e) {
+            logger.severe("Token no soportado");
+        } catch (ExpiredJwtException e) {
+            logger.severe("Token caducado");
+        } catch (IllegalArgumentException e) {
+            logger.severe("Token no provisto");
+        }
+        return false;
+    }
+
+    public String getEmailFromPasswordResetToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token).getBody().getSubject();
     }
 
 }

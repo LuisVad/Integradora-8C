@@ -6,7 +6,6 @@ import com.twilio.type.PhoneNumber;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import utez.edu.mx.foodster.utils.Response;
 
 @Service
 @Transactional
@@ -18,18 +17,17 @@ public class TwilioServices {
     @Value("${TWILIO_NUMBER}")
     String phoneNumber;
 
-    public Response<String> sendSMS(String number){
-        Twilio.init(sid, token);
-        Message.creator(
-                new PhoneNumber(number),
-                new PhoneNumber(phoneNumber),
-                "Probando"
-        ).create();
-        return new Response<>(
-                "Enviado",
-                false,
-                200,
-                "OK"
-        );
+    public Boolean sendSMS(String number, String message) {
+        try {
+            Twilio.init(sid, token);
+            Message.creator(
+                    new PhoneNumber("+52" + number),
+                    new PhoneNumber(phoneNumber),
+                    message
+            ).create();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

@@ -4,8 +4,7 @@ package utez.edu.mx.foodster.controllers.auth;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import utez.edu.mx.foodster.dtos.auth.SignDto;
-import utez.edu.mx.foodster.dtos.auth.UsuarioTokenDto;
+import utez.edu.mx.foodster.dtos.auth.*;
 import utez.edu.mx.foodster.services.auth.AuthService;
 import utez.edu.mx.foodster.utils.Response;
 
@@ -22,5 +21,15 @@ public class AuthController {
     @PostMapping("/")
     public ResponseEntity<Response<UsuarioTokenDto>> login(@RequestBody @Valid SignDto dto) {
         return service.login(dto.getCorreo(), dto.getContrasenia());
+    }
+
+    @PostMapping("/restablecer")
+    public ResponseEntity<Response<CambioResponseDto>> restablecerContrasenia(@RequestBody @Valid CambioRequestDto dto) {
+        return service.resetPassword(dto.getCorreo());
+    }
+
+    @PostMapping("/confirmar")
+    public ResponseEntity<Response<CambioResponseDto>> confirmarCambio(@RequestBody @Valid RestablecerContraDto dto) {
+        return service.confirmResetPassword(dto.getToken(), dto.getContrasenia());
     }
 }
