@@ -1,7 +1,22 @@
 EndPoints 
+# save usuarios ***/foodster-api/usuarios/ method POST 
 
+{
+            "nombres": "usuario",
+            "primerApellido": "usuario",
+            "segundoApellido": "usuario",
+            "telefono": "1234567890",
+            "correo": "usuario2@example.com",
+            "contrasena": "usuario123",
+            "active": true,
+            "roles": [
+               {
+                    "idRol": "47760ab5-2d74-45ac-af43-250208acd14e"
+                }
+            ]
+}
 
-# save personal ***/fooster-api/personal/   method POST 
+# save personal ***/foodster-api/personal/   method POST 
 # JSON 
 {
     "categoria": {
@@ -27,7 +42,7 @@ EndPoints
     }
 }
 
-# update personal ***/fooster-api/personal/   method PUT 
+# update personal ***/foodster-api/personal/   method PUT 
 # JSON 
 {
     "categoria": {
@@ -56,7 +71,7 @@ EndPoints
     }
 }
 
-# insert servicios ***/fooster-api/servicios/ method POST
+# insert servicios ***/foodster-api/servicios/ method POST
 
 {
   "nombre": "Nombre del Servicio 2",
