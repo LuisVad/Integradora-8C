@@ -40,4 +40,8 @@ public class UsuariosController {
     public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") String uid) {
         return new ResponseEntity<>(this.services.delete(uid), HttpStatus.OK);
     }
+    @DeleteMapping("/status/{uid}")
+    public ResponseEntity<Response<Boolean>> changeStatus(@PathVariable("uid") String uid) {
+        return new ResponseEntity<>(this.services.changeStatus(uid), HttpStatus.OK);
+    }
 }

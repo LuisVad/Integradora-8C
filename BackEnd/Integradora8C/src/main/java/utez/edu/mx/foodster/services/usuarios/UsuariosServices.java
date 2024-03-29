@@ -61,6 +61,16 @@ public class UsuariosServices {
         }
         return new Response<>(null, true, 400, "No encontrado");
     }
+    @Transactional(rollbackFor = {SQLException.class})
+    public Response<Boolean> changeStatus(String id) {
+        Optional<Usuarios> entity = this.repository.findById(id);
+        if (entity.isPresent()) {
+            entity.get().setActive(
+                    !entity.get().getActive());
+            return new Response<>(true, false, 200, "Estatus cambiado!");
+        }
+        return new Response<>(null, true, 400, "No encontrado");
+    }
 
     public long count() {
         return this.repository.count();
