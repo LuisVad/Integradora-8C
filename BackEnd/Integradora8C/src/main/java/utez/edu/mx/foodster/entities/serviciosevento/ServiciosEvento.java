@@ -24,6 +24,8 @@ public class ServiciosEvento {
     @UuidGenerator
     @Column(name = "id_servicio_evento")
     private String idServicioEvento;
+    @Column(name = "cantidad", columnDefinition = "BIGINT")
+    private Long cantidad;
     @ManyToOne
     @JoinColumn(name = "id_evento")
     private Eventos evento;

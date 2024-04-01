@@ -1,6 +1,6 @@
 package utez.edu.mx.foodster.dtos.personalevento;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,9 +17,9 @@ import java.sql.Timestamp;
 @Setter
 public class PersonalEventoDto {
     private String idPersonalEvento;
-    @NotBlank(message = "El personal no puede ser nulo")
+    @NotNull(message = "El personal no puede ser nulo")
     private Personal personal;
-    @NotBlank(message = "El evento no puede ser nulo")
+    @NotNull(message = "El evento no puede ser nulo")
     private Eventos eventos;
     private Timestamp ultimaModificacion;
     private Boolean active;
