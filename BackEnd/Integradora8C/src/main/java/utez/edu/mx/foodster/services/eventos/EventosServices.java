@@ -50,7 +50,7 @@ public class EventosServices {
         Optional<Eventos> update = this.repository.findById(eventos.getIdEvento());
         if(update.isPresent()){
             return new Response<>(
-                    this.repository.saveAndFlush(update.get()),
+                    this.repository.saveAndFlush(eventos),
                     false,
                     200,
                     "OK"
