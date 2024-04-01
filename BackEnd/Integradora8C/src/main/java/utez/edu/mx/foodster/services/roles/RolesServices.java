@@ -31,6 +31,16 @@ public class RolesServices {
         return new Response<>(this.repository.findByIdRolAndActive(id, true), false, 200, "OK");
     }
 
+    @Transactional(readOnly = true)
+    public Response<Roles> getByNombre(String nombre) {
+        return new Response<>(this.repository.findByNombreAndActive(nombre, true), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
+    public Roles getByNombreAndActive(String nombre, Boolean active) {
+        return this.repository.findByNombreAndActive(nombre, active);
+    }
+
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Roles> insert(Roles roles) {
         return new Response<>(this.repository.save(roles), false, 200, "OK");

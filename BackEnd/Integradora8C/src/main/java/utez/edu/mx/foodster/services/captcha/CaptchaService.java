@@ -24,12 +24,12 @@ public class CaptchaService {
         this.restTemplate = restTemplate;
     }
 
-    public CaptchaResponse verificarCaptcha(String solution) {
+    public CaptchaResponse verificarCaptcha(String solucion) {
         String url = "https://api.friendlycaptcha.com/api/v1/siteverify";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         Map<String, String> requestBody = new HashMap<>();
-        requestBody.put("solution", solution);
+        requestBody.put("solution", solucion);
         requestBody.put("secret", captchaKey);
         requestBody.put("sitekey", siteKey);
 
@@ -41,5 +41,10 @@ public class CaptchaService {
             requestEntity,
             CaptchaResponse.class);
         return responseEntity.getBody();
+    }
+
+    public Boolean verificarCaptchaBoolean(String solucion) {
+        CaptchaResponse response = verificarCaptcha(solucion);
+        return response.isSuccess();
     }
 }

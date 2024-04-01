@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.foodster.dtos.usuarios.UsuariosDto;
+import utez.edu.mx.foodster.dtos.usuarios.UsuariosPublicDto;
 import utez.edu.mx.foodster.entities.usuarios.Usuarios;
 import utez.edu.mx.foodster.services.usuarios.UsuariosServices;
 import utez.edu.mx.foodster.utils.Response;
@@ -29,6 +30,11 @@ public class UsuariosController {
     @PostMapping("/")
     public ResponseEntity<Response<Usuarios>> insert(@RequestBody @Valid UsuariosDto usuariosDto) {
         return new ResponseEntity<>(this.services.insert(usuariosDto.toEntity()), HttpStatus.OK);
+    }
+
+    @PostMapping("/public")
+    public ResponseEntity<Response<Usuarios>> publicInsert(@RequestBody @Valid UsuariosPublicDto usuarios) {
+        return new ResponseEntity<>(this.services.publicInsert(usuarios), HttpStatus.OK);
     }
 
     @PutMapping("/")

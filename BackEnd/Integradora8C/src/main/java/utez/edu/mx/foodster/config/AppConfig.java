@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 import utez.edu.mx.foodster.dtos.categoriaspersonal.CategoriasPersonalDto;
 import utez.edu.mx.foodster.dtos.personal.PersonalDto;
@@ -14,8 +15,8 @@ import utez.edu.mx.foodster.entities.categoriaspersonal.CategoriasPersonalReposi
 import utez.edu.mx.foodster.entities.roles.Roles;
 import utez.edu.mx.foodster.entities.roles.RolesRepository;
 import utez.edu.mx.foodster.entities.usuarios.Usuarios;
+import utez.edu.mx.foodster.entities.usuarios.UsuariosRepository;
 import utez.edu.mx.foodster.services.personal.PersonalServices;
-import utez.edu.mx.foodster.services.usuarios.UsuariosServices;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
@@ -26,7 +27,9 @@ import java.util.Set;
 public class AppConfig {
 
     private final RolesRepository rolesRepository;
-    private final UsuariosServices usuariosServices;
+    private final UsuariosRepository usuariosRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     private final Random random = new Random();
     private final PersonalServices personalServices;
@@ -35,9 +38,10 @@ public class AppConfig {
 
 
     @Autowired
-    public AppConfig(RolesRepository rolesRepository, UsuariosServices usuariosServices, PersonalServices personalServices, CategoriasPersonalRepository categoriasPersonalRepository) {
+    public AppConfig(RolesRepository rolesRepository, UsuariosRepository usuariosRepository, PasswordEncoder passwordEncoder, PersonalServices personalServices, CategoriasPersonalRepository categoriasPersonalRepository) {
         this.rolesRepository = rolesRepository;
-        this.usuariosServices = usuariosServices;
+        this.usuariosRepository = usuariosRepository;
+        this.passwordEncoder = passwordEncoder;
         this.personalServices = personalServices;
         this.categoriasPersonalRepository = categoriasPersonalRepository;
     }
@@ -79,7 +83,7 @@ public class AppConfig {
     }
 
     private void initUsers() {
-        if (usuariosServices.count() != 0) return;
+        if (usuariosRepository.count() != 0) return;
 
         rolesRepository.findAllByActiveOrderByUltimaModificacionDesc(true).forEach(this::processRole);
     }
@@ -101,24 +105,25 @@ public class AppConfig {
         rolesUser.add(roles);
         UsuariosDto usuariosDto = new UsuariosDto(null, name, lastName1, lastName2, phone, email, password, new Timestamp(System.currentTimeMillis()), true, rolesUser);
         Usuarios usuarios = usuariosDto.toEntity();
-        usuariosServices.insert(usuarios);
+        usuarios.setContrasena(passwordEncoder.encode(usuarios.getContrasena()));
+        usuariosRepository.save(usuarios);
     }
 
     private void createPersonalUsers(Roles roles) {
-    String[] nombres = {"Juan", "Pedro", "Maria", "Jose", "Luis", "Ana", "Rosa", "Carlos", "Jorge", "Fernando", "Ricardo", "Roberto"};
-    String[] apellidos = {"Rodriguez", "Juarez", "Jimenez", "Gonzalez", "Perez", "Lopez", "Garcia", "Hernandez", "Martinez", "Torres", "Sanchez", "Ramirez"};
+        String[] nombres = {"Juan", "Pedro", "Maria", "Jose", "Luis", "Ana", "Rosa", "Carlos", "Jorge", "Fernando", "Ricardo", "Roberto"};
+        String[] apellidos = {"Rodriguez", "Juarez", "Jimenez", "Gonzalez", "Perez", "Lopez", "Garcia", "Hernandez", "Martinez", "Torres", "Sanchez", "Ramirez"};
 
-    for (int i = 0; i < 100; i++) {
-        String name = nombres[random.nextInt(nombres.length)];
-        String lastName1 = apellidos[random.nextInt(apellidos.length)];
-        String lastName2 = apellidos[random.nextInt(apellidos.length)];
-        String email = "usuario" + i + "@yopmail.com";
-        saveUser(roles, name, lastName1, lastName2, "7777909013", email, "personal");
+        for (int i = 0; i < 100; i++) {
+            String name = nombres[random.nextInt(nombres.length)];
+            String lastName1 = apellidos[random.nextInt(apellidos.length)];
+            String lastName2 = apellidos[random.nextInt(apellidos.length)];
+            String email = "usuario" + i + "@yopmail.com";
+            saveUser(roles, name, lastName1, lastName2, "7777909013", email, "personal");
 
-        String categoryName = i <= 50 ? "Chef" : "Mesero";
-        CategoriasPersonal categoriasPersonal = categoriasPersonalRepository.findByNombreAndActive(categoryName, true);
-        PersonalDto personalDto = new PersonalDto(null, usuariosServices.getByCorreo(email), categoriasPersonal, new Timestamp(System.currentTimeMillis()), true);
-        personalServices.insert(personalDto.toEntity());
+            String categoryName = i <= 50 ? "Chef" : "Mesero";
+            CategoriasPersonal categoriasPersonal = categoriasPersonalRepository.findByNombreAndActive(categoryName, true);
+            PersonalDto personalDto = new PersonalDto(null, usuariosRepository.findByCorreoAndActive(email, true), categoriasPersonal, new Timestamp(System.currentTimeMillis()), true);
+            personalServices.insert(personalDto.toEntity());
+        }
     }
-}
 }
