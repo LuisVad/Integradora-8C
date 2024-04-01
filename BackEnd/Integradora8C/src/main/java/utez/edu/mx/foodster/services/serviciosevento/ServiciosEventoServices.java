@@ -19,7 +19,7 @@ public class ServiciosEventoServices {
     }
 
     @Transactional(readOnly = true)
-    public Response<List<ServiciosEvento>> getAll(){
+    public Response<List<ServiciosEvento>> getAll() {
         return new Response<>(
                 this.repository.findAll(),
                 false,
@@ -27,8 +27,31 @@ public class ServiciosEventoServices {
                 "OK"
         );
     }
+
     @Transactional(readOnly = true)
-    public Response<List<ServiciosEvento>> getAllByStatus(Boolean status){
+
+    public Response<ServiciosEvento> getById(String id) {
+        return new Response<>(
+                this.repository.findByIdServicioEventoAndActive(id, true),
+                false,
+                200,
+                "OK"
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public Response<List<ServiciosEvento>> getAllByIdEvento(String idEvento) {
+        return new Response<>(
+                this.repository.findAllByEventoAndActiveOrderByUltimaModificacionDesc(idEvento, true),
+                false,
+                200,
+                "OK"
+        );
+    }
+
+
+    @Transactional(readOnly = true)
+    public Response<List<ServiciosEvento>> getAllByStatus(Boolean status) {
         return new Response<>(
                 this.repository.findAllByActiveOrderByUltimaModificacionDesc(status),
                 false,
@@ -36,8 +59,9 @@ public class ServiciosEventoServices {
                 "OK"
         );
     }
+
     @Transactional(rollbackFor = {SQLDataException.class})
-    public Response<ServiciosEvento> insert(ServiciosEvento serviciosEvento){
+    public Response<ServiciosEvento> insert(ServiciosEvento serviciosEvento) {
         return new Response<>(
                 this.repository.save(serviciosEvento),
                 false,
@@ -45,10 +69,11 @@ public class ServiciosEventoServices {
                 "OK"
         );
     }
+
     @Transactional(rollbackFor = {SQLDataException.class})
-    public Response<ServiciosEvento> update(ServiciosEvento serviciosEvento){
+    public Response<ServiciosEvento> update(ServiciosEvento serviciosEvento) {
         Optional<ServiciosEvento> update = this.repository.findById(serviciosEvento.getIdServicioEvento());
-        if(update.isPresent()){
+        if (update.isPresent()) {
             return new Response<>(
                     this.repository.saveAndFlush(serviciosEvento),
                     false,
@@ -63,10 +88,11 @@ public class ServiciosEventoServices {
                 "No encontrado para actualizar"
         );
     }
+
     @Transactional(rollbackFor = {SQLDataException.class})
-    public Response<Boolean> delete(String id){
+    public Response<Boolean> delete(String id) {
         Optional<ServiciosEvento> entity = this.repository.findById(id);
-        if (entity.isPresent()){
+        if (entity.isPresent()) {
             this.repository.delete(entity.get());
             return new Response<>(
                     true,
@@ -82,10 +108,11 @@ public class ServiciosEventoServices {
                 "No encontrado para eliminar"
         );
     }
+
     @Transactional(rollbackFor = {SQLDataException.class})
-    public Response<ServiciosEvento> changeStatus(String id){
+    public Response<ServiciosEvento> changeStatus(String id) {
         Optional<ServiciosEvento> entity = this.repository.findById(id);
-        if (entity.isPresent()){
+        if (entity.isPresent()) {
             entity.get().setActive(!entity.get().isActive());
             return new Response<>(
                     this.repository.saveAndFlush(entity.get()),

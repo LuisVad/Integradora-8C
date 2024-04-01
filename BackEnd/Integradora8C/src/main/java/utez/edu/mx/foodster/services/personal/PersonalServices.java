@@ -32,6 +32,14 @@ public class PersonalServices {
     public Response<List<Personal>> getAllByStatus(Boolean status) {
         return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status), false, 200, "OK");
     }
+
+    @Transactional(readOnly = true)
+    public Response<Personal> getById(String id) {
+        return new Response<>(this.repository.findByIdPersonalAndActive(id, true), false, 200, "OK");
+    }
+
+
+
     @Transactional(readOnly = true)
     public Response<List<Personal>> getAll(){
         return new Response<>(

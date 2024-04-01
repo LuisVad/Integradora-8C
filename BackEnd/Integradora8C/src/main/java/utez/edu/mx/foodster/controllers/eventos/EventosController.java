@@ -34,6 +34,22 @@ public class EventosController {
                 HttpStatus.OK
         );
     }
+
+    @GetMapping("/{uid}")
+    public ResponseEntity<Response<Eventos>> getById(@PathVariable("uid") String id){
+        return new ResponseEntity<>(
+                this.services.getById(id),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/usuario/{uid}")
+    public ResponseEntity<Response<List<Eventos>>> getAllByIdUsuario(@PathVariable("uid") String idUsuario){
+        return new ResponseEntity<>(
+                this.services.getAllByIdUsuario(idUsuario),
+                HttpStatus.OK
+        );
+    }
     @PostMapping("/")
     public ResponseEntity<Response<Eventos>> insert(@RequestBody EventosDto dto){
         return new ResponseEntity<>(

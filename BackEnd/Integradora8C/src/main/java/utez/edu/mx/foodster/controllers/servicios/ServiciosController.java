@@ -34,6 +34,22 @@ public class ServiciosController {
                 HttpStatus.OK
         );
     }
+    @GetMapping("/{uid}")
+    public ResponseEntity<Response<Servicios>> getById(@PathVariable("uid") String id){
+        return new ResponseEntity<>(
+                this.services.getById(id),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/categoria/{uid}")
+    public ResponseEntity<Response<List<Servicios>>> getAllByIdCategoria(@PathVariable("uid") String id){
+        return new ResponseEntity<>(
+                this.services.getAllByIdCategoria(id),
+                HttpStatus.OK
+        );
+    }
+
     @PostMapping("/")
     public ResponseEntity<Response<Servicios>> insert(@RequestBody ServiciosDto dto){
         return new ResponseEntity<>(

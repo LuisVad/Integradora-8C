@@ -27,6 +27,11 @@ public class DireccionesController {
                 HttpStatus.OK
         );
     }
+
+    @GetMapping("/{uid}")
+    public ResponseEntity<Response<Direcciones>> getById(@PathVariable("uid") String uid) {
+        return new ResponseEntity<>(this.services.getById(uid), HttpStatus.OK);
+    }
     @GetMapping("/status/{status}")
     public ResponseEntity<Response<List<Direcciones>>> getAllByStatus(@PathVariable("status") Boolean status){
         return new ResponseEntity<>(

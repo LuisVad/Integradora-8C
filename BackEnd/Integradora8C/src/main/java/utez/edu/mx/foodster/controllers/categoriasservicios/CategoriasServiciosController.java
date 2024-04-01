@@ -27,6 +27,11 @@ public class CategoriasServiciosController {
                 HttpStatus.OK
         );
     }
+
+    @GetMapping("/{uid}")
+    public ResponseEntity<Response<CategoriasServicios>> getById(@PathVariable("uid") String uid) {
+        return new ResponseEntity<>(this.services.getById(uid), HttpStatus.OK);
+    }
     @GetMapping("/status/{status}")
     public ResponseEntity<Response<List<CategoriasServicios>>> getAllByStatus(@PathVariable("status") Boolean status){
         return new ResponseEntity<>(

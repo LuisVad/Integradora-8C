@@ -12,4 +12,7 @@ public interface DireccionesUsuarioRepository extends JpaRepository<DireccionesU
     List<DireccionesUsuario> findAllByUsuarios(Usuarios usuarios);
 
     List<DireccionesUsuario> findAllByActiveOrderByUltimaModificacionDesc(Boolean active);
+
+    DireccionesUsuario findByIdDireccionUsuarioAndActive(String idDireccionUsuario, Boolean active);
+
 }

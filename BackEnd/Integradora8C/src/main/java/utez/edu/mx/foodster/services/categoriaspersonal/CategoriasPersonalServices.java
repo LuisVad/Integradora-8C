@@ -25,14 +25,15 @@ public class CategoriasPersonalServices {
     public Response<List<CategoriasPersonal>> getAll() {
         return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(true), false, 200, "OK");
     }
+
     @Transactional(readOnly = true)
-    public Response<List<CategoriasPersonal>> getAllByStatus(Boolean status){
-        return new Response<>(
-                this.repository.findAllByActiveOrderByUltimaModificacionDesc(status),
-                false,
-                200,
-                "OK"
-        );
+    public Response<CategoriasPersonal> getById(String id) {
+        return new Response<>(this.repository.findByIdCategoriaAndActive(id, true), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
+    public Response<List<CategoriasPersonal>> getAllByStatus(Boolean status) {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status), false, 200, "OK");
     }
 
     @Transactional(rollbackFor = {SQLException.class})
@@ -53,7 +54,8 @@ public class CategoriasPersonalServices {
     public Response<Boolean> delete(String id) {
         Optional<CategoriasPersonal> entity = this.repository.findById(id);
         if (entity.isPresent()) {
-            this.repository.delete(entity.get());
+            entity.get().setActive(!entity.get().getActive());
+            this.repository.save(entity.get());
             return new Response<>(true, false, 200, "Eliminado correctamente");
         }
         return new Response<>(null, true, 400, "No encontrado");

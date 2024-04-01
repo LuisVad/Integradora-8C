@@ -26,6 +26,21 @@ public class PersonalEventoController {
         return new ResponseEntity<>(this.services.getAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/{uid}")
+    public ResponseEntity<Response<PersonalEvento>> getById(@PathVariable("uid") String uid) {
+        return new ResponseEntity<>(this.services.getById(uid), HttpStatus.OK);
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<Response<List<PersonalEvento>>> getAllByStatus(@PathVariable("status") Boolean status) {
+        return new ResponseEntity<>(this.services.getAllByStatus(status), HttpStatus.OK);
+    }
+
+    @GetMapping("/evento/{uid}")
+    public ResponseEntity<Response<List<PersonalEvento>>> getAllByEvento(@PathVariable("uid") String uid) {
+        return new ResponseEntity<>(this.services.getAllByIdEvento(uid), HttpStatus.OK);
+    }
+
     @PostMapping("/")
     public ResponseEntity<Response<PersonalEvento>> insert(@RequestBody @Valid PersonalEventoDto personalEventoDto) {
         return new ResponseEntity<>(this.services.insert(personalEventoDto.toEntity()), HttpStatus.OK);

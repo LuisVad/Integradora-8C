@@ -25,13 +25,9 @@ public class PersonalEvento {
     @Column(name = "id_personal_evento")
     private String idPersonalEvento;
 
-    //Aquí ira relación personal_id_personal
-
     @ManyToOne
     @JoinColumn(name = "id_personal")
     private Personal personal;
-
-    //Aquí ira relación eventos_id_evento
 
     @ManyToOne
     @JoinColumn(name = "id_evento")

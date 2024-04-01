@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface DireccionesRepository extends JpaRepository<Direcciones, String> {
     List<Direcciones> findAllByActiveOrderByUltimaModificacionDesc(Boolean active);
+
+    Direcciones findByIdDireccionAndActive(String idDireccion, Boolean active);
 }

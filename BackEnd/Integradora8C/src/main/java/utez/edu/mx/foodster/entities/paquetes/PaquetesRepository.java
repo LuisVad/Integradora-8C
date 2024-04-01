@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface PaquetesRepository extends JpaRepository<Paquetes, String> {
     List<Paquetes> findAllByActiveOrderByUltimaModificacionDesc(Boolean active);
+
+    Paquetes findByIdPaqueteAndActive(String idPaquete, Boolean active);
 }

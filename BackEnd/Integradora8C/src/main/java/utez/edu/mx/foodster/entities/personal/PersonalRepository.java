@@ -9,4 +9,9 @@ import java.util.List;
 public interface PersonalRepository extends JpaRepository<Personal, String> {
 
     List<Personal> findAllByActiveOrderByUltimaModificacionDesc(Boolean active);
+
+
+    Personal findByIdPersonalAndActive(String idPersonal, Boolean active);
+
+
 }

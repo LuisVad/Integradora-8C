@@ -26,6 +26,12 @@ public class RolesController {
         return new ResponseEntity<>(this.services.getAll(), HttpStatus.OK);
     }
 
+
+    @GetMapping("/{uid}")
+    public ResponseEntity<Response<Roles>> getById(@PathVariable("uid") String uid) {
+        return new ResponseEntity<>(this.services.getById(uid), HttpStatus.OK);
+    }
+
     @PostMapping("/")
     public ResponseEntity<Response<Roles>> insert(@RequestBody @Valid RolesDto rolesDto) {
         return new ResponseEntity<>(this.services.insert(rolesDto.toEntity()), HttpStatus.OK);

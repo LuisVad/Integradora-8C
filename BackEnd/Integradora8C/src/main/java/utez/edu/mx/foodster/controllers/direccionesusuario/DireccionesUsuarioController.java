@@ -21,31 +21,27 @@ public class DireccionesUsuarioController {
     }
 
     @GetMapping("/usuario/{id}")
-    public ResponseEntity<Response<List<DireccionesUsuario>>> getAllByUsuario(@PathVariable("id") String id){
-        return new ResponseEntity<>(
-                this.services.getAllByUsuarios(id),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Response<List<DireccionesUsuario>>> getAllByUsuario(@PathVariable("id") String id) {
+        return new ResponseEntity<>(this.services.getAllByUsuarios(id), HttpStatus.OK);
     }
+
+    @GetMapping("/{uid}")
+    public ResponseEntity<Response<DireccionesUsuario>> getById(@PathVariable("uid") String uid) {
+        return new ResponseEntity<>(this.services.getById(uid), HttpStatus.OK);
+    }
+
     @PostMapping("/")
-    public ResponseEntity<Response<DireccionesUsuario>> insert(@RequestBody DireccionesUsuariosDto dto){
-        return new ResponseEntity<>(
-                this.services.insert(dto.toEntity()),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Response<DireccionesUsuario>> insert(@RequestBody DireccionesUsuariosDto dto) {
+        return new ResponseEntity<>(this.services.insert(dto.toEntity()), HttpStatus.OK);
     }
+
     @PutMapping("/")
-    public ResponseEntity<Response<DireccionesUsuario>> update(@RequestBody DireccionesUsuariosDto dto){
-        return new ResponseEntity<>(
-                this.services.update(dto.toEntity()),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Response<DireccionesUsuario>> update(@RequestBody DireccionesUsuariosDto dto) {
+        return new ResponseEntity<>(this.services.update(dto.toEntity()), HttpStatus.OK);
     }
+
     @DeleteMapping("/{uid}")
-    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") String id){
-        return new ResponseEntity<>(
-                this.services.delete(id),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") String id) {
+        return new ResponseEntity<>(this.services.delete(id), HttpStatus.OK);
     }
 }

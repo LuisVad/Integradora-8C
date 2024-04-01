@@ -35,6 +35,18 @@ public class DireccionesUsuarioServices {
                 "OK"
         );
     }
+
+
+    @Transactional(readOnly = true)
+    public Response<DireccionesUsuario> getById(String id){
+        return new Response<>(
+                this.repository.findByIdDireccionUsuarioAndActive(id, true),
+                false,
+                200,
+                "OK"
+        );
+    }
+
     @Transactional(readOnly = true)
     public Response<List<DireccionesUsuario>> getAllByUsuarios(String idUsuario){
         Optional<Usuarios> usuario = this.usuariosRepository.findById(idUsuario);

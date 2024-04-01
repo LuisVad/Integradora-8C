@@ -25,6 +25,11 @@ public class CategoriaPersonalController {
     public ResponseEntity<Response<List<CategoriasPersonal>>> getAll() {
         return new ResponseEntity<>(this.services.getAll(), HttpStatus.OK);
     }
+
+    @GetMapping("/{uid}")
+    public ResponseEntity<Response<CategoriasPersonal>> getById(@PathVariable("uid") String uid) {
+        return new ResponseEntity<>(this.services.getById(uid), HttpStatus.OK);
+    }
     @GetMapping("/status/{status}")
     public ResponseEntity<Response<List<CategoriasPersonal>>> getAllByStatus(@PathVariable("status") Boolean status){
         return new ResponseEntity<>(

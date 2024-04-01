@@ -27,6 +27,27 @@ public class ServiciosServices {
                 "OK"
         );
     }
+
+    @Transactional(readOnly = true)
+    public Response<Servicios> getById(String id){
+        return new Response<>(
+                this.repository.findByIdServicioAndActive(id, true),
+                false,
+                200,
+                "OK"
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public Response<List<Servicios>> getAllByIdCategoria(String idCategoria){
+        return new Response<>(
+                this.repository.findAllByCategoriasAndActiveOrderByUltimaModificacionDesc(idCategoria, true),
+                false,
+                200,
+                "OK"
+        );
+    }
+
     @Transactional(readOnly = true)
     public Response<List<Servicios>> getAllByStatus(Boolean status){
         return new Response<>(

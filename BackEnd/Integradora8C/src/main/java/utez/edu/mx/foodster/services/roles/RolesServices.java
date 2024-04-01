@@ -26,6 +26,11 @@ public class RolesServices {
         return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(true), false, 200, "OK");
     }
 
+    @Transactional(readOnly = true)
+    public Response<Roles> getById(String id) {
+        return new Response<>(this.repository.findByIdRolAndActive(id, true), false, 200, "OK");
+    }
+
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Roles> insert(Roles roles) {
         return new Response<>(this.repository.save(roles), false, 200, "OK");

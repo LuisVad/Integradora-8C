@@ -8,4 +8,8 @@ import java.util.List;
 @Repository
 public interface RolesRepository extends JpaRepository<Roles, String> {
     List<Roles> findAllByActiveOrderByUltimaModificacionDesc(Boolean active);
+
+    Roles findByIdRolAndActive(String idRol, Boolean active);
+
+
 }

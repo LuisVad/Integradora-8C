@@ -8,12 +8,14 @@ import utez.edu.mx.foodster.entities.calificaciones.CalificacionesRepository;
 import utez.edu.mx.foodster.utils.Response;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
 public class CalificacionesService {
 
     private final CalificacionesRepository repository;
+
     @Autowired
     public CalificacionesService(CalificacionesRepository repository) {
         this.repository = repository;
@@ -22,6 +24,32 @@ public class CalificacionesService {
     @Transactional(readOnly = true)
     public Response<List<Calificaciones>> getAll() {
         return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(true), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
+    public Response<List<Calificaciones>> getAllByStatus(Boolean status) {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
+    public Response<Calificaciones> getById(String id) {
+        return new Response<>(this.repository.findByIdCalificacionAndActive(id, true), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
+    public Response<List<Calificaciones>> getAllByServicios(String idServicio) {
+        return new Response<>(this.repository.findAllByServiciosAndActiveOrderByUltimaModificacionDesc(idServicio, true), false, 200, "OK");
+    }
+
+
+    @Transactional(readOnly = true)
+    public Response<List<Calificaciones>> getAllByUsuarios(String idUsuario) {
+        return new Response<>(this.repository.findAllByUsuariosAndActiveOrderByUltimaModificacionDesc(idUsuario, true), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
+    public Response<List<Calificaciones>> getAllByPaquetes(String idPaquete) {
+        return new Response<>(this.repository.findAllByPaquetesAndActiveOrderByUltimaModificacionDesc(idPaquete, true), false, 200, "OK");
     }
 
     @Transactional(rollbackFor = {Exception.class})
@@ -36,8 +64,14 @@ public class CalificacionesService {
 
     @Transactional(rollbackFor = {Exception.class})
     public Response<Boolean> delete(String id) {
-        this.repository.deleteById(id);
-        return new Response<>(true, false, 200, "OK");
+        Optional<Calificaciones> entity = this.repository.findById(id);
+        if (entity.isPresent()) {
+            Calificaciones calificaciones = entity.get();
+            calificaciones.setActive(!calificaciones.getActive());
+            this.repository.save(calificaciones);
+            return new Response<>(true, false, 200, "OK");
+        }
+        return new Response<>(null, true, 400, "No encontrado para eliminar");
     }
 
     @Transactional(rollbackFor = {Exception.class})
@@ -48,19 +82,8 @@ public class CalificacionesService {
             this.repository.save(calificaciones);
             return new Response<>(true, false, 200, "OK");
         }
-        return new Response<>(null, true, 400, "No encontrado");
+        return new Response<>(null, true, 400, "No encontrado para cambiar status");
     }
-
-    @Transactional(readOnly = true)
-    public Response<Calificaciones> getById(String id) {
-        return new Response<>(this.repository.findById(id).orElse(null), false, 200, "OK");
-    }
-
-
-
-
-
-
 
 
 }

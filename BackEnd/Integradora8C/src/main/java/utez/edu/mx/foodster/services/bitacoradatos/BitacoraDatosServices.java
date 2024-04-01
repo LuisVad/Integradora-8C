@@ -20,7 +20,7 @@ public class BitacoraDatosServices {
     @Transactional(readOnly = true)
     public Response<List<BitacoraDatos>> getAll() {
         return new Response<>(
-                this.repository.findAll(),
+                this.repository.findAllByOrderByCreadoEnDesc(),
                 false,
                 200,
                 "OK"

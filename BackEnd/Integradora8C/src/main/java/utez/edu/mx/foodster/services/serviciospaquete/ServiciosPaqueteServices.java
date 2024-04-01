@@ -20,7 +20,7 @@ public class ServiciosPaqueteServices {
     }
 
     @Transactional(readOnly = true)
-    public Response<List<ServiciosPaquete>> getAll(){
+    public Response<List<ServiciosPaquete>> getAll() {
         return new Response<>(
                 this.repository.findAll(),
                 false,
@@ -28,8 +28,29 @@ public class ServiciosPaqueteServices {
                 "OK"
         );
     }
+
     @Transactional(readOnly = true)
-    public Response<List<ServiciosPaquete>> getAllByStatus(Boolean status){
+    public Response<ServiciosPaquete> getById(String id) {
+        return new Response<>(
+                this.repository.findByIdServicioPaqueteAndActive(id, true),
+                false,
+                200,
+                "OK"
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public Response<List<ServiciosPaquete>> getAllByIdPaquete(String idPaquete) {
+        return new Response<>(
+                this.repository.findByIdPaqueteAndActive(idPaquete, true),
+                false,
+                200,
+                "OK"
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public Response<List<ServiciosPaquete>> getAllByStatus(Boolean status) {
         return new Response<>(
                 this.repository.findAllByActiveOrderByUltimaModificacionDesc(status),
                 false,
@@ -37,8 +58,9 @@ public class ServiciosPaqueteServices {
                 "OK"
         );
     }
+
     @Transactional(rollbackFor = {SQLDataException.class})
-    public Response<ServiciosPaquete> insert(ServiciosPaquete serviciosPaquete){
+    public Response<ServiciosPaquete> insert(ServiciosPaquete serviciosPaquete) {
         return new Response<>(
                 this.repository.save(serviciosPaquete),
                 false,
@@ -46,10 +68,11 @@ public class ServiciosPaqueteServices {
                 "OK"
         );
     }
+
     @Transactional(rollbackFor = {SQLDataException.class})
-    public Response<ServiciosPaquete> update(ServiciosPaquete serviciosPaquete){
+    public Response<ServiciosPaquete> update(ServiciosPaquete serviciosPaquete) {
         Optional<ServiciosPaquete> update = this.repository.findById(serviciosPaquete.getIdServicioPaquete());
-        if(update.isPresent()){
+        if (update.isPresent()) {
             return new Response<>(
                     this.repository.saveAndFlush(serviciosPaquete),
                     false,
@@ -64,10 +87,11 @@ public class ServiciosPaqueteServices {
                 "No encontrado para actualizar"
         );
     }
+
     @Transactional(rollbackFor = {SQLDataException.class})
-    public Response<Boolean> delete(String id){
+    public Response<Boolean> delete(String id) {
         Optional<ServiciosPaquete> entity = this.repository.findById(id);
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             this.repository.delete(entity.get());
             return new Response<>(
                     true,
@@ -83,10 +107,11 @@ public class ServiciosPaqueteServices {
                 "No encontrado para eliminar"
         );
     }
+
     @Transactional(rollbackFor = {SQLDataException.class})
-    public Response<ServiciosPaquete> changeStatus(String id){
+    public Response<ServiciosPaquete> changeStatus(String id) {
         Optional<ServiciosPaquete> entity = this.repository.findById(id);
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             entity.get().setActive(!entity.get().isActive());
             return new Response<>(
                     this.repository.saveAndFlush(entity.get()),

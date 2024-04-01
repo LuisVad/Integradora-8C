@@ -24,6 +24,21 @@ public class PersonalEventoServices {
         return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(true), false, 200, "OK");
     }
 
+    @Transactional(readOnly = true)
+    public Response<PersonalEvento> getById(String id) {
+        return new Response<>(this.repository.findByIdPersonalEventoAndActive(id, true), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
+    public Response<List<PersonalEvento>> getAllByIdEvento(String idEvento) {
+        return new Response<>(this.repository.findByIdEventoAndActive(idEvento, true), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
+    public Response<List<PersonalEvento>> getAllByStatus(Boolean status) {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status), false, 200, "OK");
+    }
+
     @Transactional(rollbackFor = {SQLException.class})
     public Response<PersonalEvento> insert(PersonalEvento personalEvento) {
         return new Response<>(this.repository.save(personalEvento), false, 200, "OK");

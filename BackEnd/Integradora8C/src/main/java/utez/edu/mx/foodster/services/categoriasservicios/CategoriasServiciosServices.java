@@ -36,6 +36,16 @@ public class CategoriasServiciosServices {
                 "OK"
         );
     }
+
+    @Transactional(readOnly = true)
+    public Response<CategoriasServicios> getById(String id){
+        return new Response<>(
+                this.repository.findByIdCategoriaAndActive(id, true),
+                false,
+                200,
+                "OK"
+        );
+    }
     @Transactional(rollbackFor = {SQLDataException.class})
     public Response<CategoriasServicios> insert(CategoriasServicios categoriasServicios){
         return new Response<>(

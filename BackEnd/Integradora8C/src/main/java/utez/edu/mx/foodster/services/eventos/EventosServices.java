@@ -27,6 +27,27 @@ public class EventosServices {
                 "OK"
         );
     }
+
+    @Transactional(readOnly = true)
+    public Response<Eventos> getById(String id){
+        return new Response<>(
+                this.repository.findByIdEventoAndActive(id, true),
+                false,
+                200,
+                "OK"
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public Response<List<Eventos>> getAllByIdUsuario(String idUsuario){
+        return new Response<>(
+                this.repository.findAllByIdUsuarioAndActive(idUsuario, true),
+                false,
+                200,
+                "OK"
+        );
+    }
+
     @Transactional(readOnly = true)
     public Response<List<Eventos>> getAllByStatus(Boolean status){
         return new Response<>(
@@ -60,14 +81,15 @@ public class EventosServices {
                 null,
                 true,
                 400,
-                "No encontrado"
+                "No encontrado para actualizar"
         );
     }
     @Transactional(rollbackFor = {SQLDataException.class})
     public Response<Boolean> delete(String id){
         Optional<Eventos> entity = this.repository.findById(id);
         if (entity.isPresent()){
-            this.repository.delete(entity.get());
+            entity.get().setActive(!entity.get().getActive());
+            this.repository.save(entity.get());
             return new Response<>(
                     true,
                     false,
@@ -79,7 +101,7 @@ public class EventosServices {
                 null,
                 true,
                 400,
-                "No encontrado"
+                "No encontrado para eliminar"
         );
     }
 }

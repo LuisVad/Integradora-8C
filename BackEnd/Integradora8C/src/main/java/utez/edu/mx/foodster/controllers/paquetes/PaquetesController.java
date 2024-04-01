@@ -21,42 +21,52 @@ public class PaquetesController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Response<List<Paquetes>>> getAll(){
+    public ResponseEntity<Response<List<Paquetes>>> getAll() {
         return new ResponseEntity<>(
                 this.services.getAll(),
                 HttpStatus.OK
         );
     }
+
+    @GetMapping("/{uid}")
+    public ResponseEntity<Response<Paquetes>> getById(@PathVariable("uid") String uid) {
+        return new ResponseEntity<>(this.services.getById(uid), HttpStatus.OK);
+    }
+
     @GetMapping("/status/{status}")
-    public ResponseEntity<Response<List<Paquetes>>> getAllByStatus(@PathVariable("status") Boolean status){
+    public ResponseEntity<Response<List<Paquetes>>> getAllByStatus(@PathVariable("status") Boolean status) {
         return new ResponseEntity<>(
                 this.services.getAllByStatus(status),
                 HttpStatus.OK
         );
     }
+
     @PostMapping("/")
-    public ResponseEntity<Response<Paquetes>> insert(@RequestBody PaquetesDto dto){
+    public ResponseEntity<Response<Paquetes>> insert(@RequestBody PaquetesDto dto) {
         return new ResponseEntity<>(
                 this.services.insert(dto.toEntity()),
                 HttpStatus.OK
         );
     }
+
     @PutMapping("/")
-    public ResponseEntity<Response<Paquetes>> update(@RequestBody PaquetesDto dto){
+    public ResponseEntity<Response<Paquetes>> update(@RequestBody PaquetesDto dto) {
         return new ResponseEntity<>(
                 this.services.update(dto.toEntity()),
                 HttpStatus.OK
         );
     }
+
     @DeleteMapping("/{uid}")
-    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") String id){
+    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") String id) {
         return new ResponseEntity<>(
                 this.services.delete(id),
                 HttpStatus.OK
         );
     }
+
     @DeleteMapping("/status/{uid}")
-    public ResponseEntity<Response<Paquetes>> changeStatus(@PathVariable("uid") String id){
+    public ResponseEntity<Response<Paquetes>> changeStatus(@PathVariable("uid") String id) {
         return new ResponseEntity<>(
                 this.services.changeStatus(id),
                 HttpStatus.OK

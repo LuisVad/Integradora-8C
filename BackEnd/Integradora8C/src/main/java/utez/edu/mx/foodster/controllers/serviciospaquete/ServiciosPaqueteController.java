@@ -34,6 +34,22 @@ public class ServiciosPaqueteController {
                 HttpStatus.OK
         );
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<Response<ServiciosPaquete>> getById(@PathVariable("id") String id){
+        return new ResponseEntity<>(
+                this.services.getById(id),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/paquete/{id}")
+    public ResponseEntity<Response<List<ServiciosPaquete>>> getAllByIdPaquete(@PathVariable("id") String id){
+        return new ResponseEntity<>(
+                this.services.getAllByIdPaquete(id),
+                HttpStatus.OK
+        );
+    }
+
     @PostMapping("/")
     public ResponseEntity<Response<ServiciosPaquete>> insert(@RequestBody ServiciosPaqueteDto dto){
         return new ResponseEntity<>(

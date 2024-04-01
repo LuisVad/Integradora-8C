@@ -13,6 +13,7 @@ public interface UsuariosRepository extends JpaRepository<Usuarios, String> {
     List<Usuarios> findAllByActiveOrderByUltimaModificacionDesc(Boolean active);
 
     Usuarios findByCorreoAndActive(String correo, Boolean active);
+
     Optional<Usuarios> findByCorreo(String correo);
 
     @Modifying

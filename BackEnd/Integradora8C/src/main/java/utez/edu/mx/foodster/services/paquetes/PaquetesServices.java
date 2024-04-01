@@ -36,6 +36,15 @@ public class PaquetesServices {
                 "OK"
         );
     }
+    @Transactional(readOnly = true)
+    public Response<Paquetes> getById(String id){
+        return new Response<>(
+                this.repository.findByIdPaqueteAndActive(id, true),
+                false,
+                200,
+                "OK"
+        );
+    }
     @Transactional(rollbackFor = {SQLDataException.class})
     public Response<Paquetes> insert(Paquetes paquetes){
         return new Response<>(

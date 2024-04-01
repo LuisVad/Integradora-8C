@@ -10,4 +10,5 @@ public interface CategoriasPersonalRepository extends JpaRepository<CategoriasPe
 
     List<CategoriasPersonal> findAllByActiveOrderByUltimaModificacionDesc(Boolean active);
     CategoriasPersonal findByNombreAndActive(String nombre, Boolean active);
+    CategoriasPersonal findByIdCategoriaAndActive(String idCategoria, Boolean active);
 }

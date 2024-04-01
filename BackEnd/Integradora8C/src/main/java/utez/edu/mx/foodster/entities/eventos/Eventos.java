@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
+import utez.edu.mx.foodster.entities.direcciones.Direcciones;
+import utez.edu.mx.foodster.entities.usuarios.Usuarios;
 
 import java.sql.Timestamp;
 
@@ -31,6 +33,12 @@ public class Eventos {
     private Double costoTotal;
     @Column(name = "personalizado", columnDefinition = "BOOLEAN NOT NULL")
     private Boolean personalizado;
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    @ManyToOne
+    private Usuarios usuario;
+    @JoinColumn(name = "id_direccion", referencedColumnName = "id_direccion")
+    @ManyToOne
+    private Direcciones direccion;
     @Column(name = "ultima_modificacion", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp ultimaModificacion;
     @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE")
