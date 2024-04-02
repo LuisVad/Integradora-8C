@@ -3,11 +3,8 @@ package utez.edu.mx.foodster.dtos.usuarios;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import utez.edu.mx.foodster.entities.roles.Roles;
 import utez.edu.mx.foodster.entities.usuarios.Usuarios;
-
 import java.sql.Timestamp;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,7 +12,6 @@ import java.util.Set;
 @Setter
 @Data
 public class UsuariosPublicDto {
-    private String idUsuario;
     @NotBlank(message = "El nombre no puede ser nulo")
     @Size(min = 3, max = 50, message = "El nombre debe tener entre 3 y 50 caracteres")
     private String nombres;
@@ -37,14 +33,18 @@ public class UsuariosPublicDto {
     @NotBlank(message = "La contraseña no puede ser nula")
     @Size(min = 3, max = 255, message = "La contraseña debe tener entre 3 y 255 caracteres")
     private String contrasena;
-    private Timestamp ultimaModificacion;
-    private Boolean active;
-    private Set<Roles> roles;
     @NotBlank(message = "La solucion del captcha no puede ser nula")
     private String solucion;
 
     public Usuarios toEntity() {
-        this.ultimaModificacion = new Timestamp(System.currentTimeMillis());
-        return new Usuarios(idUsuario, nombres, primerApellido, segundoApellido, telefono, correo, contrasena, ultimaModificacion, active, roles);
+        Usuarios usuario = new Usuarios();
+        usuario.setNombres(nombres);
+        usuario.setPrimerApellido(primerApellido);
+        usuario.setSegundoApellido(segundoApellido);
+        usuario.setTelefono(telefono);
+        usuario.setCorreo(correo);
+        usuario.setContrasena(contrasena);
+        usuario.setUltimaModificacion(new Timestamp(System.currentTimeMillis()));
+        return usuario;
     }
 }
