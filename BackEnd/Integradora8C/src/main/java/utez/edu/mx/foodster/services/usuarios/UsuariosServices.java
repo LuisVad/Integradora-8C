@@ -49,6 +49,9 @@ public class UsuariosServices {
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Usuarios> insert(Usuarios usuarios) {
         usuarios.setContrasena(this.passwordEncoder.encode(usuarios.getContrasena()));
+        usuarios.getRoles().forEach(roles -> {
+            this.repository.saveUserRole(usuarios.getIdUsuario(), roles.getIdRol());
+        });
         return new Response<>(this.repository.save(usuarios), false, 200, "OK");
     }
 
@@ -62,6 +65,9 @@ public class UsuariosServices {
         Set<Roles> roles = usuario.getRoles();
         roles.add(this.rolesServices.getByNombreAndActive("USUARIO", true));
         usuario.setRoles(roles);
+        usuario.getRoles().forEach(rolesPublicDto -> {
+            this.repository.saveUserRole(usuario.getIdUsuario(), rolesPublicDto.getIdRol());
+        });
         usuario.setActive(true);
         usuario.setContrasena(this.passwordEncoder.encode(usuario.getContrasena()));
         return new Response<>(this.repository.save(usuario), false, 200, "OK");
@@ -72,6 +78,11 @@ public class UsuariosServices {
     public Response<Usuarios> update(Usuarios usuarios) {
         Optional<Usuarios> entityUpdate = this.repository.findById(usuarios.getIdUsuario());
         if (entityUpdate.isPresent()) {
+            this.repository.deleteUserRoles(usuarios.getIdUsuario());
+            usuarios.getRoles().forEach(roles -> {
+                this.repository.saveUserRole(usuarios.getIdUsuario(), roles.getIdRol());
+            });
+
             return new Response<>(this.repository.saveAndFlush(usuarios), false, 200, "OK");
         }
         return new Response<>(null, true, 400, "No encontrado para actualizar");

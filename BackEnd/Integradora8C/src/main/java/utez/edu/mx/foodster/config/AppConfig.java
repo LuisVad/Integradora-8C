@@ -12,6 +12,7 @@ import utez.edu.mx.foodster.dtos.roles.RolesDto;
 import utez.edu.mx.foodster.dtos.usuarios.UsuariosDto;
 import utez.edu.mx.foodster.entities.categoriaspersonal.CategoriasPersonal;
 import utez.edu.mx.foodster.entities.categoriaspersonal.CategoriasPersonalRepository;
+import utez.edu.mx.foodster.entities.personal.PersonalRepository;
 import utez.edu.mx.foodster.entities.roles.Roles;
 import utez.edu.mx.foodster.entities.roles.RolesRepository;
 import utez.edu.mx.foodster.entities.usuarios.Usuarios;
@@ -32,17 +33,17 @@ public class AppConfig {
     private final PasswordEncoder passwordEncoder;
 
     private final Random random = new Random();
-    private final PersonalServices personalServices;
+    private final PersonalRepository personalRepository;
 
     private final CategoriasPersonalRepository categoriasPersonalRepository;
 
 
     @Autowired
-    public AppConfig(RolesRepository rolesRepository, UsuariosRepository usuariosRepository, PasswordEncoder passwordEncoder, PersonalServices personalServices, CategoriasPersonalRepository categoriasPersonalRepository) {
+    public AppConfig(RolesRepository rolesRepository, UsuariosRepository usuariosRepository, PasswordEncoder passwordEncoder, PersonalRepository personalRepository, CategoriasPersonalRepository categoriasPersonalRepository) {
         this.rolesRepository = rolesRepository;
         this.usuariosRepository = usuariosRepository;
         this.passwordEncoder = passwordEncoder;
-        this.personalServices = personalServices;
+        this.personalRepository = personalRepository;
         this.categoriasPersonalRepository = categoriasPersonalRepository;
     }
 
@@ -123,7 +124,7 @@ public class AppConfig {
             String categoryName = i <= 50 ? "Chef" : "Mesero";
             CategoriasPersonal categoriasPersonal = categoriasPersonalRepository.findByNombreAndActive(categoryName, true);
             PersonalDto personalDto = new PersonalDto(null, usuariosRepository.findByCorreoAndActive(email, true), categoriasPersonal, new Timestamp(System.currentTimeMillis()), true);
-            personalServices.insert(personalDto.toEntity());
+            personalRepository.save(personalDto.toEntity());
         }
     }
 }
