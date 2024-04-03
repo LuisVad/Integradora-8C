@@ -9,7 +9,6 @@ import utez.edu.mx.foodster.entities.direccionesusuario.DireccionesUsuario;
 import utez.edu.mx.foodster.entities.direccionesusuario.DireccionesUsuarioRepository;
 import utez.edu.mx.foodster.entities.usuarios.Usuarios;
 import utez.edu.mx.foodster.entities.usuarios.UsuariosRepository;
-import utez.edu.mx.foodster.services.usuarios.UsuariosServices;
 import utez.edu.mx.foodster.utils.Response;
 
 import java.sql.SQLException;
