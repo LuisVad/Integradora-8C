@@ -30,4 +30,11 @@ public interface UsuariosRepository extends JpaRepository<Usuarios, String> {
     @Query(value = "INSERT INTO usuarios_roles (id_rol,id_usuario) VALUES (:roleId, :userId);", nativeQuery = true)
     int saveUserRole(String userId, String roleId);
 
+
+    @Modifying
+    @Query(value = "DELETE FROM usuarios_roles WHERE id_usuario = :userId", nativeQuery = true)
+    int deleteUserRoles(String userId);
+
+
+
 }
