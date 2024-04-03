@@ -1,8 +1,10 @@
 package utez.edu.mx.foodster.controllers.eventos;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import utez.edu.mx.foodster.dtos.eventos.EventoConServicios;
 import utez.edu.mx.foodster.dtos.eventos.EventosDto;
 import utez.edu.mx.foodster.entities.eventos.Eventos;
 import utez.edu.mx.foodster.services.eventos.EventosServices;
@@ -51,14 +53,14 @@ public class EventosController {
         );
     }
     @PostMapping("/")
-    public ResponseEntity<Response<Eventos>> insert(@RequestBody EventosDto dto){
+    public ResponseEntity<Response<Eventos>> insert(@RequestBody @Valid EventoConServicios dto ){
         return new ResponseEntity<>(
-                this.services.insert(dto.toEntity()),
+                this.services.insert(dto),
                 HttpStatus.OK
         );
     }
     @PutMapping("/")
-    public ResponseEntity<Response<Eventos>> update(@RequestBody EventosDto dto){
+    public ResponseEntity<Response<Eventos>> update(@RequestBody @Valid EventosDto dto){
         return new ResponseEntity<>(
                 this.services.update(dto.toEntity()),
                 HttpStatus.OK

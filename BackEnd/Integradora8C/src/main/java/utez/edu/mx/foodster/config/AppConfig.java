@@ -47,8 +47,6 @@ public class AppConfig {
     private final ServiciosRepository serviciosRepository;
 
 
-
-
     @Autowired
     public AppConfig(RolesRepository rolesRepository, UsuariosRepository usuariosRepository, PasswordEncoder passwordEncoder, PersonalRepository personalRepository, CategoriasPersonalRepository categoriasPersonalRepository, CategoriasServiciosRepository categoriasServiciosRepository, ServiciosRepository serviciosRepository) {
         this.rolesRepository = rolesRepository;
@@ -163,14 +161,14 @@ public class AppConfig {
         String[] nombres = {"Juan", "Pedro", "Maria", "Jose", "Luis", "Ana", "Rosa", "Carlos", "Jorge", "Fernando", "Ricardo", "Roberto"};
         String[] apellidos = {"Rodriguez", "Juarez", "Jimenez", "Gonzalez", "Perez", "Lopez", "Garcia", "Hernandez", "Martinez", "Torres", "Sanchez", "Ramirez"};
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 400; i++) {
             String name = nombres[random.nextInt(nombres.length)];
             String lastName1 = apellidos[random.nextInt(apellidos.length)];
             String lastName2 = apellidos[random.nextInt(apellidos.length)];
             String email = "usuario" + i + "@yopmail.com";
             saveUser(roles, name, lastName1, lastName2, "7777909013", email, "personal");
 
-            String categoryName = i <= 50 ? "Chef" : "Mesero";
+            String categoryName = i <= 100 ? "Chef" : "Mesero";
             CategoriasPersonal categoriasPersonal = categoriasPersonalRepository.findByNombreAndActive(categoryName, true);
             PersonalDto personalDto = new PersonalDto(null, usuariosRepository.findByCorreoAndActive(email, true), categoriasPersonal, new Timestamp(System.currentTimeMillis()), true);
             personalRepository.save(personalDto.toEntity());
@@ -181,12 +179,11 @@ public class AppConfig {
         if (serviciosRepository.count() != 0) return;
         saveService("Desayuno", "Café", "Café americano", "Café con leche", "Café cortado", "Café expreso", "Café irlandés", "Café moca", "Café turco", "Café vienés", "Té", "Té chai", "Té de jazmín", "Té helado");
         saveService("Comida", "Hamburguesa", "Pizza", "Tacos", "Tortas", "Hot dogs", "Papas fritas", "Ensaladas", "Sopas", "Pasta", "Pollo", "Pescado", "Carne", "Mariscos", "Vegetariano", "Vegano");
-        saveService("Cena", "Hamburguesa", "Pizza", "Tacos", "Tortas", "Hot dogs",  "Ensaladas", "Sopas", "Pasta", "Pollo", "Pescado", "Carne", "Mariscos", "Vegetariano", "Vegano");
+        saveService("Cena", "Hamburguesa", "Pizza", "Tacos", "Tortas", "Hot dogs", "Ensaladas", "Sopas", "Pasta", "Pollo", "Pescado", "Carne", "Mariscos", "Vegetariano", "Vegano");
         saveService("Postre", "Pastel", "Gelatina", "Flan", "Helado", "Galletas", "Cupcakes", "Brownies", "Cheesecake", "Tiramisú", "Mousse", "Churros", "Crepa", "Waffles", "Donas", "Chocolates");
         saveService("Botana", "Papas fritas", "Palomitas", "Nueces", "Pistaches", "Almendras", "Cacahuates", "Chicharrones", "Tostadas", "Doritos", "Cacahuates japoneses", "Pepinos", "Zanahorias", "Jícama", "Pepinillos", "Chile", "Frutas", "Verduras", "Queso", "Jamón", "Salchichas", "Salami", "Chorizo", "Pepinillos", "Aceitunas", "Chiles en vinagre", "Salsas", "Guacamole", "Hummus", "Tzatziki", "Taramosalata", "Baba ganush", "Tabule", "Falafel", "Kibbeh", "Dolma");
         saveService("Cerveza", "Clara", "Oscura", "Roja", "Rubia", "Negra", "Ambar", "Pilsner", "Lager", "Ale", "Stout", "Porter", "Weizen", "Trigo", "IPA", "APA", "Doble", "Triple", "Cuádruple", "Quíntuple", "Sextuple", "Septuple", "Octuple", "Novena", "Décima", "Onceava", "Doceava", "Treceava", "Catorceava", "Quinceava", "Dieciséisava", "Diecisieteava", "Dieciochoava", "Diecinueveava", "Veinteava");
         saveService("Vino",
-
 
 
                 "Tinto", "Blanco", "Rosado", "Espumoso", "Dulce", "Seco", "Semi-seco", "Semi-dulce", "Crianza", "Reserva", "Gran reserva", "Joven", "Roble", "Barrica", "Bodega", "Cava", "Champagne", "Prosecco", "Asti", "Lambrusco", "Moscato", "Riesling", "Chardonnay", "Sauvignon blanc", "Merlot", "Cabernet sauvignon", "Malbec", "Syrah", "Garnacha", "Tempranillo", "Pinot noir", "Zinfandel", "Petit verdot", "Marsanne", "Viognier", "Gewürztraminer", "Chenin blanc", "Pinot gris", "Albariño", "Verdejo", "Godello", "Palomino", "Pedro ximénez", "Sherry", "Jerez", "Oporto", "Madeira", "Marsala", "Vermut", "Vermouth", "Campari", "Aperol", "Cinzano", "Martini", "Punt e mes", "Carpano", "Cocchi", "Lillet", "Dubonnet", "Noilly prat", "Byrrh", "St. Raphael", "Suze", "Salers", "Génépi", "Chartreuse", "Bénédictine", "Grand marnier", "Cointreau", "Triple sec", "Curazao", "Blue curaz");
@@ -195,6 +192,7 @@ public class AppConfig {
         saveService("Agua", "Natural", "Mineral", "De coco", "De frutas", "De sabores", "De manantial", "De pozo", "De lluvia", "De río", "De mar", "De lago", "De arroyo", "De poza", "De estanque", "De charco", "De laguna", "De cenote", "De ojo de agua", "De nacimiento", "De vertiente", "De acuífero", "De glaciar");
         saveService("Jugo", "Naranja", "Manzana", "Piña", "Toronja", "Mandarina", "Limonada", "Lima", "Uva", "Fresa", "Frambuesa", "Zarzamora", "Mora", "Arándano", "Cereza", "Guayaba", "Mango", "Papaya", "Sandía", "Melón", "Plátano", "Kiwi", "Pera", "Durazno", "Ciruela", "Higo", "Tamarindo", "Mamey", "Zapote", "Chicozapote", "Níspero", "Nectarina", "Albaricoque", "Coco", "Pomelo", "Granada", "Pitahaya", "Tuna", "Tamarindo", "Jamaica", "Té");
     }
+
     private void saveService(String categoryName, String... services) {
         CategoriasServicios categoriasServicios = categoriasServiciosRepository.findByNombreAndActive(categoryName, true);
         for (String service : services) {
@@ -211,7 +209,6 @@ public class AppConfig {
             serviciosRepository.save(serviciosDto.toEntity());
         }
     }
-
 
 
 }

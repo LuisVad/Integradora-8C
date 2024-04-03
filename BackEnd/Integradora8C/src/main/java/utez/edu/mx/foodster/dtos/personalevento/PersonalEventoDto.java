@@ -29,7 +29,7 @@ public class PersonalEventoDto {
         personalEvento.setIdPersonalEvento(this.idPersonalEvento);
         personalEvento.setPersonal(this.personal);
         personalEvento.setEventos(this.eventos);
-        personalEvento.setUltimaModificacion(this.ultimaModificacion);
+        personalEvento.setUltimaModificacion(new Timestamp(System.currentTimeMillis()));
         personalEvento.setActive(active);
         return personalEvento;
     }

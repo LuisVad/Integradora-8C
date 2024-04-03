@@ -1,6 +1,8 @@
 package utez.edu.mx.foodster.dtos.eventos;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,14 +21,15 @@ import java.sql.Timestamp;
 public class EventosDto {
 
     private String idEvento;
-
-    @NotBlank(message = "La fecha y hora de inicio no pueden ser nulas")
+    @NotNull(message = "La fecha y hora de inicio no pueden ser nulas")
     private Timestamp fechaHoraInicio;
 
-    @NotBlank(message = "La fecha y hora de fin no pueden ser nulas")
+    @NotNull(message = "La fecha y hora de fin no pueden ser nulas")
     private Timestamp fechaHoraFin;
 
-    @NotBlank(message = "El número de personas no puede ser nulo")
+    @NotNull(message = "El número de personas no puede ser nulo")
+    @Min(value = 1, message = "El número de personas debe ser mayor a 0")
+    @Max(value = 1000, message = "El número de personas debe ser menor a 100")
     private Long numeroPersonas;
 
     @NotNull(message = "La dirección no puede ser nula")

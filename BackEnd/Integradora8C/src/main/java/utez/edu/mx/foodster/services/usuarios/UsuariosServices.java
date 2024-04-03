@@ -4,11 +4,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.foodster.dtos.usuarios.UsuariosPublicDto;
-import utez.edu.mx.foodster.entities.roles.Roles;
+import utez.edu.mx.foodster.entities.roles.RolesRepository;
 import utez.edu.mx.foodster.entities.usuarios.Usuarios;
 import utez.edu.mx.foodster.entities.usuarios.UsuariosRepository;
 import utez.edu.mx.foodster.services.captcha.CaptchaService;
-import utez.edu.mx.foodster.services.roles.RolesServices;
 import utez.edu.mx.foodster.utils.Response;
 
 import java.sql.SQLException;
@@ -21,16 +20,16 @@ import java.util.Set;
 public class UsuariosServices {
     private final UsuariosRepository repository;
 
-    private final RolesServices rolesServices;
+    private final RolesRepository rolesRepository;
 
 
     private final PasswordEncoder passwordEncoder;
 
     private final CaptchaService captchaService;
 
-    public UsuariosServices(UsuariosRepository repository, RolesServices rolesServices, PasswordEncoder passwordEncoder, CaptchaService captchaService) {
+    public UsuariosServices(UsuariosRepository repository, RolesRepository rolesRepository, PasswordEncoder passwordEncoder, CaptchaService captchaService) {
         this.repository = repository;
-        this.rolesServices = rolesServices;
+        this.rolesRepository = rolesRepository;
         this.passwordEncoder = passwordEncoder;
         this.captchaService = captchaService;
     }
@@ -45,23 +44,34 @@ public class UsuariosServices {
         return this.repository.findByCorreoAndActive(correo, true);
     }
 
+    @Transactional(readOnly = true)
+    public Response<Usuarios> getById(String id) {
+        return new Response<>(this.repository.findByIdUsuarioAndActive(id, true), false, 200, "OK");
+    }
+
 
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Usuarios> insert(Usuarios usuarios) {
+        Usuarios existe = this.repository.findByCorreoAndActive(usuarios.getCorreo(), true);
+        if (existe != null) {
+            return new Response<>(null, true, 400, "Correo ya registrado");
+        }
         usuarios.setContrasena(this.passwordEncoder.encode(usuarios.getContrasena()));
         return new Response<>(this.repository.save(usuarios), false, 200, "OK");
     }
 
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Usuarios> publicInsert(UsuariosPublicDto usuarios) {
+        Usuarios existe = this.repository.findByCorreoAndActive(usuarios.getCorreo(), true);
+        if (existe != null) {
+            return new Response<>(null, true, 400, "Correo ya registrado");
+        }
         Boolean captchaVerification = this.captchaService.verificarCaptchaBoolean(usuarios.getSolucion());
         if (captchaVerification == null || !captchaVerification) {
             return new Response<>(null, true, 400, "Captcha invalido");
         }
         Usuarios usuario = usuarios.toEntity();
-        Set<Roles> roles = usuario.getRoles();
-        roles.add(this.rolesServices.getByNombreAndActive("USUARIO", true));
-        usuario.setRoles(roles);
+        usuario.setRoles(Set.of(this.rolesRepository.findByNombreAndActive("CLIENTE", true)));
         usuario.setActive(true);
         usuario.setContrasena(this.passwordEncoder.encode(usuario.getContrasena()));
         return new Response<>(this.repository.save(usuario), false, 200, "OK");

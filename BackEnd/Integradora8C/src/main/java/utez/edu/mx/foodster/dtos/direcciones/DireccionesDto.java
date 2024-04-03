@@ -48,6 +48,11 @@ public class DireccionesDto {
 
     private Boolean active;
 
+
+    private String idUsuario;
+
+
+
     public Direcciones toEntity() {
         this.ultimaModificacion = new Timestamp(System.currentTimeMillis());
         return new Direcciones(idDireccion, calle, colonia, numero, codigoPostal, municipio, estado, referencias, ultimaModificacion, active);

@@ -27,6 +27,12 @@ public class UsuariosController {
         return new ResponseEntity<>(this.services.getAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/{uid}")
+    public ResponseEntity<Response<Usuarios>> getById(@PathVariable("uid") String uid) {
+        return new ResponseEntity<>(this.services.getById(uid), HttpStatus.OK);
+    }
+
+
     @PostMapping("/")
     public ResponseEntity<Response<Usuarios>> insert(@RequestBody @Valid UsuariosDto usuariosDto) {
         return new ResponseEntity<>(this.services.insert(usuariosDto.toEntity()), HttpStatus.OK);

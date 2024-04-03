@@ -32,6 +32,11 @@ public class DireccionesController {
     public ResponseEntity<Response<Direcciones>> getById(@PathVariable("uid") String uid) {
         return new ResponseEntity<>(this.services.getById(uid), HttpStatus.OK);
     }
+
+    @GetMapping("/usuario/{id}")
+    public ResponseEntity<Response<List<Direcciones>>> getAllByUsuario(@PathVariable("id") String id) {
+        return new ResponseEntity<>(this.services.getAllByUsuario(id), HttpStatus.OK);
+    }
     @GetMapping("/status/{status}")
     public ResponseEntity<Response<List<Direcciones>>> getAllByStatus(@PathVariable("status") Boolean status){
         return new ResponseEntity<>(
@@ -42,7 +47,7 @@ public class DireccionesController {
     @PostMapping("/")
     public ResponseEntity<Response<Direcciones>> insert(@RequestBody DireccionesDto dto){
         return new ResponseEntity<>(
-                this.services.insert(dto.toEntity()),
+                this.services.insert(dto),
                 HttpStatus.OK
         );
     }
