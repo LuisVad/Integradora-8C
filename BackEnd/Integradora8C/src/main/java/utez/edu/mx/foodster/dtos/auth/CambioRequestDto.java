@@ -9,5 +9,6 @@ import lombok.*;
 @Setter
 public class CambioRequestDto {
     private String correo;
+    private String solucion;
 }
 

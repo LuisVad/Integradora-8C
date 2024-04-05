@@ -25,7 +25,7 @@ public class AuthController {
 
     @PostMapping("/restablecer")
     public ResponseEntity<Response<CambioResponseDto>> restablecerContrasenia(@RequestBody @Valid CambioRequestDto dto) {
-        return service.resetPassword(dto.getCorreo());
+        return service.resetPassword(dto);
     }
 
     @PostMapping("/confirmar")

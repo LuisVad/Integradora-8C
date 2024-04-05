@@ -10,10 +10,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import utez.edu.mx.foodster.dtos.auth.CambioRequestDto;
 import utez.edu.mx.foodster.dtos.auth.CambioResponseDto;
 import utez.edu.mx.foodster.dtos.auth.UsuarioTokenDto;
 import utez.edu.mx.foodster.entities.usuarios.Usuarios;
 import utez.edu.mx.foodster.security.jwt.JwtProvider;
+import utez.edu.mx.foodster.services.captcha.CaptchaService;
 import utez.edu.mx.foodster.services.mailservice.MailService;
 import utez.edu.mx.foodster.services.twilio.TwilioServices;
 import utez.edu.mx.foodster.services.usuarios.UsuariosServices;
@@ -38,16 +40,18 @@ public class AuthService {
 
     private final TwilioServices twilioService;
     private final HtmlMessageRender htmlRender;
+    private final CaptchaService captchaService;
 
 
     @Autowired
-    public AuthService(UsuariosServices service, AuthenticationManager manager, JwtProvider provider, MailService emailService, TwilioServices twilioService, HtmlMessageRender htmlRender) {
+    public AuthService(UsuariosServices service, AuthenticationManager manager, JwtProvider provider, MailService emailService, TwilioServices twilioService, HtmlMessageRender htmlRender, CaptchaService captchaService) {
         this.service = service;
         this.manager = manager;
         this.provider = provider;
         this.emailService = emailService;
         this.twilioService = twilioService;
         this.htmlRender = htmlRender;
+        this.captchaService = captchaService;
     }
 
     @Transactional(readOnly = true)
@@ -72,7 +76,12 @@ public class AuthService {
         }
     }
 
-    public ResponseEntity<Response<CambioResponseDto>> resetPassword(String correo) {
+    public ResponseEntity<Response<CambioResponseDto>> resetPassword(CambioRequestDto dto) {
+        Boolean captchaVerification = this.captchaService.verificarCaptchaBoolean(dto.getSolucion());
+        if (captchaVerification == null || !captchaVerification) {
+            return new ResponseEntity<>(new Response<>(null, true, 400, "Captcha invalido"), HttpStatus.BAD_REQUEST);
+        }
+        String correo = dto.getCorreo();
         Usuarios user = service.getByCorreo(correo);
         if (user == null) {
             return new ResponseEntity<>(new Response<>(null, true, 404, "Usuario no encontrado"), HttpStatus.NOT_FOUND);
