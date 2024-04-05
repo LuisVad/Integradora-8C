@@ -1,5 +1,7 @@
 package utez.edu.mx.foodster.controllers.direccionesusuario;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,27 +23,27 @@ public class DireccionesUsuarioController {
     }
 
     @GetMapping("/usuario/{id}")
-    public ResponseEntity<Response<List<DireccionesUsuario>>> getAllByUsuario(@PathVariable("id") String id) {
+    public ResponseEntity<Response<List<DireccionesUsuario>>> getAllByUsuario(@PathVariable("id") @NotBlank String id) {
         return new ResponseEntity<>(this.services.getAllByUsuarios(id), HttpStatus.OK);
     }
 
     @GetMapping("/{uid}")
-    public ResponseEntity<Response<DireccionesUsuario>> getById(@PathVariable("uid") String uid) {
+    public ResponseEntity<Response<DireccionesUsuario>> getById(@PathVariable("uid") @NotBlank String uid) {
         return new ResponseEntity<>(this.services.getById(uid), HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<Response<DireccionesUsuario>> insert(@RequestBody DireccionesUsuariosDto dto) {
+    public ResponseEntity<Response<DireccionesUsuario>> insert(@RequestBody @Valid DireccionesUsuariosDto dto) {
         return new ResponseEntity<>(this.services.insert(dto.toEntity()), HttpStatus.OK);
     }
 
     @PutMapping("/")
-    public ResponseEntity<Response<DireccionesUsuario>> update(@RequestBody DireccionesUsuariosDto dto) {
+    public ResponseEntity<Response<DireccionesUsuario>> update(@RequestBody @Valid DireccionesUsuariosDto dto) {
         return new ResponseEntity<>(this.services.update(dto.toEntity()), HttpStatus.OK);
     }
 
     @DeleteMapping("/{uid}")
-    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") String id) {
+    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") @NotBlank String id) {
         return new ResponseEntity<>(this.services.delete(id), HttpStatus.OK);
     }
 }

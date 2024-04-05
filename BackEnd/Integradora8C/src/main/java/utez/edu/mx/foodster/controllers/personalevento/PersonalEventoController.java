@@ -1,6 +1,8 @@
 package utez.edu.mx.foodster.controllers.personalevento;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,17 +29,17 @@ public class PersonalEventoController {
     }
 
     @GetMapping("/{uid}")
-    public ResponseEntity<Response<PersonalEvento>> getById(@PathVariable("uid") String uid) {
+    public ResponseEntity<Response<PersonalEvento>> getById(@PathVariable("uid") @NotBlank String uid) {
         return new ResponseEntity<>(this.services.getById(uid), HttpStatus.OK);
     }
 
     @GetMapping("/status/{status}")
-    public ResponseEntity<Response<List<PersonalEvento>>> getAllByStatus(@PathVariable("status") Boolean status) {
+    public ResponseEntity<Response<List<PersonalEvento>>> getAllByStatus(@PathVariable("status") @NotNull Boolean status) {
         return new ResponseEntity<>(this.services.getAllByStatus(status), HttpStatus.OK);
     }
 
     @GetMapping("/evento/{uid}")
-    public ResponseEntity<Response<List<PersonalEvento>>> getAllByEvento(@PathVariable("uid") String uid) {
+    public ResponseEntity<Response<List<PersonalEvento>>> getAllByEvento(@PathVariable("uid") @NotBlank String uid) {
         return new ResponseEntity<>(this.services.getAllByIdEvento(uid), HttpStatus.OK);
     }
 
@@ -52,7 +54,7 @@ public class PersonalEventoController {
     }
 
     @DeleteMapping("/{uid}")
-    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") String uid) {
+    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") @NotBlank String uid) {
         return new ResponseEntity<>(this.services.delete(uid), HttpStatus.OK);
     }
 }

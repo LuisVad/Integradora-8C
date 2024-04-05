@@ -42,12 +42,14 @@ public class EventosDto {
 
     private Boolean personalizado;
 
+    private String estado;
+
     private Timestamp ultimaModificacion;
 
     private Boolean active;
 
     public Eventos toEntity() {
         this.ultimaModificacion = new Timestamp(System.currentTimeMillis());
-        return new Eventos(idEvento, fechaHoraInicio, fechaHoraFin, numeroPersonas, costoTotal, personalizado, usuario, direccion, ultimaModificacion, active);
+        return new Eventos(idEvento, fechaHoraInicio, fechaHoraFin, numeroPersonas, costoTotal, personalizado, estado, usuario, direccion, ultimaModificacion, active);
     }
 }

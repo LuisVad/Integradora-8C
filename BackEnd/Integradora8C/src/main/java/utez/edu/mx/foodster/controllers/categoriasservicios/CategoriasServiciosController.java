@@ -1,5 +1,7 @@
 package utez.edu.mx.foodster.controllers.categoriasservicios;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +31,7 @@ public class CategoriasServiciosController {
     }
 
     @GetMapping("/{uid}")
-    public ResponseEntity<Response<CategoriasServicios>> getById(@PathVariable("uid") String uid) {
+    public ResponseEntity<Response<CategoriasServicios>> getById(@PathVariable("uid") @NotBlank String uid) {
         return new ResponseEntity<>(this.services.getById(uid), HttpStatus.OK);
     }
     @GetMapping("/status/{status}")
@@ -40,28 +42,28 @@ public class CategoriasServiciosController {
         );
     }
     @PostMapping("/")
-    public ResponseEntity<Response<CategoriasServicios>> insert(@RequestBody CategoriasServiciosDto dto){
+    public ResponseEntity<Response<CategoriasServicios>> insert(@RequestBody @Valid CategoriasServiciosDto dto){
         return new ResponseEntity<>(
                 this.services.insert(dto.toEntity()),
                 HttpStatus.OK
         );
     }
     @PutMapping("/")
-    public ResponseEntity<Response<CategoriasServicios>> update(@RequestBody CategoriasServiciosDto dto){
+    public ResponseEntity<Response<CategoriasServicios>> update(@RequestBody @NotBlank CategoriasServiciosDto dto){
         return new ResponseEntity<>(
                 this.services.update(dto.toEntity()),
                 HttpStatus.OK
         );
     }
     @DeleteMapping("/{uid}")
-    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") String id){
+    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") @NotBlank String id){
         return new ResponseEntity<>(
                 this.services.delete(id),
                 HttpStatus.OK
         );
     }
     @DeleteMapping("/status/{uid}")
-    public ResponseEntity<Response<Boolean>> changeStatus(@PathVariable("uid") String id){
+    public ResponseEntity<Response<Boolean>> changeStatus(@PathVariable("uid") @NotBlank String id){
         return new ResponseEntity<>(
                 this.services.changeStatus(id),
                 HttpStatus.OK

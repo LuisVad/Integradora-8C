@@ -1,5 +1,8 @@
 package utez.edu.mx.foodster.controllers.serviciospaquete;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,14 +31,14 @@ public class ServiciosPaqueteController {
         );
     }
     @GetMapping("/status/{status}")
-    public ResponseEntity<Response<List<ServiciosPaquete>>> getAllByStatus(@PathVariable("status") Boolean status){
+    public ResponseEntity<Response<List<ServiciosPaquete>>> getAllByStatus(@PathVariable("status") @NotNull Boolean status){
         return new ResponseEntity<>(
                 this.services.getAllByStatus(status),
                 HttpStatus.OK
         );
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Response<ServiciosPaquete>> getById(@PathVariable("id") String id){
+    public ResponseEntity<Response<ServiciosPaquete>> getById(@PathVariable("id") @NotBlank String id){
         return new ResponseEntity<>(
                 this.services.getById(id),
                 HttpStatus.OK
@@ -43,7 +46,7 @@ public class ServiciosPaqueteController {
     }
 
     @GetMapping("/paquete/{id}")
-    public ResponseEntity<Response<List<ServiciosPaquete>>> getAllByIdPaquete(@PathVariable("id") String id){
+    public ResponseEntity<Response<List<ServiciosPaquete>>> getAllByIdPaquete(@PathVariable("id") @NotBlank String id){
         return new ResponseEntity<>(
                 this.services.getAllByIdPaquete(id),
                 HttpStatus.OK
@@ -51,28 +54,28 @@ public class ServiciosPaqueteController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Response<ServiciosPaquete>> insert(@RequestBody ServiciosPaqueteDto dto){
+    public ResponseEntity<Response<ServiciosPaquete>> insert(@RequestBody @Valid ServiciosPaqueteDto dto){
         return new ResponseEntity<>(
                 this.services.insert(dto.toEntity()),
                 HttpStatus.OK
         );
     }
     @PutMapping("/")
-    public ResponseEntity<Response<ServiciosPaquete>> update(@RequestBody ServiciosPaqueteDto dto){
+    public ResponseEntity<Response<ServiciosPaquete>> update(@RequestBody @Valid ServiciosPaqueteDto dto){
         return new ResponseEntity<>(
                 this.services.update(dto.toEntity()),
                 HttpStatus.OK
         );
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Response<Boolean>> delete(@PathVariable("id") String id){
+    public ResponseEntity<Response<Boolean>> delete(@PathVariable("id") @NotBlank String id){
         return new ResponseEntity<>(
                 this.services.delete(id),
                 HttpStatus.OK
         );
     }
     @DeleteMapping("/status/{id}")
-    public ResponseEntity<Response<ServiciosPaquete>> changeStatus(@PathVariable("id") String id){
+    public ResponseEntity<Response<ServiciosPaquete>> changeStatus(@PathVariable("id") @NotBlank String id){
         return new ResponseEntity<>(
                 this.services.changeStatus(id),
                 HttpStatus.OK

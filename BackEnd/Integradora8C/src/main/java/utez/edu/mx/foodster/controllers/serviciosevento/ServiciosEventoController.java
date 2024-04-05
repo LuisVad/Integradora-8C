@@ -1,5 +1,8 @@
 package utez.edu.mx.foodster.controllers.serviciosevento;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,37 +29,37 @@ public class ServiciosEventoController {
     }
 
     @GetMapping("/status/{status}")
-    public ResponseEntity<Response<List<ServiciosEvento>>> getAllByStatus(@PathVariable("status") Boolean status) {
+    public ResponseEntity<Response<List<ServiciosEvento>>> getAllByStatus(@PathVariable("status") @NotNull Boolean status) {
         return new ResponseEntity<>(this.services.getAllByStatus(status), HttpStatus.OK);
     }
 
     @GetMapping("/{uid}")
-    public ResponseEntity<Response<ServiciosEvento>> getById(@PathVariable("uid") String id) {
+    public ResponseEntity<Response<ServiciosEvento>> getById(@PathVariable("uid") @NotBlank String id) {
         return new ResponseEntity<>(this.services.getById(id), HttpStatus.OK);
     }
 
     @GetMapping("/evento/{uid}")
-    public ResponseEntity<Response<List<ServiciosEvento>>> getAllByIdEvento(@PathVariable("uid") String id) {
+    public ResponseEntity<Response<List<ServiciosEvento>>> getAllByIdEvento(@PathVariable("uid") @NotBlank String id) {
         return new ResponseEntity<>(this.services.getAllByIdEvento(id), HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<Response<ServiciosEvento>> insert(@RequestBody ServiciosEventoDto dto) {
+    public ResponseEntity<Response<ServiciosEvento>> insert(@RequestBody @Valid ServiciosEventoDto dto) {
         return new ResponseEntity<>(this.services.insert(dto.toEntity()), HttpStatus.OK);
     }
 
     @PutMapping("/")
-    public ResponseEntity<Response<ServiciosEvento>> update(@RequestBody ServiciosEventoDto dto) {
+    public ResponseEntity<Response<ServiciosEvento>> update(@RequestBody @Valid ServiciosEventoDto dto) {
         return new ResponseEntity<>(this.services.update(dto.toEntity()), HttpStatus.OK);
     }
 
     @DeleteMapping("/{uid}")
-    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") String id) {
+    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") @NotBlank String id) {
         return new ResponseEntity<>(this.services.delete(id), HttpStatus.OK);
     }
 
     @DeleteMapping("/status/{uid}")
-    public ResponseEntity<Response<ServiciosEvento>> changeStatus(@PathVariable("uid") String id) {
+    public ResponseEntity<Response<ServiciosEvento>> changeStatus(@PathVariable("uid") @NotBlank String id) {
         return new ResponseEntity<>(this.services.changeStatus(id), HttpStatus.OK);
     }
 }

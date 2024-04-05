@@ -1,6 +1,8 @@
 package utez.edu.mx.foodster.controllers.roles;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +30,7 @@ public class RolesController {
 
 
     @GetMapping("/{uid}")
-    public ResponseEntity<Response<Roles>> getById(@PathVariable("uid") String uid) {
+    public ResponseEntity<Response<Roles>> getById(@PathVariable("uid") @NotNull String uid) {
         return new ResponseEntity<>(this.services.getById(uid), HttpStatus.OK);
     }
 
@@ -43,7 +45,7 @@ public class RolesController {
     }
 
     @DeleteMapping("/{uid}")
-    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") String uid) {
+    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") @NotBlank String uid) {
         return new ResponseEntity<>(this.services.delete(uid), HttpStatus.OK);
     }
 }

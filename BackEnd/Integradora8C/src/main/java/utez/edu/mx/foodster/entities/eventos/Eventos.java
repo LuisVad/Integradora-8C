@@ -33,6 +33,8 @@ public class Eventos {
     private Double costoTotal;
     @Column(name = "personalizado", columnDefinition = "BOOLEAN NOT NULL")
     private Boolean personalizado;
+    @Column(name = "estado", columnDefinition = "TEXT NOT NULL")
+    private String estado;
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     @ManyToOne
     private Usuarios usuario;

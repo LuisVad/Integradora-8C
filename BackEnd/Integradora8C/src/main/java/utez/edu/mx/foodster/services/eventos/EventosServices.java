@@ -17,6 +17,7 @@ import utez.edu.mx.foodster.entities.personalevento.PersonalEventoRepository;
 import utez.edu.mx.foodster.entities.servicios.Servicios;
 import utez.edu.mx.foodster.entities.servicios.ServiciosRepository;
 import utez.edu.mx.foodster.entities.serviciosevento.ServiciosEventoRepository;
+import utez.edu.mx.foodster.utils.EventoEstados;
 import utez.edu.mx.foodster.utils.Response;
 
 import java.sql.SQLDataException;
@@ -72,11 +73,14 @@ public class EventosServices {
         try {
             Eventos eventoDetalles = evento.getEvento().toEntity();
             eventoDetalles.setActive(true);
+            eventoDetalles.setPersonalizado(true);
             if (evento.getIdPaquete() != null) {
                 Paquetes paquete = this.paquetesRepository.findByIdPaqueteAndActive(evento.getIdPaquete(), true);
                 paquete.setNumeroPedidos(paquete.getNumeroPedidos() + 1);
+                eventoDetalles.setPersonalizado(false);
                 this.paquetesRepository.save(paquete);
             }
+            eventoDetalles.setEstado(EventoEstados.getEstado(EventoEstados.EN_PROCESO));
             Eventos eventoGuardado = this.repository.save(eventoDetalles);
             evento.getServicios().forEach(servicio -> {
                 Servicios servicioActual = this.serviciosRepository.findByIdServicioAndActive(servicio.getIdServicio(), true);
@@ -130,6 +134,30 @@ public class EventosServices {
         }
         return new Response<>(null, true, 400, "No encontrado para actualizar");
     }
+
+
+    @Transactional(rollbackFor = {SQLDataException.class})
+    public Response<Eventos> setFinalizado(String id) {
+        Optional<Eventos> update = this.repository.findById(id);
+        if (update.isPresent()) {
+            Eventos eventos = update.get();
+            eventos.setEstado(EventoEstados.getEstado(EventoEstados.FINALIZADO));
+            return new Response<>(this.repository.saveAndFlush(eventos), false, 200, "OK");
+        }
+        return new Response<>(null, true, 400, "No encontrado para finalizar");
+    }
+    @Transactional(rollbackFor = {SQLDataException.class})
+    public Response<Eventos> setCancelado(String id) {
+        Optional<Eventos> update = this.repository.findById(id);
+        if (update.isPresent()) {
+            Eventos eventos = update.get();
+            eventos.setEstado(EventoEstados.getEstado(EventoEstados.CANCELADO));
+            return new Response<>(this.repository.saveAndFlush(eventos), false, 200, "OK");
+        }
+        return new Response<>(null, true, 400, "No encontrado para finalizar");
+    }
+
+
 
     @Transactional(rollbackFor = {SQLDataException.class})
     public Response<Boolean> delete(String id) {

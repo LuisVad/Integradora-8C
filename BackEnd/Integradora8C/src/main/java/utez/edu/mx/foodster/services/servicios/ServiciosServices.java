@@ -1,5 +1,7 @@
 package utez.edu.mx.foodster.services.servicios;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.foodster.entities.servicios.Servicios;
@@ -21,7 +23,16 @@ public class ServiciosServices {
     @Transactional(readOnly = true)
     public Response<List<Servicios>> getAll(){
         return new Response<>(
-                this.repository.findAll(),
+                this.repository.findAllByActiveOrderByUltimaModificacionDesc(true),
+                false,
+                200,
+                "OK"
+        );
+    }
+    @Transactional(readOnly = true)
+    public Response<Page<Servicios>> getAll(Pageable pageable){
+        return new Response<>(
+                this.repository.findAllByActiveOrderByUltimaModificacionDesc(true, pageable),
                 false,
                 200,
                 "OK"
@@ -38,10 +49,22 @@ public class ServiciosServices {
         );
     }
 
+
+
     @Transactional(readOnly = true)
     public Response<List<Servicios>> getAllByIdCategoria(String idCategoria){
         return new Response<>(
                 this.repository.findAllByCategoriasAndActiveOrderByUltimaModificacionDesc(idCategoria, true),
+                false,
+                200,
+                "OK"
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public Response<Page<Servicios>> getAllByIdCategoria(String idCategoria, Pageable pageable){
+        return new Response<>(
+                this.repository.findAllByCategoriasAndActiveOrderByUltimaModificacionDesc(idCategoria, true, pageable),
                 false,
                 200,
                 "OK"

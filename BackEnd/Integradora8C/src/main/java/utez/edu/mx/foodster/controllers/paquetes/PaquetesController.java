@@ -1,5 +1,11 @@
 package utez.edu.mx.foodster.controllers.paquetes;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,13 +34,22 @@ public class PaquetesController {
         );
     }
 
+    @GetMapping("/paginado/{page}/{size}")
+    public ResponseEntity<Response<Page<Paquetes>>> getAllPaginado(@PathVariable("page") @NotNull Integer page, @PathVariable("size") @NotNull Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return new ResponseEntity<>(
+                this.services.getAll(pageable),
+                HttpStatus.OK
+        );
+    }
+
     @GetMapping("/{uid}")
-    public ResponseEntity<Response<Paquetes>> getById(@PathVariable("uid") String uid) {
+    public ResponseEntity<Response<Paquetes>> getById(@PathVariable("uid") @NotBlank String uid) {
         return new ResponseEntity<>(this.services.getById(uid), HttpStatus.OK);
     }
 
     @GetMapping("/status/{status}")
-    public ResponseEntity<Response<List<Paquetes>>> getAllByStatus(@PathVariable("status") Boolean status) {
+    public ResponseEntity<Response<List<Paquetes>>> getAllByStatus(@PathVariable("status") @NotNull Boolean status) {
         return new ResponseEntity<>(
                 this.services.getAllByStatus(status),
                 HttpStatus.OK
@@ -42,7 +57,7 @@ public class PaquetesController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Response<Paquetes>> insert(@RequestBody PaquetesDto dto) {
+    public ResponseEntity<Response<Paquetes>> insert(@RequestBody @Valid PaquetesDto dto) {
         return new ResponseEntity<>(
                 this.services.insert(dto.toEntity()),
                 HttpStatus.OK
@@ -50,7 +65,7 @@ public class PaquetesController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<Response<Paquetes>> update(@RequestBody PaquetesDto dto) {
+    public ResponseEntity<Response<Paquetes>> update(@RequestBody @Valid PaquetesDto dto) {
         return new ResponseEntity<>(
                 this.services.update(dto.toEntity()),
                 HttpStatus.OK
@@ -58,7 +73,7 @@ public class PaquetesController {
     }
 
     @DeleteMapping("/{uid}")
-    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") String id) {
+    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") @NotBlank String id) {
         return new ResponseEntity<>(
                 this.services.delete(id),
                 HttpStatus.OK
@@ -66,7 +81,7 @@ public class PaquetesController {
     }
 
     @DeleteMapping("/status/{uid}")
-    public ResponseEntity<Response<Paquetes>> changeStatus(@PathVariable("uid") String id) {
+    public ResponseEntity<Response<Paquetes>> changeStatus(@PathVariable("uid") @NotBlank String id) {
         return new ResponseEntity<>(
                 this.services.changeStatus(id),
                 HttpStatus.OK

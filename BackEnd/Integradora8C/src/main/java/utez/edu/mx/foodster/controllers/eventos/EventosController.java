@@ -1,6 +1,8 @@
 package utez.edu.mx.foodster.controllers.eventos;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +32,7 @@ public class EventosController {
         );
     }
     @GetMapping("/status/{status}")
-    public ResponseEntity<Response<List<Eventos>>> getAllByStatus(@PathVariable("status") Boolean status){
+    public ResponseEntity<Response<List<Eventos>>> getAllByStatus(@PathVariable("status") @NotNull Boolean status){
         return new ResponseEntity<>(
                 this.services.getAllByStatus(status),
                 HttpStatus.OK
@@ -38,7 +40,7 @@ public class EventosController {
     }
 
     @GetMapping("/{uid}")
-    public ResponseEntity<Response<Eventos>> getById(@PathVariable("uid") String id){
+    public ResponseEntity<Response<Eventos>> getById(@PathVariable("uid") @NotBlank String id){
         return new ResponseEntity<>(
                 this.services.getById(id),
                 HttpStatus.OK
@@ -46,7 +48,7 @@ public class EventosController {
     }
 
     @GetMapping("/usuario/{uid}")
-    public ResponseEntity<Response<List<Eventos>>> getAllByIdUsuario(@PathVariable("uid") String idUsuario){
+    public ResponseEntity<Response<List<Eventos>>> getAllByIdUsuario(@PathVariable("uid") @NotBlank String idUsuario){
         return new ResponseEntity<>(
                 this.services.getAllByIdUsuario(idUsuario),
                 HttpStatus.OK
@@ -67,7 +69,7 @@ public class EventosController {
         );
     }
     @DeleteMapping("/{uid}")
-    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") String id){
+    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") @NotBlank String id){
         return new ResponseEntity<>(
                 this.services.delete(id),
                 HttpStatus.OK

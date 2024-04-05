@@ -3,9 +3,9 @@ package utez.edu.mx.foodster.services.direcciones;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.foodster.dtos.direcciones.DireccionesDto;
+import utez.edu.mx.foodster.dtos.direccionesusuarios.DireccionesUsuariosDto;
 import utez.edu.mx.foodster.entities.direcciones.Direcciones;
 import utez.edu.mx.foodster.entities.direcciones.DireccionesRepository;
-import utez.edu.mx.foodster.entities.direccionesusuario.DireccionesUsuario;
 import utez.edu.mx.foodster.entities.direccionesusuario.DireccionesUsuarioRepository;
 import utez.edu.mx.foodster.entities.usuarios.Usuarios;
 import utez.edu.mx.foodster.entities.usuarios.UsuariosRepository;
@@ -52,15 +52,16 @@ public class DireccionesServices {
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Direcciones> insert(DireccionesDto direcciones) {
         Usuarios usuarios = this.usuariosRepository.findByIdUsuarioAndActive(direcciones.getIdUsuario(), true);
-
         if (usuarios == null) {
             return new Response<>(null, true, 400, "Usuario no encontrado");
         }
+        direcciones.setActive(true);
         Direcciones direccion = this.repository.save(direcciones.toEntity());
-        DireccionesUsuario direccionesUsuario = new DireccionesUsuario();
+        DireccionesUsuariosDto direccionesUsuario = new DireccionesUsuariosDto();
         direccionesUsuario.setDirecciones(direccion);
         direccionesUsuario.setUsuarios(usuarios);
-        this.direccionesUsuarioRepository.save(direccionesUsuario);
+        direccionesUsuario.setActive(true);
+        this.direccionesUsuarioRepository.save(direccionesUsuario.toEntity());
         return new Response<>(direccion, false, 200, "OK");
     }
 

@@ -1,6 +1,5 @@
 package utez.edu.mx.foodster.entities.direcciones;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -48,6 +47,5 @@ public class Direcciones {
     private Timestamp ultimaModificacion;
 
     @Column( columnDefinition = "BOOLEAN DEFAULT TRUE")
-    @JsonIgnore
     private Boolean active;
 }

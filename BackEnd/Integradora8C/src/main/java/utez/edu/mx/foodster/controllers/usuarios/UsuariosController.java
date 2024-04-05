@@ -1,6 +1,7 @@
 package utez.edu.mx.foodster.controllers.usuarios;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class UsuariosController {
     }
 
     @GetMapping("/{uid}")
-    public ResponseEntity<Response<Usuarios>> getById(@PathVariable("uid") String uid) {
+    public ResponseEntity<Response<Usuarios>> getById(@PathVariable("uid") @NotBlank String uid) {
         return new ResponseEntity<>(this.services.getById(uid), HttpStatus.OK);
     }
 
@@ -49,11 +50,11 @@ public class UsuariosController {
     }
 
     @DeleteMapping("/{uid}")
-    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") String uid) {
+    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") @NotBlank String uid) {
         return new ResponseEntity<>(this.services.delete(uid), HttpStatus.OK);
     }
     @DeleteMapping("/status/{uid}")
-    public ResponseEntity<Response<Boolean>> changeStatus(@PathVariable("uid") String uid) {
+    public ResponseEntity<Response<Boolean>> changeStatus(@PathVariable("uid") @NotBlank String uid) {
         return new ResponseEntity<>(this.services.changeStatus(uid), HttpStatus.OK);
     }
 }

@@ -1,6 +1,8 @@
 package utez.edu.mx.foodster.controllers.personal;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,11 +30,11 @@ public class PersonalController {
     }
 
     @GetMapping("/{uid}")
-    public ResponseEntity<Response<Personal>> getById(@PathVariable("uid") String uid) {
+    public ResponseEntity<Response<Personal>> getById(@PathVariable("uid") @NotBlank String uid) {
         return new ResponseEntity<>(this.services.getById(uid), HttpStatus.OK);
     }
     @GetMapping("/status/{status}")
-    public ResponseEntity<Response<List<Personal>>> getAllByStatus(@PathVariable("status") Boolean status) {
+    public ResponseEntity<Response<List<Personal>>> getAllByStatus(@PathVariable("status") @NotNull Boolean status) {
         return new ResponseEntity<>(this.services.getAllByStatus(status), HttpStatus.OK);
     }
 
@@ -47,11 +49,11 @@ public class PersonalController {
     }
 
     @DeleteMapping("/{uid}")
-    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") String uid) {
+    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") @NotBlank String uid) {
         return new ResponseEntity<>(this.services.delete(uid), HttpStatus.OK);
     }
     @DeleteMapping("/status/{uid}")
-    public ResponseEntity<Response<Boolean>> changeStatus(@PathVariable("uid") String uid) {
+    public ResponseEntity<Response<Boolean>> changeStatus(@PathVariable("uid") @NotBlank String uid) {
         return new ResponseEntity<>(this.services.changeStatus(uid), HttpStatus.OK);
     }
 }
