@@ -23,6 +23,8 @@ public class JwtProvider {
     private String secret;
     @Value("${jwt.expiration}")
     private long expiration;
+    @Value("${jwt.expiration.restore}")
+    private long expirationRestore;
 
     public String generateToken(Authentication auth) {
         UserDetails user = (UserDetails) auth.getPrincipal();
@@ -77,7 +79,7 @@ public class JwtProvider {
     }
 
     public String generatePasswordResetToken(String email) {
-        return Jwts.builder().setSubject(email).setIssuedAt(new Date()).setExpiration(new Date(new Date().getTime() + expiration * 1000L)).signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
+        return Jwts.builder().setSubject(email).setIssuedAt(new Date()).setExpiration(new Date(new Date().getTime() + expirationRestore * 1000L)).signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
     public boolean validatePasswordResetToken(String token) {

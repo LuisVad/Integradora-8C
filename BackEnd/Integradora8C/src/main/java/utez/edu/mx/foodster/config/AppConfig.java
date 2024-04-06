@@ -161,14 +161,14 @@ public class AppConfig {
         String[] nombres = {"Juan", "Pedro", "Maria", "Jose", "Luis", "Ana", "Rosa", "Carlos", "Jorge", "Fernando", "Ricardo", "Roberto"};
         String[] apellidos = {"Rodriguez", "Juarez", "Jimenez", "Gonzalez", "Perez", "Lopez", "Garcia", "Hernandez", "Martinez", "Torres", "Sanchez", "Ramirez"};
 
-        for (int i = 0; i < 400; i++) {
+        for (int i = 0; i < 100; i++) {
             String name = nombres[random.nextInt(nombres.length)];
             String lastName1 = apellidos[random.nextInt(apellidos.length)];
             String lastName2 = apellidos[random.nextInt(apellidos.length)];
             String email = "usuario" + i + "@yopmail.com";
             saveUser(roles, name, lastName1, lastName2, "7777909013", email, "personal");
 
-            String categoryName = i <= 100 ? "Chef" : "Mesero";
+            String categoryName = i <= 50 ? "Chef" : "Mesero";
             CategoriasPersonal categoriasPersonal = categoriasPersonalRepository.findByNombreAndActive(categoryName, true);
             PersonalDto personalDto = new PersonalDto(null, usuariosRepository.findByCorreoAndActive(email, true), categoriasPersonal, new Timestamp(System.currentTimeMillis()), true);
             personalRepository.save(personalDto.toEntity());

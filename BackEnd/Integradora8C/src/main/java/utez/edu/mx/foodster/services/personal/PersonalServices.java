@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.foodster.entities.personal.Personal;
 import utez.edu.mx.foodster.entities.personal.PersonalRepository;
+import utez.edu.mx.foodster.entities.roles.RolesRepository;
 import utez.edu.mx.foodster.entities.usuarios.Usuarios;
 import utez.edu.mx.foodster.entities.usuarios.UsuariosRepository;
 import utez.edu.mx.foodster.utils.Response;
@@ -13,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -20,12 +22,14 @@ public class PersonalServices {
     private final PasswordEncoder passwordEncoder;
     private final PersonalRepository repository;
     private final UsuariosRepository usuariosRepository;
+    private final RolesRepository rolesRepository;
 
 
-    public PersonalServices(PersonalRepository repository, UsuariosRepository usuariosRepository, PasswordEncoder passwordEncoder) {
+    public PersonalServices(PersonalRepository repository, UsuariosRepository usuariosRepository, PasswordEncoder passwordEncoder, RolesRepository rolesRepository) {
         this.repository = repository;
         this.usuariosRepository = usuariosRepository;
         this.passwordEncoder = passwordEncoder;
+        this.rolesRepository = rolesRepository;
     }
 
     @Transactional(readOnly = true)
@@ -63,6 +67,7 @@ public class PersonalServices {
         }
         personal.getUsuarios().setUltimaModificacion(new Timestamp(System.currentTimeMillis()));
         personal.getUsuarios().setContrasena(this.passwordEncoder.encode(personal.getUsuarios().getContrasena()));
+        personal.getUsuarios().setRoles(Set.of(this.rolesRepository.findByNombreAndActive("PERSONAL", true)));
         Usuarios usuarios = this.usuariosRepository.save(personal.getUsuarios());
         personal.setUsuarios(usuarios);
         return new Response<>(this.repository.save(personal), false, 200, "OK");

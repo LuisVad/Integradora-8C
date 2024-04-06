@@ -8,6 +8,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.foodster.dtos.auth.CambioRequestDto;
@@ -41,10 +42,10 @@ public class AuthService {
     private final TwilioServices twilioService;
     private final HtmlMessageRender htmlRender;
     private final CaptchaService captchaService;
-
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthService(UsuariosServices service, AuthenticationManager manager, JwtProvider provider, MailService emailService, TwilioServices twilioService, HtmlMessageRender htmlRender, CaptchaService captchaService) {
+    public AuthService(UsuariosServices service, AuthenticationManager manager, JwtProvider provider, MailService emailService, TwilioServices twilioService, HtmlMessageRender htmlRender, CaptchaService captchaService, PasswordEncoder passwordEncoder) {
         this.service = service;
         this.manager = manager;
         this.provider = provider;
@@ -52,6 +53,7 @@ public class AuthService {
         this.twilioService = twilioService;
         this.htmlRender = htmlRender;
         this.captchaService = captchaService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
@@ -106,7 +108,7 @@ public class AuthService {
         if (user == null) {
             return new ResponseEntity<>(new Response<>(null, true, 404, "Usuario no encontrado"), HttpStatus.NOT_FOUND);
         }
-        user.setContrasena(password);
+        user.setContrasena(passwordEncoder.encode(password));
         service.insert(user);
         return new ResponseEntity<>(new Response<>(new CambioResponseDto(correo), false, 200, "Contraseña actualizada"), HttpStatus.OK);
     }

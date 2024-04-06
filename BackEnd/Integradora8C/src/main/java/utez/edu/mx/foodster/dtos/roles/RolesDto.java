@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 public class RolesDto {
     private String idRol;
     @NotBlank(message = "El nombre no puede ser nulo")
-    @Size(min = 3, max = 50, message = "El nombre debe tener entre 3 y 50 caracteres")
+    @Size(min = 1, max = 50, message = "El nombre debe tener entre 3 y 50 caracteres")
     private String nombre;
     private Timestamp ultimaModificacion;
     @NotBlank(message = "El active no puede ser nulo")

@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("${apiPrefix}/categorias-servicios")
 @CrossOrigin(value = {"*"})
-public class CategoriasServiciosController {
+public class    CategoriasServiciosController {
     private final CategoriasServiciosServices services;
 
     public CategoriasServiciosController(CategoriasServiciosServices services) {
@@ -49,7 +49,7 @@ public class CategoriasServiciosController {
         );
     }
     @PutMapping("/")
-    public ResponseEntity<Response<CategoriasServicios>> update(@RequestBody @NotBlank CategoriasServiciosDto dto){
+    public ResponseEntity<Response<CategoriasServicios>> update(@RequestBody  @Valid CategoriasServiciosDto dto){
         return new ResponseEntity<>(
                 this.services.update(dto.toEntity()),
                 HttpStatus.OK
