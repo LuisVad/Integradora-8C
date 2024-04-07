@@ -91,7 +91,7 @@ public class UsuariosServices {
     public Response<Boolean> delete(String id) {
         Optional<Usuarios> usuarios = this.repository.findById(id);
         if (usuarios.isPresent()) {
-            this.repository.delete(usuarios.get());
+            usuarios.get().setActive(!usuarios.get().getActive());
             return new Response<>(true, false, 200, "Eliminado correctamente");
         }
         return new Response<>(null, true, 400, "No encontrado para eliminar");

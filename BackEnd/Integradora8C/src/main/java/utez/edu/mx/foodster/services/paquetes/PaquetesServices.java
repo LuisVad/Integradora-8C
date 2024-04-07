@@ -70,6 +70,9 @@ public class PaquetesServices {
     public Response<Paquetes> update(Paquetes paquetes){
         Optional<Paquetes> entity = this.repository.findById(paquetes.getIdPaquete());
         if(entity.isPresent()){
+            if (paquetes.getImagen().isEmpty()) {
+                paquetes.setImagen(entity.get().getImagen());
+            }
             return new Response<>(
                     this.repository.saveAndFlush(paquetes),
                     false,
@@ -88,9 +91,9 @@ public class PaquetesServices {
     public Response<Boolean> delete(String id){
         Optional<Paquetes> entity = this.repository.findById(id);
         if(entity.isPresent()){
-            this.repository.delete(entity.get());
+            entity.get().setActive(!entity.get().getActive());
             return new Response<>(
-                    true,
+                    this.repository.saveAndFlush(entity.get()).getActive(),
                     false,
                     200,
                     "OK"

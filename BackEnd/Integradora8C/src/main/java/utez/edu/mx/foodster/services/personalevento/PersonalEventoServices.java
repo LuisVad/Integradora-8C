@@ -57,8 +57,8 @@ public class PersonalEventoServices {
     public Response<Boolean> delete(String id) {
         Optional<PersonalEvento> personalEvento = this.repository.findById(id);
         if (personalEvento.isPresent()) {
-            this.repository.delete(personalEvento.get());
-            return new Response<>(true, false, 200, "Eliminado correctamente");
+            personalEvento.get().setActive(!personalEvento.get().getActive());
+            return new Response<>(this.repository.saveAndFlush(personalEvento.get()).getActive(), false, 200, "Eliminado correctamente");
         }
         return new Response<>(null, true, 400, "No encontrado");
     }

@@ -91,7 +91,7 @@ public class EventosServices {
                 serviciosEvento.setActive(true);
                 this.serviciosEventoRepository.save(serviciosEvento.toEntity());
                 // si el producto cuenta con existencia se resta la cantidad
-                if (servicioActual.existencias != null) {
+                if (servicioActual.getExistencias() != null) {
                     servicioActual.setExistencias(servicioActual.getExistencias() - servicio.getCantidad());
                     this.serviciosRepository.save(servicioActual);
                 }

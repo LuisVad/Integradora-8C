@@ -38,7 +38,7 @@ public class PaquetesDto {
 
     private Timestamp ultimaModificacion;
 
-    private boolean active;
+    private Boolean active;
 
     public Paquetes toEntity() {
         this.ultimaModificacion = new Timestamp(System.currentTimeMillis());

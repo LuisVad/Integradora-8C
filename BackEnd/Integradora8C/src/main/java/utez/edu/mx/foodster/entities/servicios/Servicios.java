@@ -23,22 +23,22 @@ public class Servicios {
     @Column(name = "id_servicio")
     private String idServicio;
     @Column(name = "nombre", columnDefinition = "TEXT NOT NULL", nullable = false)
-    public String nombre;
+    private String nombre;
     @Column(name = "descripcion", columnDefinition = "TEXT NOT NULL", nullable = false)
-    public String descripcion;
+    private String descripcion;
     @Column(name = "precio", columnDefinition = "DOUBLE NOT NULL", nullable = false)
-    public Double precio;
+    private Double precio;
     @Column(name = "precio_descuento", columnDefinition = "DOUBLE")
-    public Double precioDescuento;
+    private Double precioDescuento;
     @Column(name = "imagen", columnDefinition = "MEDIUMTEXT NOT NULL", nullable = false)
-    public String imagen;
+    private String imagen;
     @Column(name = "existencias", columnDefinition = "BIGINT")
-    public Long existencias;
+    private Long existencias;
     @ManyToOne
     @JoinColumn(name = "id_categoria")
-    public CategoriasServicios categoria;
+    private CategoriasServicios categoria;
     @Column(name = "ultima_modificacion", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    public Timestamp ultimaModificacion;
+    private Timestamp ultimaModificacion;
     @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE")
-    public Boolean active;
+    private Boolean active;
 }

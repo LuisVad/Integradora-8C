@@ -21,129 +21,71 @@ public class ServiciosServices {
     }
 
     @Transactional(readOnly = true)
-    public Response<List<Servicios>> getAll(){
-        return new Response<>(
-                this.repository.findAllByActiveOrderByUltimaModificacionDesc(true),
-                false,
-                200,
-                "OK"
-        );
-    }
-    @Transactional(readOnly = true)
-    public Response<Page<Servicios>> getAll(Pageable pageable){
-        return new Response<>(
-                this.repository.findAllByActiveOrderByUltimaModificacionDesc(true, pageable),
-                false,
-                200,
-                "OK"
-        );
+    public Response<List<Servicios>> getAll() {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(true), false, 200, "OK");
     }
 
     @Transactional(readOnly = true)
-    public Response<Servicios> getById(String id){
-        return new Response<>(
-                this.repository.findByIdServicioAndActive(id, true),
-                false,
-                200,
-                "OK"
-        );
-    }
-
-
-
-    @Transactional(readOnly = true)
-    public Response<List<Servicios>> getAllByIdCategoria(String idCategoria){
-        return new Response<>(
-                this.repository.findAllByCategoriasAndActiveOrderByUltimaModificacionDesc(idCategoria, true),
-                false,
-                200,
-                "OK"
-        );
+    public Response<Page<Servicios>> getAll(Pageable pageable) {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(true, pageable), false, 200, "OK");
     }
 
     @Transactional(readOnly = true)
-    public Response<Page<Servicios>> getAllByIdCategoria(String idCategoria, Pageable pageable){
-        return new Response<>(
-                this.repository.findAllByCategoriasAndActiveOrderByUltimaModificacionDesc(idCategoria, true, pageable),
-                false,
-                200,
-                "OK"
-        );
+    public Response<Servicios> getById(String id) {
+        return new Response<>(this.repository.findByIdServicioAndActive(id, true), false, 200, "OK");
+    }
+
+
+    @Transactional(readOnly = true)
+    public Response<List<Servicios>> getAllByIdCategoria(String idCategoria) {
+        return new Response<>(this.repository.findAllByCategoriasAndActiveOrderByUltimaModificacionDesc(idCategoria, true), false, 200, "OK");
     }
 
     @Transactional(readOnly = true)
-    public Response<List<Servicios>> getAllByStatus(Boolean status){
-        return new Response<>(
-                this.repository.findAllByActiveOrderByUltimaModificacionDesc(status),
-                false,
-                200,
-                "OK"
-        );
+    public Response<Page<Servicios>> getAllByIdCategoria(String idCategoria, Pageable pageable) {
+        return new Response<>(this.repository.findAllByCategoriasAndActiveOrderByUltimaModificacionDesc(idCategoria, true, pageable), false, 200, "OK");
     }
+
+    @Transactional(readOnly = true)
+    public Response<List<Servicios>> getAllByStatus(Boolean status) {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status), false, 200, "OK");
+    }
+
     @Transactional(rollbackFor = {SQLDataException.class})
-    public Response<Servicios> insert(Servicios servicios){
-        return new Response<>(
-                this.repository.save(servicios),
-                false,
-                200,
-                "OK"
-        );
+    public Response<Servicios> insert(Servicios servicios) {
+        return new Response<>(this.repository.save(servicios), false, 200, "OK");
     }
+
     @Transactional(rollbackFor = {SQLDataException.class})
-    public Response<Servicios> update(Servicios servicios){
+    public Response<Servicios> update(Servicios servicios) {
         Optional<Servicios> update = this.repository.findById(servicios.getIdServicio());
-        if(update.isPresent()){
-            return new Response<>(
-                    this.repository.saveAndFlush(servicios),
-                    false,
-                    200,
-                    "OK"
-            );
+        if (update.isPresent()) {
+            if (servicios.getImagen().isEmpty()) {
+                servicios.setImagen(update.get().getImagen());
+            }
+            return new Response<>(this.repository.saveAndFlush(servicios), false, 200, "OK");
         }
-        return new Response<>(
-                null,
-                true,
-                400,
-                "No encontrado para actualizar"
-        );
+        return new Response<>(null, true, 400, "No encontrado para actualizar");
     }
+
     @Transactional(rollbackFor = {SQLDataException.class})
-    public Response<Boolean> delete(String id){
+    public Response<Boolean> delete(String id) {
         Optional<Servicios> entity = this.repository.findById(id);
-        if(entity.isPresent()){
-            this.repository.delete(entity.get());
-            return new Response<>(
-                    true,
-                    false,
-                    200,
-                    "ok"
-            );
-        }
-        return new Response<>(
-                null,
-                true,
-                400,
-                "No encontrado para eliminar"
-        );
-    }
-    @Transactional(rollbackFor = {SQLDataException.class})
-    public Response<Servicios> changeStatus(String id){
-        Optional<Servicios> entity = this.repository.findById(id);
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             entity.get().setActive(!entity.get().getActive());
-            return new Response<>(
-                    this.repository.saveAndFlush(entity.get()),
-                    false,
-                    200,
-                    "ok"
-            );
+            return new Response<>(this.repository.saveAndFlush(entity.get()).getActive(), false, 200, "ok");
         }
-        return new Response<>(
-                null,
-                true,
-                400,
-                "No encontrado para cambiar status"
-        );
+        return new Response<>(null, true, 400, "No encontrado para eliminar");
+    }
+
+    @Transactional(rollbackFor = {SQLDataException.class})
+    public Response<Servicios> changeStatus(String id) {
+        Optional<Servicios> entity = this.repository.findById(id);
+        if (entity.isPresent()) {
+            entity.get().setActive(!entity.get().getActive());
+            return new Response<>(this.repository.saveAndFlush(entity.get()), false, 200, "ok");
+        }
+        return new Response<>(null, true, 400, "No encontrado para cambiar status");
     }
 
 }

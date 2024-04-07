@@ -98,9 +98,9 @@ public class DireccionesUsuarioServices {
     public Response<Boolean> delete(String id){
         Optional<DireccionesUsuario> entity = this.repository.findById(id);
         if(entity.isPresent()){
-            this.repository.delete(entity.get());
+            entity.get().setActive(!entity.get().getActive());
             return new Response<>(
-                    true,
+                    this.repository.saveAndFlush(entity.get()).getActive(),
                     false,
                     200,
                     "OK"

@@ -1,6 +1,6 @@
 package utez.edu.mx.foodster.dtos.serviciospaquete;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,12 +17,12 @@ import java.sql.Timestamp;
 @Setter
 public class ServiciosPaqueteDto {
     private String idServicioPaquete;
-    @NotBlank(message = "El paquete no puede ser nulo")
+    @NotNull(message = "El paquete no puede ser nulo")
     private Paquetes paquete;
-    @NotBlank(message = "El servicio no puede ser nulo")
+    @NotNull(message = "El servicio no puede ser nulo")
     private Servicios servicio;
     private Timestamp ultimaModificacion;
-    private boolean active;
+    private Boolean active;
 
     public ServiciosPaquete toEntity(){
         this.ultimaModificacion = new Timestamp(System.currentTimeMillis());

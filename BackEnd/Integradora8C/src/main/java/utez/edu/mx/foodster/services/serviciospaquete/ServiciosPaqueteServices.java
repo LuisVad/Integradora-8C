@@ -92,9 +92,9 @@ public class ServiciosPaqueteServices {
     public Response<Boolean> delete(String id) {
         Optional<ServiciosPaquete> entity = this.repository.findById(id);
         if (entity.isPresent()) {
-            this.repository.delete(entity.get());
+            entity.get().setActive(!entity.get().getActive());
             return new Response<>(
-                    true,
+                    this.repository.saveAndFlush(entity.get()).getActive(),
                     false,
                     200,
                     "OK"
@@ -112,7 +112,7 @@ public class ServiciosPaqueteServices {
     public Response<ServiciosPaquete> changeStatus(String id) {
         Optional<ServiciosPaquete> entity = this.repository.findById(id);
         if (entity.isPresent()) {
-            entity.get().setActive(!entity.get().isActive());
+            entity.get().setActive(!entity.get().getActive());
             return new Response<>(
                     this.repository.saveAndFlush(entity.get()),
                     false,

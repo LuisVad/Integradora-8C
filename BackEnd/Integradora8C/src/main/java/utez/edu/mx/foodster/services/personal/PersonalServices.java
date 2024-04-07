@@ -88,8 +88,8 @@ public class PersonalServices {
     public Response<Boolean> delete(String id) {
         Optional<Personal> personal = this.repository.findById(id);
         if (personal.isPresent()) {
-            this.repository.delete(personal.get());
-            return new Response<>(true, false, 200, "Eliminado correctamente");
+            personal.get().setActive(!personal.get().getActive());
+            return new Response<>(this.repository.saveAndFlush(personal.get()).getActive(), false, 200, "OK");
         }
         return new Response<>(null, true, 400, "No encontrado para eliminar");
     }

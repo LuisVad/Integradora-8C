@@ -23,7 +23,7 @@ public class ServiciosEventoDto {
     @NotNull(message = "El servicio no puede ser nulo")
     private Servicios servicio;
     private Timestamp ultimaModificacion;
-    private boolean active;
+    private Boolean active;
 
     public ServiciosEvento toEntity() {
         this.ultimaModificacion = new Timestamp(System.currentTimeMillis());

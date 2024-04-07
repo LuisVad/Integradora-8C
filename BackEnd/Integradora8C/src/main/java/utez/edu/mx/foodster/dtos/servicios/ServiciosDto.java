@@ -17,8 +17,10 @@ import java.sql.Timestamp;
 public class ServiciosDto {
     private String idServicio;
     @NotBlank(message = "El nombre no puede ser nulo")
+    @Size(min = 3, max = 50, message = "El nombre debe tener entre 3 y 50 caracteres")
     private String nombre;
     @NotBlank(message = "La descripción no puede ser nula")
+    @Size(min = 3, max = 255, message = "La descripción debe tener entre 3 y 255 caracteres")
     private String descripcion;
     @NotNull(message = "El precio no puede ser nulo")
     @Positive(message = "El precio debe ser positivo")

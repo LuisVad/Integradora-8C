@@ -77,9 +77,9 @@ public class CategoriasServiciosServices {
     public Response<Boolean> delete(String id){
         Optional<CategoriasServicios> entity = this.repository.findById(id);
         if (entity.isPresent()){
-            this.repository.delete(entity.get());
+           entity.get().setActive(!entity.get().getActive());
             return new Response<>(
-                    true,
+                    this.repository.saveAndFlush(entity.get()).getActive(),
                     false,
                     200,
                     "OK"
