@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.foodster.entities.paquetes.Paquetes;
 import utez.edu.mx.foodster.entities.paquetes.PaquetesRepository;
+import utez.edu.mx.foodster.utils.Base64DummyImages;
 import utez.edu.mx.foodster.utils.Response;
 
 import java.sql.SQLDataException;
@@ -59,6 +60,9 @@ public class PaquetesServices {
     }
     @Transactional(rollbackFor = {SQLDataException.class})
     public Response<Paquetes> insert(Paquetes paquetes){
+        if(paquetes.getImagen().isEmpty()){
+            paquetes.setImagen(Base64DummyImages.PLACEHOLDER);
+        }
         return new Response<>(
                 this.repository.save(paquetes),
                 false,

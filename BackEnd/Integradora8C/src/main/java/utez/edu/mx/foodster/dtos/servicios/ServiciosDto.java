@@ -27,7 +27,6 @@ public class ServiciosDto {
     private Double precio;
     @PositiveOrZero(message = "El precio de descuento debe ser positivo o cero")
     private Double precioDescuento;
-    @NotBlank(message = "La imagen no puede ser nula")
     private String imagen;
     @PositiveOrZero(message = "Las existencias deben ser positivas o cero")
     private Long existencias;
