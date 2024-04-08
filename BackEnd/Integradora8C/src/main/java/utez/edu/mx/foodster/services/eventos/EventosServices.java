@@ -62,6 +62,10 @@ public class EventosServices {
     public Response<List<Eventos>> getAllByIdUsuario(String idUsuario) {
         return new Response<>(this.repository.findAllByIdUsuarioAndActive(idUsuario, true), false, 200, "OK");
     }
+    @Transactional(readOnly = true)
+    public Response<List<Eventos>> getAllByPersonalIdUsuario(String idUsuario) {
+        return new Response<>(this.repository.findAllByPersonalIdUsuarioAndActive(idUsuario, true), false, 200, "OK");
+    }
 
     @Transactional(readOnly = true)
     public Response<List<Eventos>> getAllByStatus(Boolean status) {
@@ -91,7 +95,7 @@ public class EventosServices {
                 serviciosEvento.setActive(true);
                 this.serviciosEventoRepository.save(serviciosEvento.toEntity());
                 // si el producto cuenta con existencia se resta la cantidad
-                if (servicioActual.getExistencias() != null) {
+                if (servicioActual.getExistencias() != null && servicioActual.getExistencias() > 0) {
                     servicioActual.setExistencias(servicioActual.getExistencias() - servicio.getCantidad());
                     this.serviciosRepository.save(servicioActual);
                 }

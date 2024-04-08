@@ -15,6 +15,9 @@ public interface PersonalRepository extends JpaRepository<Personal, String> {
 
     Personal findByIdPersonalAndActive(String idPersonal, Boolean active);
 
+    @Query(value = "SELECT * FROM personal WHERE id_usuario = ?1 AND active = ?2", nativeQuery = true)
+    Personal findByIdUsuarioAndActive(String idUsuario, Boolean active);
+
 
     @Query(value = """
             SELECT * FROM personal 

@@ -3,6 +3,7 @@ package utez.edu.mx.foodster.security;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import utez.edu.mx.foodster.security.jwt.JwtAuthenticationFilter;
 import utez.edu.mx.foodster.security.jwt.JwtProvider;
 import utez.edu.mx.foodster.security.service.UserDetailsServiceImpl;
+import utez.edu.mx.foodster.utils.RolesActuales;
 
 @Configuration
 @EnableWebSecurity
@@ -73,8 +75,69 @@ public class MainSecurity {
         http.cors(Customizer.withDefaults()).csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(whiteList).permitAll()
-                                /*.requestMatchers(apiPrefix + "/usuarios/**").hasAnyAuthority("ADMIN")*/
-                                .anyRequest().permitAll()
+                                // rutas publicas de la api
+                                .requestMatchers(HttpMethod.POST, apiPrefix +"/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, apiPrefix +"/servicios/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, apiPrefix +"/paquetes/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, apiPrefix +"/categorias-servicios/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, apiPrefix +"/usuarios/public/").permitAll()
+                                .requestMatchers(HttpMethod.POST, apiPrefix +"/captcha/**").permitAll()
+
+                                // rutas de eventos
+
+                                .requestMatchers(HttpMethod.POST, apiPrefix +"/eventos/**").authenticated()
+                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/eventos/**").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.GET, apiPrefix +"/eventos/usuario/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.CLIENTE)
+                                .requestMatchers(HttpMethod.GET, apiPrefix +"/eventos/personal/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.PERSONAL)
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/eventos/").hasAuthority(RolesActuales.ADMIN)
+
+                                // rutas de usuarios
+                                .requestMatchers(HttpMethod.POST, apiPrefix +"/usuarios/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/usuarios/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.GET, apiPrefix +"/usuarios/**").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/usuarios/**").hasAuthority(RolesActuales.ADMIN)
+
+                                // rutas de personal
+                                .requestMatchers(HttpMethod.POST, apiPrefix +"/personal/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/personal/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.GET, apiPrefix +"/personal/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.PERSONAL)
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/personal/**").hasAuthority(RolesActuales.ADMIN)
+
+                                // rutas de categorias personal
+                                .requestMatchers(HttpMethod.POST, apiPrefix +"/categorias-personal/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/categorias-personal/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.GET, apiPrefix +"/categorias-personal/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.PERSONAL)
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/categorias-personal/**").hasAuthority(RolesActuales.ADMIN)
+
+                                // rutas de categorias servicios
+                                .requestMatchers(HttpMethod.POST, apiPrefix +"/categorias-servicios/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/categorias-servicios/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/categorias-servicios/**").hasAuthority(RolesActuales.ADMIN)
+
+                                // rutas de servicios
+                                .requestMatchers(HttpMethod.POST, apiPrefix +"/servicios/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/servicios/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/servicios/**").hasAuthority(RolesActuales.ADMIN)
+
+                                // rutas de paquetes
+                                .requestMatchers(HttpMethod.POST, apiPrefix +"/paquetes/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/paquetes/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/paquetes/**").hasAuthority(RolesActuales.ADMIN)
+
+                                // rutas de roles
+                                .requestMatchers(HttpMethod.POST, apiPrefix +"/roles/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/roles/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.GET, apiPrefix +"/roles/**").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/roles/**").hasAuthority(RolesActuales.ADMIN)
+
+                                // rutas de direcciones
+
+                                .requestMatchers(HttpMethod.POST, apiPrefix +"/direcciones/").authenticated()
+                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/direcciones/").authenticated()
+                                .requestMatchers(HttpMethod.GET, apiPrefix +"/direcciones/usuario/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.CLIENTE)
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/direcciones/**").authenticated()
+
+                                .anyRequest().hasAuthority(RolesActuales.ADMIN)
                 )
                 .httpBasic(Customizer.withDefaults())
                 .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))

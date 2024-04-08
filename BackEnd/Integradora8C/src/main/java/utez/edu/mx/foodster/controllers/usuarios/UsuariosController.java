@@ -39,7 +39,7 @@ public class UsuariosController {
         return new ResponseEntity<>(this.services.insert(usuariosDto.toEntity()), HttpStatus.OK);
     }
 
-    @PostMapping("/public")
+    @PostMapping("/public/")
     public ResponseEntity<Response<Usuarios>> publicInsert(@RequestBody @Valid UsuariosPublicDto usuarios) {
         return new ResponseEntity<>(this.services.publicInsert(usuarios), HttpStatus.OK);
     }

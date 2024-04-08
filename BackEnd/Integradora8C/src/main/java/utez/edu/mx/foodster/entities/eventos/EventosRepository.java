@@ -13,6 +13,15 @@ public interface EventosRepository extends JpaRepository<Eventos, String> {
     @Query(value = "SELECT * FROM eventos WHERE id_usuario = ?1 AND active = ?2", nativeQuery = true)
     List<Eventos> findAllByIdUsuarioAndActive(String idUsuario, Boolean active);
 
-
+    @Query(value = """
+            SELECT * FROM eventos 
+            WHERE active = :active
+            AND id_evento IN (
+                SELECT id_evento FROM personal_evento 
+                INNER JOIN personal ON personal.id_personal = personal_evento.id_personal 
+                WHERE personal.id_usuario = :idUsuario AND personal_evento.active = :active AND personal.active = :active
+            )
+            """, nativeQuery = true)
+    List<Eventos> findAllByPersonalIdUsuarioAndActive(String idUsuario, Boolean active);
     Eventos findByIdEventoAndActive(String idEvento, Boolean active);
 }
