@@ -12,5 +12,6 @@ public class KeyGenerator {
         var key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
         var base64Key = Base64.getEncoder().encodeToString(key.getEncoded());
         logger.info(base64Key);
+
     }
 }

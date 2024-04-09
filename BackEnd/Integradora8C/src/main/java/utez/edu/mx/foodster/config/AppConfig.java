@@ -46,6 +46,8 @@ public class AppConfig {
 
     private final ServiciosRepository serviciosRepository;
 
+    private static final String TELEFONO = "7777909013";
+
 
     @Autowired
     public AppConfig(RolesRepository rolesRepository, UsuariosRepository usuariosRepository, PasswordEncoder passwordEncoder, PersonalRepository personalRepository, CategoriasPersonalRepository categoriasPersonalRepository, CategoriasServiciosRepository categoriasServiciosRepository, ServiciosRepository serviciosRepository) {
@@ -140,9 +142,9 @@ public class AppConfig {
         String roleName = roles.getNombre();
         switch (roleName) {
             case "ADMIN" ->
-                    saveUser(roles, "Cristian", "Jimenez", "Rodriguez", "7777909055", "redalphasiete@gmail.com", "admin");
+                    saveUser(roles, "Cristian", "Jimenez", "Rodriguez", TELEFONO, "redalphasiete@gmail.com", "admin");
             case "CLIENTE" ->
-                    saveUser(roles, "Juan", "Camaney", "Ramirez", "7777909014", "juancamaney@yopmail.com", "cliente");
+                    saveUser(roles, "Juan", "Camaney", "Ramirez", TELEFONO, "juancamaney@yopmail.com", "cliente");
             case "PERSONAL" -> createPersonalUsers(roles);
             default -> throw new IllegalStateException("Unexpected value: " + roleName);
         }
@@ -166,7 +168,7 @@ public class AppConfig {
             String lastName1 = apellidos[random.nextInt(apellidos.length)];
             String lastName2 = apellidos[random.nextInt(apellidos.length)];
             String email = "usuario" + i + "@yopmail.com";
-            saveUser(roles, name, lastName1, lastName2, "7777909013", email, "personal");
+            saveUser(roles, name, lastName1, lastName2, TELEFONO, email, "personal");
 
             String categoryName = i <= 50 ? "Chef" : "Mesero";
             CategoriasPersonal categoriasPersonal = categoriasPersonalRepository.findByNombreAndActive(categoryName, true);

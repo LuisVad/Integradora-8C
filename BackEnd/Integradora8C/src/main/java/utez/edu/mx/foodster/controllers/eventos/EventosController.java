@@ -25,61 +25,52 @@ public class EventosController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Response<List<Eventos>>> getAll(){
-        return new ResponseEntity<>(
-                this.services.getAll(),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Response<List<Eventos>>> getAll() {
+        return new ResponseEntity<>(this.services.getAll(), HttpStatus.OK);
     }
+
     @GetMapping("/status/{status}")
-    public ResponseEntity<Response<List<Eventos>>> getAllByStatus(@PathVariable("status") @NotNull Boolean status){
-        return new ResponseEntity<>(
-                this.services.getAllByStatus(status),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Response<List<Eventos>>> getAllByStatus(@PathVariable("status") @NotNull Boolean status) {
+        return new ResponseEntity<>(this.services.getAllByStatus(status), HttpStatus.OK);
     }
 
     @GetMapping("/{uid}")
-    public ResponseEntity<Response<Eventos>> getById(@PathVariable("uid") @NotBlank String id){
-        return new ResponseEntity<>(
-                this.services.getById(id),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Response<Eventos>> getById(@PathVariable("uid") @NotBlank String id) {
+        return new ResponseEntity<>(this.services.getById(id), HttpStatus.OK);
     }
 
     @GetMapping("/usuario/{uid}")
-    public ResponseEntity<Response<List<Eventos>>> getAllByIdUsuario(@PathVariable("uid") @NotBlank String idUsuario){
-        return new ResponseEntity<>(
-                this.services.getAllByIdUsuario(idUsuario),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Response<List<Eventos>>> getAllByIdUsuario(@PathVariable("uid") @NotBlank String idUsuario) {
+        return new ResponseEntity<>(this.services.getAllByIdUsuario(idUsuario), HttpStatus.OK);
     }
+
     @GetMapping("/personal/{uid}")
-    public ResponseEntity<Response<List<Eventos>>> getAllByPersonalIdUsuario(@PathVariable("uid") @NotBlank String idUsuario){
-        return new ResponseEntity<>(
-                this.services.getAllByPersonalIdUsuario(idUsuario),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Response<List<Eventos>>> getAllByPersonalIdUsuario(@PathVariable("uid") @NotBlank String idUsuario) {
+        return new ResponseEntity<>(this.services.getAllByPersonalIdUsuario(idUsuario), HttpStatus.OK);
     }
+
     @PostMapping("/")
-    public ResponseEntity<Response<Eventos>> insert(@RequestBody @Valid EventoConServicios dto ){
-        return new ResponseEntity<>(
-                this.services.insert(dto),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Response<Eventos>> insert(@RequestBody @Valid EventoConServicios dto) {
+        return new ResponseEntity<>(this.services.insert(dto), HttpStatus.OK);
     }
+
     @PutMapping("/")
-    public ResponseEntity<Response<Eventos>> update(@RequestBody @Valid EventosDto dto){
-        return new ResponseEntity<>(
-                this.services.update(dto.toEntity()),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Response<Eventos>> update(@RequestBody @Valid EventosDto dto) {
+        return new ResponseEntity<>(this.services.update(dto.toEntity()), HttpStatus.OK);
     }
+
+    @PutMapping("/finalizar/{uid}")
+    public ResponseEntity<Response<Eventos>> finalizar(@PathVariable("uid") @NotBlank String id) {
+        return new ResponseEntity<>(this.services.setFinalizado(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/cancelar/{uid}")
+    public ResponseEntity<Response<Eventos>> cancelar(@PathVariable("uid") @NotBlank String id) {
+        return new ResponseEntity<>(this.services.setCancelado(id), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{uid}")
-    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") @NotBlank String id){
-        return new ResponseEntity<>(
-                this.services.delete(id),
-                HttpStatus.OK
-        );
+    public ResponseEntity<Response<Boolean>> delete(@PathVariable("uid") @NotBlank String id) {
+        return new ResponseEntity<>(this.services.delete(id), HttpStatus.OK);
     }
 }
