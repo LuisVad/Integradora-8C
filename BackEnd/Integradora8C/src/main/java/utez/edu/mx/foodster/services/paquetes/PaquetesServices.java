@@ -22,111 +22,67 @@ public class PaquetesServices {
     }
 
     @Transactional(readOnly = true)
-    public Response<List<Paquetes>> getAll(){
-        return new Response<>(
-                this.repository.findAllByActiveOrderByUltimaModificacionDesc(true),
-                false,
-                200,
-                "OK"
-        );
-    }
-    @Transactional(readOnly = true)
-    public Response<Page<Paquetes>> getAll(Pageable pageable){
-        return new Response<>(
-                this.repository.findAllByActiveOrderByUltimaModificacionDesc(true, pageable),
-                false,
-                200,
-                "OK"
-        );
+    public Response<List<Paquetes>> getAll() {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(true), false, 200, "OK");
     }
 
     @Transactional(readOnly = true)
-    public Response<List<Paquetes>> getAllByStatus(Boolean status){
-        return new Response<>(
-                this.repository.findAllByActiveOrderByUltimaModificacionDesc(status),
-                false,
-                200,
-                "OK"
-        );
+    public Response<Page<Paquetes>> getAll(Pageable pageable) {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(true, pageable), false, 200, "OK");
     }
+
     @Transactional(readOnly = true)
-    public Response<Paquetes> getById(String id){
-        return new Response<>(
-                this.repository.findByIdPaqueteAndActive(id, true),
-                false,
-                200,
-                "OK"
-        );
+    public Response<List<Paquetes>> getAllByStatus(Boolean status) {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status), false, 200, "OK");
     }
+
+    @Transactional(readOnly = true)
+    public Response<Page<Paquetes>> getAllByStatus(Boolean status, Pageable pageable) {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status, pageable), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
+    public Response<Paquetes> getById(String id) {
+        return new Response<>(this.repository.findByIdPaqueteAndActive(id, true), false, 200, "OK");
+    }
+
     @Transactional(rollbackFor = {SQLDataException.class})
-    public Response<Paquetes> insert(Paquetes paquetes){
-        if(paquetes.getImagen().isEmpty()){
+    public Response<Paquetes> insert(Paquetes paquetes) {
+        if (paquetes.getImagen().isEmpty()) {
             paquetes.setImagen(Base64DummyImages.PLACEHOLDER);
         }
-        return new Response<>(
-                this.repository.save(paquetes),
-                false,
-                200,
-                "OK"
-        );
+        return new Response<>(this.repository.save(paquetes), false, 200, "OK");
     }
+
     @Transactional(rollbackFor = {SQLDataException.class})
-    public Response<Paquetes> update(Paquetes paquetes){
+    public Response<Paquetes> update(Paquetes paquetes) {
         Optional<Paquetes> entity = this.repository.findById(paquetes.getIdPaquete());
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             if (paquetes.getImagen().isEmpty()) {
                 paquetes.setImagen(entity.get().getImagen());
             }
-            return new Response<>(
-                    this.repository.saveAndFlush(paquetes),
-                    false,
-                    200,
-                    "OK"
-            );
+            return new Response<>(this.repository.saveAndFlush(paquetes), false, 200, "OK");
         }
-        return new Response<>(
-                null,
-                true,
-                400,
-                "No encontrado para actualizar"
-        );
+        return new Response<>(null, true, 400, "No encontrado para actualizar");
     }
+
     @Transactional(rollbackFor = {SQLDataException.class})
-    public Response<Boolean> delete(String id){
+    public Response<Boolean> delete(String id) {
         Optional<Paquetes> entity = this.repository.findById(id);
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             entity.get().setActive(!entity.get().getActive());
-            return new Response<>(
-                    this.repository.saveAndFlush(entity.get()).getActive(),
-                    false,
-                    200,
-                    "OK"
-            );
+            return new Response<>(this.repository.saveAndFlush(entity.get()).getActive(), false, 200, "OK");
         }
-        return new Response<>(
-                null,
-                true,
-                400,
-                "No encontrado para eliminar"
-        );
+        return new Response<>(null, true, 400, "No encontrado para eliminar");
     }
+
     @Transactional(rollbackFor = {SQLDataException.class})
-    public Response<Paquetes> changeStatus(String id){
+    public Response<Paquetes> changeStatus(String id) {
         Optional<Paquetes> entity = this.repository.findById(id);
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             entity.get().setActive(!entity.get().getActive());
-            return new Response<>(
-                    this.repository.saveAndFlush(entity.get()),
-                    false,
-                    200,
-                    "OK"
-            );
+            return new Response<>(this.repository.saveAndFlush(entity.get()), false, 200, "OK");
         }
-        return new Response<>(
-                null,
-                true,
-                400,
-                "No encontrado para cambiar estado"
-        );
+        return new Response<>(null, true, 400, "No encontrado para cambiar estado");
     }
 }

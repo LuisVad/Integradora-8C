@@ -1,5 +1,7 @@
 package utez.edu.mx.foodster.services.serviciosevento;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.foodster.entities.serviciosevento.ServiciosEvento;
@@ -22,6 +24,16 @@ public class ServiciosEventoServices {
     public Response<List<ServiciosEvento>> getAll() {
         return new Response<>(
                 this.repository.findAll(),
+                false,
+                200,
+                "OK"
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public Response<Page<ServiciosEvento>> getAll(Pageable pageable) {
+        return new Response<>(
+                this.repository.findAllByActiveOrderByUltimaModificacionDesc(true, pageable),
                 false,
                 200,
                 "OK"
@@ -54,6 +66,16 @@ public class ServiciosEventoServices {
     public Response<List<ServiciosEvento>> getAllByStatus(Boolean status) {
         return new Response<>(
                 this.repository.findAllByActiveOrderByUltimaModificacionDesc(status),
+                false,
+                200,
+                "OK"
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public Response<Page<ServiciosEvento>> getAllByStatus(Boolean status, Pageable pageable) {
+        return new Response<>(
+                this.repository.findAllByActiveOrderByUltimaModificacionDesc(status, pageable),
                 false,
                 200,
                 "OK"

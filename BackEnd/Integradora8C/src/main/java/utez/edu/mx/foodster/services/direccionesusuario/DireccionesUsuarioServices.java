@@ -1,5 +1,7 @@
 package utez.edu.mx.foodster.services.direccionesusuario;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.foodster.entities.direcciones.Direcciones;
@@ -27,9 +29,19 @@ public class DireccionesUsuarioServices {
     }
 
     @Transactional(readOnly = true)
-    public Response<List<DireccionesUsuario>> getALl(){
+    public Response<List<DireccionesUsuario>> getAll(){
         return new Response<>(
                 this.repository.findAll(),
+                false,
+                200,
+                "OK"
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public Response<Page<DireccionesUsuario>> getAll(Pageable pageable){
+        return new Response<>(
+                this.repository.findAll(pageable),
                 false,
                 200,
                 "OK"

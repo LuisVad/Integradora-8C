@@ -1,6 +1,8 @@
 package utez.edu.mx.foodster.services.calificaciones;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.foodster.entities.calificaciones.Calificaciones;
@@ -27,8 +29,18 @@ public class CalificacionesService {
     }
 
     @Transactional(readOnly = true)
+    public Response<Page<Calificaciones>> getAll(Pageable pageable) {
+    return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(true, pageable), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
     public Response<List<Calificaciones>> getAllByStatus(Boolean status) {
         return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
+    public Response<Page<Calificaciones>> getAllByStatus(Boolean status, Pageable pageable) {
+    return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status, pageable), false, 200, "OK");
     }
 
     @Transactional(readOnly = true)
@@ -41,6 +53,11 @@ public class CalificacionesService {
         return new Response<>(this.repository.findAllByServiciosAndActiveOrderByUltimaModificacionDesc(idServicio, true), false, 200, "OK");
     }
 
+    @Transactional(readOnly = true)
+    public Response<Page<Calificaciones>> getAllByServicios(String idServicio, Pageable pageable) {
+    return new Response<>(this.repository.findAllByServiciosAndActiveOrderByUltimaModificacionDesc(idServicio, true, pageable), false, 200, "OK");
+    }
+
 
     @Transactional(readOnly = true)
     public Response<List<Calificaciones>> getAllByUsuarios(String idUsuario) {
@@ -48,8 +65,18 @@ public class CalificacionesService {
     }
 
     @Transactional(readOnly = true)
+    public Response<Page<Calificaciones>> getAllByUsuarios(String idUsuario, Pageable pageable) {
+    return new Response<>(this.repository.findAllByUsuariosAndActiveOrderByUltimaModificacionDesc(idUsuario, true, pageable), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
     public Response<List<Calificaciones>> getAllByPaquetes(String idPaquete) {
         return new Response<>(this.repository.findAllByPaquetesAndActiveOrderByUltimaModificacionDesc(idPaquete, true), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
+    public Response<Page<Calificaciones>> getAllByPaquetes(String idPaquete, Pageable pageable) {
+    return new Response<>(this.repository.findAllByPaquetesAndActiveOrderByUltimaModificacionDesc(idPaquete, true, pageable), false, 200, "OK");
     }
 
     @Transactional(rollbackFor = {Exception.class})

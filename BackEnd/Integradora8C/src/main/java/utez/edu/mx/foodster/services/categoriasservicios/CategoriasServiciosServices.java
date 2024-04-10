@@ -1,5 +1,7 @@
 package utez.edu.mx.foodster.services.categoriasservicios;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.foodster.entities.categoriasservicios.CategoriasServicios;
@@ -27,10 +29,31 @@ public class CategoriasServiciosServices {
                 "OK"
         );
     }
+
+    @Transactional(readOnly = true)
+    public Response<Page<CategoriasServicios>> getAll(Pageable pageable){
+        return new Response<>(
+                this.repository.findAllByActiveOrderByUltimaModificacionDesc(true, pageable),
+                false,
+                200,
+                "OK"
+        );
+    }
+
     @Transactional(readOnly = true)
     public Response<List<CategoriasServicios>> getAllByStatus(Boolean status){
         return new Response<>(
                 this.repository.findAllByActiveOrderByUltimaModificacionDesc(status),
+                false,
+                200,
+                "OK"
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public Response<Page<CategoriasServicios>> getAllByStatus(Boolean status, Pageable pageable){
+        return new Response<>(
+                this.repository.findAllByActiveOrderByUltimaModificacionDesc(status, pageable),
                 false,
                 200,
                 "OK"

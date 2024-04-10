@@ -3,6 +3,8 @@ package utez.edu.mx.foodster.controllers.eventos;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +31,21 @@ public class EventosController {
         return new ResponseEntity<>(this.services.getAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/paginado/{page}/{size}")
+    public ResponseEntity<Response<Page<Eventos>>> getAllPaginado(@PathVariable("page") @NotNull Integer page, @PathVariable("size") @NotNull Integer size) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        return new ResponseEntity<>(this.services.getAll(pageable), HttpStatus.OK);
+    }
+
     @GetMapping("/status/{status}")
     public ResponseEntity<Response<List<Eventos>>> getAllByStatus(@PathVariable("status") @NotNull Boolean status) {
         return new ResponseEntity<>(this.services.getAllByStatus(status), HttpStatus.OK);
+    }
+
+    @GetMapping("/status/{status}/paginado/{page}/{size}")
+    public ResponseEntity<Response<Page<Eventos>>> getAllByStatusPaginado(@PathVariable("status") @NotNull Boolean status, @PathVariable("page") @NotNull Integer page, @PathVariable("size") @NotNull Integer size) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        return new ResponseEntity<>(this.services.getAllByStatus(status, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/{uid}")
@@ -39,6 +53,11 @@ public class EventosController {
         return new ResponseEntity<>(this.services.getById(id), HttpStatus.OK);
     }
 
+
+    @GetMapping("/usuario/")
+    public ResponseEntity<Response<List<Eventos>>> getAllByIdUsuario() {
+        return new ResponseEntity<>(this.services.getAllByIdUsuario(), HttpStatus.OK);
+    }
     @GetMapping("/usuario/{uid}")
     public ResponseEntity<Response<List<Eventos>>> getAllByIdUsuario(@PathVariable("uid") @NotBlank String idUsuario) {
         return new ResponseEntity<>(this.services.getAllByIdUsuario(idUsuario), HttpStatus.OK);

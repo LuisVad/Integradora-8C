@@ -10,11 +10,11 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = TimeAfterValidator.class)
-public @interface TimeAfter {
-    String message() default "La fecha de inicio debe ser antes que la fecha de fin";
+@Constraint(validatedBy = FieldMatchValidator.class)
+public @interface FieldMatch {
+    String message() default "Los campos no coinciden";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
-    String start();
-    String end();
+    String first();
+    String second();
 }

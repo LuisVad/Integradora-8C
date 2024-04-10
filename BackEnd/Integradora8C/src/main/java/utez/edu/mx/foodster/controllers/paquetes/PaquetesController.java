@@ -56,6 +56,15 @@ public class PaquetesController {
         );
     }
 
+    @GetMapping("/status/{status}/paginado/{page}/{size}")
+    public ResponseEntity<Response<Page<Paquetes>>> getAllByStatusPaginado(@PathVariable("status") @NotNull Boolean status, @PathVariable("page") @NotNull Integer page, @PathVariable("size") @NotNull Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return new ResponseEntity<>(
+                this.services.getAllByStatus(status, pageable),
+                HttpStatus.OK
+        );
+    }
+
     @PostMapping("/")
     public ResponseEntity<Response<Paquetes>> insert(@RequestBody @Valid PaquetesDto dto) {
         return new ResponseEntity<>(

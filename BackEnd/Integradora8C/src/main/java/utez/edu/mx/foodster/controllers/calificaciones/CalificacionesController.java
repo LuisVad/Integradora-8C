@@ -2,6 +2,10 @@ package utez.edu.mx.foodster.controllers.calificaciones;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +31,14 @@ public class CalificacionesController {
     public ResponseEntity<Response<List<Calificaciones>>> getAll() {
         return new ResponseEntity<>(this.services.getAll(), HttpStatus.OK);
     }
+    @GetMapping("/paginado/{page}/{size}")
+    public ResponseEntity<Response<Page<Calificaciones>>> getAllPaginado(@PathVariable("page") @NotNull Integer page, @PathVariable("size") @NotNull Integer size){
+        Pageable pageable = PageRequest.of(page, size);
+        return new ResponseEntity<>(
+                this.services.getAll(pageable),
+                HttpStatus.OK
+        );
+    }
 
     @GetMapping("/{uid}")
     public ResponseEntity<Response<Calificaciones>> getById(@PathVariable String uid) {
@@ -38,14 +50,32 @@ public class CalificacionesController {
         return new ResponseEntity<>(this.services.getAllByServicios(idServicio), HttpStatus.OK);
     }
 
+    @GetMapping("/servicios/{idServicio}/paginado/{page}/{size}")
+    public ResponseEntity<Response<Page<Calificaciones>>> getAllByServiciosPaginado(@PathVariable @NotBlank String idServicio, @PathVariable("page") @NotNull Integer page, @PathVariable("size") @NotNull Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return new ResponseEntity<>(this.services.getAllByServicios(idServicio, pageable), HttpStatus.OK);
+    }
+
     @GetMapping("/usuarios/{idUsuario}")
     public ResponseEntity<Response<List<Calificaciones>>> getAllByUsuarios(@PathVariable @NotBlank String idUsuario) {
         return new ResponseEntity<>(this.services.getAllByUsuarios(idUsuario), HttpStatus.OK);
     }
 
+    @GetMapping("/usuarios/{idUsuario}/paginado/{page}/{size}")
+    public ResponseEntity<Response<Page<Calificaciones>>> getAllByUsuariosPaginado(@PathVariable @NotBlank String idUsuario, @PathVariable("page") @NotNull Integer page, @PathVariable("size") @NotNull Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return new ResponseEntity<>(this.services.getAllByUsuarios(idUsuario, pageable), HttpStatus.OK);
+    }
+
     @GetMapping("/paquetes/{idPaquete}")
     public ResponseEntity<Response<List<Calificaciones>>> getAllByPaquetes(@PathVariable @NotBlank String idPaquete) {
         return new ResponseEntity<>(this.services.getAllByPaquetes(idPaquete), HttpStatus.OK);
+    }
+
+    @GetMapping("/paquetes/{idPaquete}/paginado/{page}/{size}")
+    public ResponseEntity<Response<Page<Calificaciones>>> getAllByPaquetesPaginado(@PathVariable @NotBlank String idPaquete, @PathVariable("page") @NotNull Integer page, @PathVariable("size") @NotNull Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return new ResponseEntity<>(this.services.getAllByPaquetes(idPaquete, pageable), HttpStatus.OK);
     }
 
     @PostMapping("/")

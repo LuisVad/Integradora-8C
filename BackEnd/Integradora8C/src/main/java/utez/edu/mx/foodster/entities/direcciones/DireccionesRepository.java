@@ -1,5 +1,7 @@
 package utez.edu.mx.foodster.entities.direcciones;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -9,6 +11,8 @@ import java.util.List;
 @Repository
 public interface DireccionesRepository extends JpaRepository<Direcciones, String> {
     List<Direcciones> findAllByActiveOrderByUltimaModificacionDesc(Boolean active);
+
+    Page<Direcciones> findAllByActiveOrderByUltimaModificacionDesc(Boolean active, Pageable pageable);
 
     Direcciones findByIdDireccionAndActive(String idDireccion, Boolean active);
 

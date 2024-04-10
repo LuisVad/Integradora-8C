@@ -1,5 +1,7 @@
 package utez.edu.mx.foodster.entities.serviciosevento;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -7,6 +9,8 @@ import java.util.List;
 
 public interface ServiciosEventoRepository extends JpaRepository<ServiciosEvento, String> {
     List<ServiciosEvento> findAllByActiveOrderByUltimaModificacionDesc(Boolean active);
+
+    Page<ServiciosEvento> findAllByActiveOrderByUltimaModificacionDesc(Boolean active, Pageable pageable);
 
     ServiciosEvento findByIdServicioEventoAndActive(String idServicioEvento, Boolean active);
 

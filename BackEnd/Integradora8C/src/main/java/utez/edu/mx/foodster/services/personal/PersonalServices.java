@@ -1,5 +1,7 @@
 package utez.edu.mx.foodster.services.personal;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +40,11 @@ public class PersonalServices {
     }
 
     @Transactional(readOnly = true)
+    public Response<Page<Personal>> getAllByStatus(Boolean status, Pageable pageable) {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status, pageable), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
     public Response<Personal> getById(String id) {
         return new Response<>(this.repository.findByIdPersonalAndActive(id, true), false, 200, "OK");
     }
@@ -48,6 +55,16 @@ public class PersonalServices {
     public Response<List<Personal>> getAll(){
         return new Response<>(
                 this.repository.findAll(),
+                false,
+                200,
+                "OK"
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public Response<Page<Personal>> getAll(Pageable pageable){
+        return new Response<>(
+                this.repository.findAll(pageable),
                 false,
                 200,
                 "OK"

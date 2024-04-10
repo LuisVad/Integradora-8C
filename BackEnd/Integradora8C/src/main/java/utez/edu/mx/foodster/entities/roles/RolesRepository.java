@@ -9,6 +9,7 @@ import java.util.List;
 public interface RolesRepository extends JpaRepository<Roles, String> {
     List<Roles> findAllByActiveOrderByUltimaModificacionDesc(Boolean active);
 
+
     Roles findByNombreAndActive(String nombre, Boolean active);
 
     Roles findByIdRolAndActive(String idRol, Boolean active);

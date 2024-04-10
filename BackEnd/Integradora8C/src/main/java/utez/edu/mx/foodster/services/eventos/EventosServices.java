@@ -1,5 +1,8 @@
 package utez.edu.mx.foodster.services.eventos;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.foodster.dtos.eventos.EventoConServicios;
@@ -17,10 +20,14 @@ import utez.edu.mx.foodster.entities.personalevento.PersonalEventoRepository;
 import utez.edu.mx.foodster.entities.servicios.Servicios;
 import utez.edu.mx.foodster.entities.servicios.ServiciosRepository;
 import utez.edu.mx.foodster.entities.serviciosevento.ServiciosEventoRepository;
+import utez.edu.mx.foodster.entities.usuarios.Usuarios;
+import utez.edu.mx.foodster.entities.usuarios.UsuariosRepository;
+import utez.edu.mx.foodster.utils.CurrentUserDetails;
 import utez.edu.mx.foodster.utils.EventoEstados;
 import utez.edu.mx.foodster.utils.Response;
 
 import java.sql.SQLDataException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +45,11 @@ public class EventosServices {
 
     private final PersonalRepository personalRepository;
 
-    public EventosServices(EventosRepository repository, PaquetesRepository paquetesRepository, ServiciosEventoRepository serviciosEventoRepository, ServiciosRepository serviciosRepository, PersonalEventoRepository personalEventoRepository, CategoriasPersonalRepository categoriasPersonalRepository, PersonalRepository personalRepository) {
+    private final UsuariosRepository usuariosRepository;
+
+    private final CurrentUserDetails currentUserDetails;
+
+    public EventosServices(EventosRepository repository, PaquetesRepository paquetesRepository, ServiciosEventoRepository serviciosEventoRepository, ServiciosRepository serviciosRepository, PersonalEventoRepository personalEventoRepository, CategoriasPersonalRepository categoriasPersonalRepository, PersonalRepository personalRepository, UsuariosRepository usuariosRepository, CurrentUserDetails currentUserDetails) {
         this.repository = repository;
         this.paquetesRepository = paquetesRepository;
         this.serviciosEventoRepository = serviciosEventoRepository;
@@ -46,11 +57,18 @@ public class EventosServices {
         this.personalEventoRepository = personalEventoRepository;
         this.categoriasPersonalRepository = categoriasPersonalRepository;
         this.personalRepository = personalRepository;
+        this.usuariosRepository = usuariosRepository;
+        this.currentUserDetails = currentUserDetails;
     }
 
     @Transactional(readOnly = true)
     public Response<List<Eventos>> getAll() {
         return new Response<>(this.repository.findAll(), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
+    public Response<Page<Eventos>> getAll(Pageable pageable) {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(true, pageable), false, 200, "OK");
     }
 
     @Transactional(readOnly = true)
@@ -63,6 +81,17 @@ public class EventosServices {
         return new Response<>(this.repository.findAllByIdUsuarioAndActive(idUsuario, true), false, 200, "OK");
     }
     @Transactional(readOnly = true)
+    public Response<List<Eventos>> getAllByIdUsuario() {
+        UserDetails userDetails = this.currentUserDetails.getCurrentUserDetails();
+        Usuarios usuario = this.usuariosRepository.findByCorreoAndActive(userDetails.getUsername(), true);
+        if (usuario != null) {
+            return new Response<>(this.repository.findAllByIdUsuarioAndActive(usuario.getIdUsuario(), true), false, 200, "OK");
+        } else {
+            return new Response<>(null, true, 404, "Usuario no encontrado");
+        }
+    }
+
+    @Transactional(readOnly = true)
     public Response<List<Eventos>> getAllByPersonalIdUsuario(String idUsuario) {
         return new Response<>(this.repository.findAllByPersonalIdUsuarioAndActive(idUsuario, true), false, 200, "OK");
     }
@@ -70,6 +99,11 @@ public class EventosServices {
     @Transactional(readOnly = true)
     public Response<List<Eventos>> getAllByStatus(Boolean status) {
         return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
+    public Response<Page<Eventos>> getAllByStatus(Boolean status, Pageable pageable) {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status, pageable), false, 200, "OK");
     }
 
     @Transactional(rollbackFor = {SQLDataException.class})
@@ -84,7 +118,7 @@ public class EventosServices {
                 eventoDetalles.setPersonalizado(false);
                 this.paquetesRepository.save(paquete);
             }
-            eventoDetalles.setEstado(EventoEstados.getEstado(EventoEstados.EN_PROCESO));
+            eventoDetalles.setEstado(EventoEstados.EN_PROCESO);
             Eventos eventoGuardado = this.repository.save(eventoDetalles);
             evento.getServicios().forEach(servicio -> {
                 Servicios servicioActual = this.serviciosRepository.findByIdServicioAndActive(servicio.getIdServicio(), true);
@@ -94,7 +128,6 @@ public class EventosServices {
                 serviciosEvento.setCantidad(servicio.getCantidad());
                 serviciosEvento.setActive(true);
                 this.serviciosEventoRepository.save(serviciosEvento.toEntity());
-                // si el producto cuenta con existencia se resta la cantidad
                 if (servicioActual.getExistencias() != null && servicioActual.getExistencias() > 0) {
                     servicioActual.setExistencias(servicioActual.getExistencias() - servicio.getCantidad());
                     this.serviciosRepository.save(servicioActual);
@@ -105,8 +138,13 @@ public class EventosServices {
             Long numeroPersonas = eventoDetalles.getNumeroPersonas();
             Long numeroMeseros = numeroPersonas < 20 ? 1 : numeroPersonas / 20;
             Long numeroChef = numeroPersonas < 150 ? 1 : numeroPersonas / 150;
+            Long chefDisponibles = this.personalRepository.countRandomPersonalByCategoriaAndEventos(eventoDetalles.getFechaHoraInicio(), eventoDetalles.getFechaHoraFin(), chef.getIdCategoria(), true);
+            Long meseroDisponibles = this.personalRepository.countRandomPersonalByCategoriaAndEventos(eventoDetalles.getFechaHoraInicio(), eventoDetalles.getFechaHoraFin(), mesero.getIdCategoria(), true);
+            if (chefDisponibles < numeroChef || meseroDisponibles < numeroMeseros) {
+                eventoGuardado.setEstado(EventoEstados.PENDIENTE_PERSONAL);
+                return new Response<>(this.repository.saveAndFlush(eventoGuardado), false, 200, "Evento creado, pero no hay personal suficiente, quedo pendiente");
+            }
             for (int i = 0; i < numeroMeseros; i++) {
-
                 Personal personal = this.personalRepository.findRandomPersonalByCategoriaAndEventos(eventoDetalles.getFechaHoraInicio(), eventoDetalles.getFechaHoraFin(), mesero.getIdCategoria(), true);
                 PersonalEventoDto personalEventoDto = new PersonalEventoDto();
                 personalEventoDto.setEventos(eventoGuardado);
@@ -142,25 +180,25 @@ public class EventosServices {
 
     @Transactional(rollbackFor = {SQLDataException.class})
     public Response<Eventos> setFinalizado(String id) {
-        Optional<Eventos> update = this.repository.findById(id);
-        if (update.isPresent()) {
-            Eventos eventos = update.get();
-            eventos.setEstado(EventoEstados.getEstado(EventoEstados.FINALIZADO));
-            return new Response<>(this.repository.saveAndFlush(eventos), false, 200, "OK");
-        }
-        return new Response<>(null, true, 400, "No encontrado para finalizar");
-    }
-    @Transactional(rollbackFor = {SQLDataException.class})
-    public Response<Eventos> setCancelado(String id) {
-        Optional<Eventos> update = this.repository.findById(id);
-        if (update.isPresent()) {
-            Eventos eventos = update.get();
-            eventos.setEstado(EventoEstados.getEstado(EventoEstados.CANCELADO));
-            return new Response<>(this.repository.saveAndFlush(eventos), false, 200, "OK");
+        Eventos evento  = this.repository.findByIdEventoAndActive(id, true);
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        if (evento != null && evento.getFechaHoraFin().before(now) && evento.getEstado().equals(EventoEstados.EN_PROCESO)) {
+            evento.setEstado(EventoEstados.FINALIZADO);
+            return new Response<>(this.repository.saveAndFlush(evento), false, 200, "OK");
         }
         return new Response<>(null, true, 400, "No encontrado para finalizar");
     }
 
+    @Transactional(rollbackFor = {SQLDataException.class})
+    public Response<Eventos> setCancelado(String id) {
+        Eventos evento = this.repository.findByIdEventoAndActive(id, true);
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        if (evento != null && evento.getFechaHoraInicio().after(now) && evento.getEstado().equals(EventoEstados.EN_PROCESO)) {
+            evento.setEstado(EventoEstados.CANCELADO);
+            return new Response<>(this.repository.saveAndFlush(evento), false, 200, "OK");
+        }
+        return new Response<>(null, true, 400, "No encontrado para cancelar");
+    }
 
 
     @Transactional(rollbackFor = {SQLDataException.class})

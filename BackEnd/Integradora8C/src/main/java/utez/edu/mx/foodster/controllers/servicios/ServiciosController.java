@@ -48,6 +48,17 @@ public class ServiciosController {
                 HttpStatus.OK
         );
     }
+
+    @GetMapping("/status/{status}/paginado/{page}/{size}")
+    public ResponseEntity<Response<Page<Servicios>>>
+    getAllByStatusPaginado(@PathVariable("status") @NotNull Boolean status, @PathVariable("page") @NotNull Integer page, @PathVariable("size") @NotNull Integer size){
+        Pageable pageable = PageRequest.of(page, size);
+        return new ResponseEntity<>(
+                this.services.getAllByStatus(status, pageable),
+                HttpStatus.OK
+        );
+    }
+
     @GetMapping("/{uid}")
     public ResponseEntity<Response<Servicios>> getById(@PathVariable("uid") @NotBlank String id){
         return new ResponseEntity<>(

@@ -1,11 +1,12 @@
 package utez.edu.mx.foodster.controllers.bitacoradatos;
 
+import jakarta.validation.constraints.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.foodster.entities.bitacoradatos.BitacoraDatos;
 import utez.edu.mx.foodster.services.bitacoradatos.BitacoraDatosServices;
 import utez.edu.mx.foodster.utils.Response;
@@ -25,6 +26,12 @@ public class BitacoraDatosController {
     @GetMapping("/")
     public ResponseEntity<Response<List<BitacoraDatos>>> getAll() {
         return new ResponseEntity<>(this.services.getAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/paginado/{page}/{size}")
+    public ResponseEntity<Response<Page<BitacoraDatos>>> getAllPaginado(@PathVariable("page") @NotNull Integer page, @PathVariable("size") @NotNull Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return new ResponseEntity<>(this.services.getAll(pageable), HttpStatus.OK);
     }
 
 }

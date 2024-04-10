@@ -11,6 +11,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = FutureOrPresentTimestampValidator.class)
+
 public @interface FutureOrPresentTimestamp {
     String message() default "The timestamp must be in the future or present";
     Class<?>[] groups() default {};

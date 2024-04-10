@@ -52,6 +52,11 @@ public class ServiciosServices {
         return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status), false, 200, "OK");
     }
 
+    @Transactional(readOnly = true)
+    public Response<Page<Servicios>> getAllByStatus(Boolean status, Pageable pageable) {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status, pageable), false, 200, "OK");
+    }
+
     @Transactional(rollbackFor = {SQLDataException.class})
     public Response<Servicios> insert(Servicios servicios) {
         if (servicios.getImagen().isEmpty()) {

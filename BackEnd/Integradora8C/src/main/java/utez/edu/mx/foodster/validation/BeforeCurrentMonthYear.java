@@ -8,13 +8,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.TYPE})
+@Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = TimeAfterValidator.class)
-public @interface TimeAfter {
-    String message() default "La fecha de inicio debe ser antes que la fecha de fin";
+@Constraint(validatedBy = BeforeCurrentMonthYearValidator.class)
+public @interface BeforeCurrentMonthYear {
+    String message() default "La fecha debe ser antes del mes y año actual";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
-    String start();
-    String end();
 }

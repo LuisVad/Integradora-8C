@@ -24,9 +24,7 @@ public class EventosDto {
 
     private String idEvento;
     @NotNull(message = "La fecha y hora de inicio no pueden ser nulas")
-
     private Timestamp fechaHoraInicio;
-
     @NotNull(message = "La fecha y hora de fin no pueden ser nulas")
     private Timestamp fechaHoraFin;
 

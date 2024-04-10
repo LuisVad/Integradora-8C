@@ -1,5 +1,8 @@
 package utez.edu.mx.foodster.services.direcciones;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.foodster.dtos.direcciones.DireccionesDto;
@@ -9,6 +12,7 @@ import utez.edu.mx.foodster.entities.direcciones.DireccionesRepository;
 import utez.edu.mx.foodster.entities.direccionesusuario.DireccionesUsuarioRepository;
 import utez.edu.mx.foodster.entities.usuarios.Usuarios;
 import utez.edu.mx.foodster.entities.usuarios.UsuariosRepository;
+import utez.edu.mx.foodster.utils.CurrentUserDetails;
 import utez.edu.mx.foodster.utils.Response;
 
 import java.sql.SQLException;
@@ -23,15 +27,23 @@ public class DireccionesServices {
 
     private final UsuariosRepository usuariosRepository;
 
-    public DireccionesServices(DireccionesRepository repository, DireccionesUsuarioRepository direccionesUsuarioRepository, UsuariosRepository usuariosRepository) {
+    private final CurrentUserDetails currentUserDetails;
+
+    public DireccionesServices(DireccionesRepository repository, DireccionesUsuarioRepository direccionesUsuarioRepository, UsuariosRepository usuariosRepository, CurrentUserDetails currentUserDetails) {
         this.repository = repository;
         this.direccionesUsuarioRepository = direccionesUsuarioRepository;
         this.usuariosRepository = usuariosRepository;
+        this.currentUserDetails = currentUserDetails;
     }
 
     @Transactional(readOnly = true)
     public Response<List<Direcciones>> getAll() {
-        return new Response<>(this.repository.findAll(), false, 200, "OK");
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(true), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
+    public Response<Page<Direcciones>> getAll(Pageable pageable) {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(true, pageable), false, 200, "OK");
     }
 
     @Transactional(readOnly = true)
@@ -45,8 +57,24 @@ public class DireccionesServices {
     }
 
     @Transactional(readOnly = true)
+    public Response<Page<Direcciones>> getAllByStatus(Boolean status, Pageable pageable) {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status, pageable), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
     public Response<List<Direcciones>> getAllByUsuario(String id) {
         return new Response<>(this.repository.findAllByIdUsuarioAndActive(id, true), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
+    public Response<List<Direcciones>> getAllByUsuario() {
+        UserDetails userDetails = this.currentUserDetails.getCurrentUserDetails();
+        Usuarios usuario = this.usuariosRepository.findByCorreoAndActive(userDetails.getUsername(), true);
+        if (usuario != null) {
+            return new Response<>(this.repository.findAllByIdUsuarioAndActive(usuario.getIdUsuario(), true), false, 200, "OK");
+        } else {
+            return new Response<>(null, true, 404, "Usuario no encontrado");
+        }
     }
 
     @Transactional(rollbackFor = {SQLException.class})

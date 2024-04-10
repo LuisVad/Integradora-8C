@@ -1,6 +1,8 @@
 package utez.edu.mx.foodster.services.categoriaspersonal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.foodster.entities.categoriaspersonal.CategoriasPersonal;
@@ -27,6 +29,11 @@ public class CategoriasPersonalServices {
     }
 
     @Transactional(readOnly = true)
+    public Response<Page<CategoriasPersonal>> getAll(Pageable pageable) {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(true, pageable), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
     public Response<CategoriasPersonal> getById(String id) {
         return new Response<>(this.repository.findByIdCategoriaAndActive(id, true), false, 200, "OK");
     }
@@ -34,6 +41,10 @@ public class CategoriasPersonalServices {
     @Transactional(readOnly = true)
     public Response<List<CategoriasPersonal>> getAllByStatus(Boolean status) {
         return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status), false, 200, "OK");
+    }
+    @Transactional(readOnly = true)
+    public Response<Page<CategoriasPersonal>> getAllByStatus(Boolean status, Pageable pageable) {
+        return new Response<>(this.repository.findAllByActiveOrderByUltimaModificacionDesc(status, pageable), false, 200, "OK");
     }
 
     @Transactional(rollbackFor = {SQLException.class})

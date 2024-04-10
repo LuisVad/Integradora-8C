@@ -76,67 +76,70 @@ public class MainSecurity {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(whiteList).permitAll()
                                 // rutas publicas de la api
-                                .requestMatchers(HttpMethod.POST, apiPrefix +"/auth/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, apiPrefix +"/servicios/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, apiPrefix +"/paquetes/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, apiPrefix +"/categorias-servicios/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, apiPrefix +"/usuarios/public/").permitAll()
-                                .requestMatchers(HttpMethod.POST, apiPrefix +"/captcha/**").permitAll()
-                                .requestMatchers(apiPrefix +"/swagger-ui/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, apiPrefix + "/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/servicios/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/paquetes/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/categorias-servicios/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, apiPrefix + "/usuarios/public/").permitAll()
+                                .requestMatchers(HttpMethod.POST, apiPrefix + "/captcha/**").permitAll()
+                                .requestMatchers("/swagger-ui/**").permitAll()
 
                                 // rutas de eventos
 
-                                .requestMatchers(HttpMethod.POST, apiPrefix +"/eventos/**").authenticated()
-                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/eventos/**").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.GET, apiPrefix +"/eventos/usuario/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.CLIENTE)
-                                .requestMatchers(HttpMethod.GET, apiPrefix +"/eventos/personal/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.PERSONAL)
-                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/eventos/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.POST, apiPrefix + "/eventos/**").authenticated()
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/eventos/**").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/eventos/usuario/").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.CLIENTE)
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/eventos/usuario/**").hasAnyAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/eventos/personal/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.PERSONAL)
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix + "/eventos/").hasAuthority(RolesActuales.ADMIN)
 
                                 // rutas de usuarios
-                                .requestMatchers(HttpMethod.POST, apiPrefix +"/usuarios/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/usuarios/").authenticated()
-                                .requestMatchers(HttpMethod.GET, apiPrefix +"/usuarios/**").authenticated()
-                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/usuarios/**").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.POST, apiPrefix + "/usuarios/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/usuarios/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/usuarios/**").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/usuarios/usuario/").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix + "/usuarios/**").hasAuthority(RolesActuales.ADMIN)
 
                                 // rutas de personal
-                                .requestMatchers(HttpMethod.POST, apiPrefix +"/personal/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/personal/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.GET, apiPrefix +"/personal/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.PERSONAL)
-                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/personal/**").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.POST, apiPrefix + "/personal/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/personal/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/personal/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.PERSONAL)
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix + "/personal/**").hasAuthority(RolesActuales.ADMIN)
 
                                 // rutas de categorias personal
-                                .requestMatchers(HttpMethod.POST, apiPrefix +"/categorias-personal/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/categorias-personal/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.GET, apiPrefix +"/categorias-personal/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.PERSONAL)
-                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/categorias-personal/**").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.POST, apiPrefix + "/categorias-personal/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/categorias-personal/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/categorias-personal/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.PERSONAL)
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix + "/categorias-personal/**").hasAuthority(RolesActuales.ADMIN)
 
                                 // rutas de categorias servicios
-                                .requestMatchers(HttpMethod.POST, apiPrefix +"/categorias-servicios/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/categorias-servicios/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/categorias-servicios/**").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.POST, apiPrefix + "/categorias-servicios/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/categorias-servicios/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix + "/categorias-servicios/**").hasAuthority(RolesActuales.ADMIN)
 
                                 // rutas de servicios
-                                .requestMatchers(HttpMethod.POST, apiPrefix +"/servicios/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/servicios/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/servicios/**").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.POST, apiPrefix + "/servicios/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/servicios/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix + "/servicios/**").hasAuthority(RolesActuales.ADMIN)
 
                                 // rutas de paquetes
-                                .requestMatchers(HttpMethod.POST, apiPrefix +"/paquetes/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/paquetes/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/paquetes/**").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.POST, apiPrefix + "/paquetes/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/paquetes/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix + "/paquetes/**").hasAuthority(RolesActuales.ADMIN)
 
                                 // rutas de roles
-                                .requestMatchers(HttpMethod.POST, apiPrefix +"/roles/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/roles/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.GET, apiPrefix +"/roles/**").authenticated()
-                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/roles/**").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.POST, apiPrefix + "/roles/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/roles/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/roles/**").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix + "/roles/**").hasAuthority(RolesActuales.ADMIN)
 
                                 // rutas de direcciones
 
-                                .requestMatchers(HttpMethod.POST, apiPrefix +"/direcciones/").authenticated()
-                                .requestMatchers(HttpMethod.PUT, apiPrefix +"/direcciones/").authenticated()
-                                .requestMatchers(HttpMethod.GET, apiPrefix +"/direcciones/usuario/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.CLIENTE)
-                                .requestMatchers(HttpMethod.DELETE, apiPrefix +"/direcciones/**").authenticated()
+                                .requestMatchers(HttpMethod.POST, apiPrefix + "/direcciones/").authenticated()
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/direcciones/").authenticated()
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/direcciones/usuario/").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.CLIENTE)
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/direcciones/usuario/**").hasAnyAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix + "/direcciones/**").authenticated()
 
                                 .anyRequest().hasAuthority(RolesActuales.ADMIN)
                 )
