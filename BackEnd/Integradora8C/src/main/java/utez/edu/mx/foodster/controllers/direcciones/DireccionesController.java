@@ -2,6 +2,7 @@ package utez.edu.mx.foodster.controllers.direcciones;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class DireccionesController {
     }
 
     @GetMapping("/paginado/{page}/{size}")
-    public ResponseEntity<Response<Page<Direcciones>>> getAllPaginado(@PathVariable("page") @NotBlank Integer page, @PathVariable("size") @NotBlank Integer size){
+    public ResponseEntity<Response<Page<Direcciones>>> getAllPaginado(@PathVariable("page") @NotNull Integer page, @PathVariable("size") @NotNull Integer size){
         Pageable pageable = Pageable.ofSize(size).withPage(page);
         return new ResponseEntity<>(
                 this.services.getAll(pageable),
@@ -67,7 +68,7 @@ public class DireccionesController {
     }
 
     @GetMapping("/status/{status}/paginado/{page}/{size}")
-    public ResponseEntity<Response<Page<Direcciones>>> getAllByStatusPaginado(@PathVariable("status") @NotBlank Boolean status, @PathVariable("page") @NotBlank Integer page, @PathVariable("size") @NotBlank Integer size){
+    public ResponseEntity<Response<Page<Direcciones>>> getAllByStatusPaginado(@PathVariable("status") @NotBlank Boolean status, @PathVariable("page") @NotNull Integer page, @PathVariable("size") @NotNull Integer size){
         Pageable pageable = Pageable.ofSize(size).withPage(page);
         return new ResponseEntity<>(
                 this.services.getAllByStatus(status, pageable),

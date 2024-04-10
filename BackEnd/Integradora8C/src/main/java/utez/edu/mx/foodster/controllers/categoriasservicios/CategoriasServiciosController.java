@@ -2,6 +2,7 @@ package utez.edu.mx.foodster.controllers.categoriasservicios;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ public class CategoriasServiciosController {
     }
 
     @GetMapping("/paginado/{page}/{size}")
-    public ResponseEntity<Response<Page<CategoriasServicios>>> getAllPaginado(@PathVariable("page") Integer page, @PathVariable("size") Integer size) {
+    public ResponseEntity<Response<Page<CategoriasServicios>>> getAllPaginado(@PathVariable("page")  @NotNull Integer page, @NotNull @PathVariable("size") Integer size) {
         Pageable pageable = Pageable.ofSize(size).withPage(page);
         return new ResponseEntity<>(this.services.getAll(pageable), HttpStatus.OK);
     }

@@ -95,9 +95,8 @@ public class MainSecurity {
 
                                 // rutas de usuarios
                                 .requestMatchers(HttpMethod.POST, apiPrefix + "/usuarios/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/usuarios/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.GET, apiPrefix + "/usuarios/**").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.GET, apiPrefix + "/usuarios/usuario/").authenticated()
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/usuarios/").authenticated()
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/usuarios/**").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, apiPrefix + "/usuarios/**").hasAuthority(RolesActuales.ADMIN)
 
                                 // rutas de personal
@@ -138,7 +137,6 @@ public class MainSecurity {
                                 .requestMatchers(HttpMethod.POST, apiPrefix + "/direcciones/").authenticated()
                                 .requestMatchers(HttpMethod.PUT, apiPrefix + "/direcciones/").authenticated()
                                 .requestMatchers(HttpMethod.GET, apiPrefix + "/direcciones/usuario/").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.CLIENTE)
-                                .requestMatchers(HttpMethod.GET, apiPrefix + "/direcciones/usuario/**").hasAnyAuthority(RolesActuales.ADMIN)
                                 .requestMatchers(HttpMethod.DELETE, apiPrefix + "/direcciones/**").authenticated()
 
                                 .anyRequest().hasAuthority(RolesActuales.ADMIN)

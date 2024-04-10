@@ -2,12 +2,14 @@ package utez.edu.mx.foodster.services.usuarios;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.foodster.dtos.usuarios.CambiarContraDto;
 import utez.edu.mx.foodster.dtos.usuarios.UsuariosPublicDto;
+import utez.edu.mx.foodster.entities.roles.Roles;
 import utez.edu.mx.foodster.entities.roles.RolesRepository;
 import utez.edu.mx.foodster.entities.usuarios.Usuarios;
 import utez.edu.mx.foodster.entities.usuarios.UsuariosRepository;
@@ -109,9 +111,14 @@ public class UsuariosServices {
 
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Usuarios> update(Usuarios usuarios) {
-        Optional<Usuarios> entityUpdate = this.repository.findById(usuarios.getIdUsuario());
-        if (entityUpdate.isPresent()) {
-            return new Response<>(this.repository.saveAndFlush(usuarios), false, 200, "OK");
+        UserDetails userDetails = this.currentUserDetails.getCurrentUserDetails();
+        Set<String> authorities = this.currentUserDetails.getCurrentUserAuthorities();
+        Usuarios usuario = this.repository.findByCorreoAndActive(userDetails.getUsername(), true);
+        if (usuario != null) {
+            if (usuarios.getIdUsuario().equals(usuario.getIdUsuario()) || authorities.contains("ADMIN")) {
+                return new Response<>(this.repository.saveAndFlush(usuarios), false, 200, "OK");
+            }
+            return new Response<>(null, true, 400, "No autorizado para actualizar");
         }
         return new Response<>(null, true, 400, "No encontrado para actualizar");
     }
@@ -138,14 +145,19 @@ public class UsuariosServices {
 
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Boolean> changePassword(CambiarContraDto cambiarContraDto) {
-        Usuarios usuarios = this.repository.findByCorreoAndActive(cambiarContraDto.getCorreo(), true);
-        if (usuarios != null) {
-            if (this.passwordEncoder.matches(cambiarContraDto.getContrasena(), usuarios.getContrasena())) {
-                usuarios.setContrasena(this.passwordEncoder.encode(cambiarContraDto.getNuevaContrasena()));
-                this.repository.saveAndFlush(usuarios);
-                return new Response<>(true, false, 200, "Contraseña cambiada correctamente");
+        UserDetails userDetails = this.currentUserDetails.getCurrentUserDetails();
+        Set<String> authorities = this.currentUserDetails.getCurrentUserAuthorities();
+        Usuarios usuario = this.repository.findByCorreoAndActive(userDetails.getUsername(), true);
+        if (usuario != null) {
+            if (cambiarContraDto.getCorreo().equals(usuario.getCorreo()) || authorities.contains("ADMIN")) {
+                if (this.passwordEncoder.matches(cambiarContraDto.getContrasena(), usuario.getContrasena())) {
+                    usuario.setContrasena(this.passwordEncoder.encode(cambiarContraDto.getNuevaContrasena()));
+                    this.repository.saveAndFlush(usuario);
+                    return new Response<>(true, false, 200, "Contraseña cambiada correctamente");
+                }
+                return new Response<>(null, true, 400, "Contraseña incorrecta");
             }
-            return new Response<>(null, true, 400, "Contraseña incorrecta");
+            return new Response<>(null, true, 400, "No autorizado para cambiar contraseña");
         }
         return new Response<>(null, true, 400, "No encontrado para cambiar contraseña");
     }
