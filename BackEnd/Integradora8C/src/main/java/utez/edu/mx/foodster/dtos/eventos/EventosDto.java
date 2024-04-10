@@ -11,6 +11,7 @@ import lombok.Setter;
 import utez.edu.mx.foodster.entities.direcciones.Direcciones;
 import utez.edu.mx.foodster.entities.eventos.Eventos;
 import utez.edu.mx.foodster.entities.usuarios.Usuarios;
+import utez.edu.mx.foodster.validation.TimeAfter;
 
 import java.sql.Timestamp;
 
@@ -18,10 +19,12 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Getter
 @Setter
+@TimeAfter(start = "fechaHoraInicio", end = "fechaHoraFin", message = "La fecha y hora de fin deben ser posteriores a la fecha y hora de inicio")
 public class EventosDto {
 
     private String idEvento;
     @NotNull(message = "La fecha y hora de inicio no pueden ser nulas")
+
     private Timestamp fechaHoraInicio;
 
     @NotNull(message = "La fecha y hora de fin no pueden ser nulas")
