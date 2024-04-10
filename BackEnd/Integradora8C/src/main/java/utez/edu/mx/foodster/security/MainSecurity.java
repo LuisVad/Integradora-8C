@@ -82,6 +82,7 @@ public class MainSecurity {
                                 .requestMatchers(HttpMethod.GET, apiPrefix +"/categorias-servicios/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, apiPrefix +"/usuarios/public/").permitAll()
                                 .requestMatchers(HttpMethod.POST, apiPrefix +"/captcha/**").permitAll()
+                                .requestMatchers(apiPrefix +"/swagger-ui/**").permitAll()
 
                                 // rutas de eventos
 
