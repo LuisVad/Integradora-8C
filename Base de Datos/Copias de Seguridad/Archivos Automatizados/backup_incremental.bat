@@ -38,8 +38,10 @@ if not exist ".git" (
     git commit -m "fecha=%fecha_hora:~0,4%-%fecha_hora:~4,2%-%fecha_hora:~6,2%"
     git branch -M main
     git remote add origin https://github.com/CristianRdz/copiasSeguridadFoodster.git
+    git pull origin main
     git push -u origin main
 ) else (
+    git pull origin main
     git add .
     git commit -m "fecha=%fecha_hora:~0,4%-%fecha_hora:~4,2%-%fecha_hora:~6,2%"
     git push
