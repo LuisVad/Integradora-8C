@@ -79,9 +79,11 @@ public class MainSecurity {
                                 .requestMatchers(HttpMethod.POST, apiPrefix + "/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, apiPrefix + "/servicios/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, apiPrefix + "/paquetes/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/servicios-paquete/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, apiPrefix + "/categorias-servicios/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, apiPrefix + "/usuarios/public/").permitAll()
                                 .requestMatchers(HttpMethod.POST, apiPrefix + "/captcha/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/calificaciones/**").permitAll()
                                 .requestMatchers("/swagger-ui/**").permitAll()
 
                                 // rutas de eventos
@@ -138,6 +140,35 @@ public class MainSecurity {
                                 .requestMatchers(HttpMethod.PUT, apiPrefix + "/direcciones/").authenticated()
                                 .requestMatchers(HttpMethod.GET, apiPrefix + "/direcciones/usuario/").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.CLIENTE)
                                 .requestMatchers(HttpMethod.DELETE, apiPrefix + "/direcciones/**").authenticated()
+
+                                // rutas de servicios evento
+                                .requestMatchers(HttpMethod.POST, apiPrefix + "/servicios-evento/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/servicios-evento/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/servicios-evento/**").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix + "/servicios-evento/**").hasAuthority(RolesActuales.ADMIN)
+
+                                // rutas de servicios paquete
+                                .requestMatchers(HttpMethod.POST, apiPrefix + "/servicios-paquete/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/servicios-paquete/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix + "/servicios-paquete/**").hasAuthority(RolesActuales.ADMIN)
+
+                                // rutas de personal evento
+                                .requestMatchers(HttpMethod.POST, apiPrefix + "/personal-evento/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/personal-evento/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/personal-evento/**").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix + "/personal-evento/**").hasAuthority(RolesActuales.ADMIN)
+
+                                // calificaciones
+                                .requestMatchers(HttpMethod.POST, apiPrefix + "/calificaciones/").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.CLIENTE)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/calificaciones/").hasAuthority(RolesActuales.ADMIN)
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix + "/calificaciones/**").hasAuthority(RolesActuales.ADMIN)
+
+                                // rutas de tarjetas
+                                .requestMatchers(HttpMethod.POST, apiPrefix + "/tarjetas/").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.CLIENTE)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/tarjetas/").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.CLIENTE)
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/tarjetas/usuario/").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.CLIENTE)
+                                .requestMatchers(HttpMethod.DELETE, apiPrefix + "/tarjetas/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.CLIENTE)
+
 
                                 .anyRequest().hasAuthority(RolesActuales.ADMIN)
                 )
