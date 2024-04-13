@@ -89,10 +89,11 @@ public class MainSecurity {
                                 // rutas de eventos
 
                                 .requestMatchers(HttpMethod.POST, apiPrefix + "/eventos/**").authenticated()
-                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/eventos/**").hasAuthority(RolesActuales.ADMIN)
                                 .requestMatchers(HttpMethod.GET, apiPrefix + "/eventos/usuario/").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.CLIENTE)
                                 .requestMatchers(HttpMethod.GET, apiPrefix + "/eventos/usuario/**").hasAnyAuthority(RolesActuales.ADMIN)
                                 .requestMatchers(HttpMethod.GET, apiPrefix + "/eventos/personal/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.PERSONAL)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/eventos/finalizar/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.PERSONAL)
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/eventos/cancelar/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.CLIENTE)
                                 .requestMatchers(HttpMethod.DELETE, apiPrefix + "/eventos/").hasAuthority(RolesActuales.ADMIN)
 
                                 // rutas de usuarios
