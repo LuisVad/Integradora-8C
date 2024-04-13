@@ -65,5 +65,22 @@ public interface PersonalRepository extends JpaRepository<Personal, String> {
     Long countRandomPersonalByCategoriaAndEventos(Timestamp fechaHoraInicio, Timestamp fechaHoraFin, String idCategoria, Boolean active);
 
 
+    @Query(value = """
+            SELECT * FROM personal 
+            WHERE active=:active
+            AND id_personal NOT IN (
+                SELECT DISTINCT personal.id_personal
+                FROM personal
+                INNER JOIN personal_evento ON personal.id_personal = personal_evento.id_personal
+                INNER JOIN eventos ON personal_evento.id_evento = eventos.id_evento
+                WHERE eventos.active=:active
+                AND personal.active=:active
+                AND personal_evento.active=:active
+                AND eventos.fecha_hora_inicio between :fechaHoraInicio AND :fechaHoraFin
+                AND eventos.fecha_hora_fin between :fechaHoraInicio AND :fechaHoraFin
+            ) 
+            order by ultima_modificacion desc
+            """, nativeQuery = true)
+    List<Personal> findPersonalDisponible(Timestamp fechaHoraInicio, Timestamp fechaHoraFin, Boolean active);
 
 }
