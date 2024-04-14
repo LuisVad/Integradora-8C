@@ -161,7 +161,9 @@ public class EventosServices {
                 personalEventoDto.setActive(true);
                 this.personalEventoRepository.save(personalEventoDto.toEntity());
             }
-            return new Response<>(eventoGuardado, false, 200, "OK");
+            Double costoTotal = this.serviciosEventoRepository.costoTotal(eventoGuardado.getIdEvento(), true);
+            eventoGuardado.setCostoTotal(costoTotal);
+            return new Response<>(this.repository.saveAndFlush(eventoGuardado), false, 200, "OK");
         } catch (Exception e) {
             return new Response<>(null, true, 500, e.getMessage());
         }

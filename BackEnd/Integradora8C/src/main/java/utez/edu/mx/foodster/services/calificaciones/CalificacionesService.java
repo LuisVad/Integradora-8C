@@ -49,6 +49,16 @@ public class CalificacionesService {
     }
 
     @Transactional(readOnly = true)
+    public Response<Double> avgCalificacionServicio(String idServicio) {
+        return new Response<>(this.repository.avgCalificacionServicio(idServicio, true), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
+    public Response<Double> avgCalificacionPaquete(String idPaquete) {
+        return new Response<>(this.repository.avgCalificacionPaquete(idPaquete, true), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
     public Response<List<Calificaciones>> getAllByServicios(String idServicio) {
         return new Response<>(this.repository.findAllByServiciosAndActiveOrderByUltimaModificacionDesc(idServicio, true), false, 200, "OK");
     }

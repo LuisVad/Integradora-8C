@@ -45,6 +45,16 @@ public class CalificacionesController {
         return new ResponseEntity<>(this.services.getById(uid), HttpStatus.OK);
     }
 
+    @GetMapping("/servicios/{idServicio}/avg/")
+    public ResponseEntity<Response<Double>> avgCalificacionServicio(@PathVariable @NotBlank String idServicio) {
+        return new ResponseEntity<>(this.services.avgCalificacionServicio(idServicio), HttpStatus.OK);
+    }
+
+    @GetMapping("/paquetes/{idPaquete}/avg/")
+    public ResponseEntity<Response<Double>> avgCalificacionPaquete(@PathVariable @NotBlank String idPaquete) {
+        return new ResponseEntity<>(this.services.avgCalificacionPaquete(idPaquete), HttpStatus.OK);
+    }
+
     @GetMapping("/servicios/{idServicio}")
     public ResponseEntity<Response<List<Calificaciones>>> getAllByServicios(@PathVariable @NotBlank String idServicio) {
         return new ResponseEntity<>(this.services.getAllByServicios(idServicio), HttpStatus.OK);
