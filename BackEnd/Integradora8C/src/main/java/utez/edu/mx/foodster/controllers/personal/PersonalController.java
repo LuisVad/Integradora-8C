@@ -13,6 +13,7 @@ import utez.edu.mx.foodster.entities.personal.Personal;
 import utez.edu.mx.foodster.services.personal.PersonalServices;
 import utez.edu.mx.foodster.utils.Response;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -35,6 +36,11 @@ public class PersonalController {
     public ResponseEntity<Response<Page<Personal>>> getAllPaginado(@PathVariable("page") @NotNull Integer page, @PathVariable("size") @NotNull Integer size) {
         Pageable pageable = Pageable.ofSize(size).withPage(page);
         return new ResponseEntity<>(this.services.getAll(pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/disponibles/{fechaHoraInicio}/{fechaHoraFin}")
+    public ResponseEntity<Response<List<Personal>>> getAllDisponibles(@PathVariable("fechaHoraInicio") @NotNull Timestamp fechaHoraInicio, @PathVariable("fechaHoraFin") @NotNull Timestamp fechaHoraFin) {
+        return new ResponseEntity<>(this.services.getAllDisponibles(fechaHoraInicio, fechaHoraFin), HttpStatus.OK);
     }
 
     @GetMapping("/{uid}")

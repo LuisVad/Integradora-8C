@@ -49,38 +49,27 @@ public class PersonalServices {
         return new Response<>(this.repository.findByIdPersonalAndActive(id, true), false, 200, "OK");
     }
 
+    @Transactional(readOnly = true)
+    public Response<List<Personal>> getAllDisponibles(Timestamp fechaHoraInicio, Timestamp fechaHoraFin) {
+        return new Response<>(this.repository.findPersonalDisponible(fechaHoraInicio, fechaHoraFin, true), false, 200, "OK");
+    }
 
 
     @Transactional(readOnly = true)
-    public Response<List<Personal>> getAll(){
-        return new Response<>(
-                this.repository.findAll(),
-                false,
-                200,
-                "OK"
-        );
+    public Response<List<Personal>> getAll() {
+        return new Response<>(this.repository.findAll(), false, 200, "OK");
     }
 
     @Transactional(readOnly = true)
-    public Response<Page<Personal>> getAll(Pageable pageable){
-        return new Response<>(
-                this.repository.findAll(pageable),
-                false,
-                200,
-                "OK"
-        );
+    public Response<Page<Personal>> getAll(Pageable pageable) {
+        return new Response<>(this.repository.findAll(pageable), false, 200, "OK");
     }
 
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Personal> insert(Personal personal) {
         Optional<Usuarios> exist = this.usuariosRepository.findByCorreo(personal.getUsuarios().getCorreo());
-        if(exist.isPresent()){
-            return new Response<>(
-                    null,
-                    true,
-                    400,
-                    "Correo ya registrado"
-            );
+        if (exist.isPresent()) {
+            return new Response<>(null, true, 400, "Correo ya registrado");
         }
         personal.getUsuarios().setUltimaModificacion(new Timestamp(System.currentTimeMillis()));
         personal.getUsuarios().setContrasena(this.passwordEncoder.encode(personal.getUsuarios().getContrasena()));
@@ -110,6 +99,7 @@ public class PersonalServices {
         }
         return new Response<>(null, true, 400, "No encontrado para eliminar");
     }
+
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Boolean> changeStatus(String id) {
         Optional<Personal> personal = this.repository.findById(id);
