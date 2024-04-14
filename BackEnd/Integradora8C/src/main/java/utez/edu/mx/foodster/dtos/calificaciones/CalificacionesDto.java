@@ -43,6 +43,6 @@ public class CalificacionesDto {
 
     public Calificaciones toEntity(){
         this.ultimaModificacion = new java.sql.Timestamp(System.currentTimeMillis());
-        return new Calificaciones(idCalificacion, servicios, usuario, paquetes, calificacion, comentario, null, active);
+        return new Calificaciones(idCalificacion, servicios, usuario, paquetes, calificacion, comentario, ultimaModificacion, active);
     }
 }
