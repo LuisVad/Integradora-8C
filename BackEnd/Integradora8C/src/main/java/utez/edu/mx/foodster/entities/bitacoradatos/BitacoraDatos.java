@@ -29,19 +29,19 @@ public class BitacoraDatos {
     @Type(JsonType.class)
     private JsonNode datos;
 
-    @Column(name = "metodo", columnDefinition = "TEXT NOT NULL", nullable = false)
+    @Column(name = "metodo", columnDefinition = "TEXT NOT NULL")
     private String metodo;
 
-    @Column(name = "ruta_solicitada", columnDefinition = "TEXT NOT NULL", nullable = false)
+    @Column(name = "ruta_solicitada", columnDefinition = "TEXT NOT NULL")
     private String rutaSolicitada;
 
-    @Column(name = "ip", columnDefinition = "TEXT NOT NULL", nullable = false)
+    @Column(name = "ip", columnDefinition = "TEXT NOT NULL")
     private String ip;
 
-    @Column(name = "agente_usuario", columnDefinition = "TEXT NOT NULL", nullable = false)
+    @Column(name = "agente_usuario", columnDefinition = "TEXT NOT NULL")
     private String agenteUsuario;
 
-    @Column(name = "estado_http", columnDefinition = "SMALLINT NOT NULL", nullable = false)
+    @Column(name = "estado_http", columnDefinition = "SMALLINT NOT NULL")
     private int estadoHttp;
 
     @Column(name = "creado_en", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

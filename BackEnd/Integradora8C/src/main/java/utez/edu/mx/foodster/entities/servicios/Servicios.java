@@ -26,9 +26,9 @@ public class Servicios {
     private String nombre;
     @Column(name = "descripcion", columnDefinition = "TEXT NOT NULL", nullable = false)
     private String descripcion;
-    @Column(name = "precio", columnDefinition = "DOUBLE NOT NULL", nullable = false)
+    @Column(name = "precio", columnDefinition = "DOUBLE (10,2) NOT NULL", nullable = false)
     private Double precio;
-    @Column(name = "precio_descuento", columnDefinition = "DOUBLE")
+    @Column(name = "precio_descuento", columnDefinition = "DOUBLE (10,2)")
     private Double precioDescuento;
     @Column(name = "imagen", columnDefinition = "MEDIUMTEXT NOT NULL", nullable = false)
     private String imagen;

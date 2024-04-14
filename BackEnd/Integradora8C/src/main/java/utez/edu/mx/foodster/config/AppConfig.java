@@ -202,7 +202,7 @@ public class AppConfig {
             serviciosDto.setNombre(service);
             serviciosDto.setDescripcion("Descripción de " + service);
             serviciosDto.setPrecio(random.nextDouble() * 100);
-            serviciosDto.setPrecioDescuento(random.nextDouble() * 100);
+            serviciosDto.setPrecioDescuento(0.0);
             serviciosDto.setImagen(Base64DummyImages.PLACEHOLDER);
             serviciosDto.setExistencias((long) random.nextInt(100));
             serviciosDto.setCategoria(categoriasServicios);

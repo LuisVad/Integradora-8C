@@ -29,7 +29,7 @@ public class Eventos {
     private Timestamp fechaHoraFin;
     @Column(name = "numero_personas", columnDefinition = "BIGINT NOT NULL")
     private Long numeroPersonas;
-    @Column(name = "costo_total", columnDefinition = "DOUBLE NOT NULL")
+    @Column(name = "costo_total", columnDefinition = "DOUBLE (10,2) NOT NULL")
     private Double costoTotal;
     @Column(name = "personalizado", columnDefinition = "BOOLEAN NOT NULL")
     private Boolean personalizado;
