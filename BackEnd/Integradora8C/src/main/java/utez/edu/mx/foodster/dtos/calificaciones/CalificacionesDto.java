@@ -8,6 +8,7 @@ import lombok.*;
 import utez.edu.mx.foodster.entities.calificaciones.Calificaciones;
 import utez.edu.mx.foodster.entities.paquetes.Paquetes;
 import utez.edu.mx.foodster.entities.servicios.Servicios;
+import utez.edu.mx.foodster.entities.usuarios.Usuarios;
 
 import java.sql.Timestamp;
 
@@ -29,6 +30,9 @@ public class CalificacionesDto {
     @Max(value = 5, message = "La calificacion no puede ser mayor a 5")
     private int calificacion;
 
+    @NotNull(message = "El usuario es obligatorio")
+    private Usuarios usuario;
+
     @Size(max = 500, message = "El comentario no puede tener mas de 500 caracteres")
     private String comentario;
 
@@ -39,6 +43,6 @@ public class CalificacionesDto {
 
     public Calificaciones toEntity(){
         this.ultimaModificacion = new java.sql.Timestamp(System.currentTimeMillis());
-        return new Calificaciones(idCalificacion, servicios, paquetes, calificacion, comentario, null, active);
+        return new Calificaciones(idCalificacion, servicios, usuario, paquetes, calificacion, comentario, null, active);
     }
 }

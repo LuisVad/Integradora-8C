@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 import utez.edu.mx.foodster.entities.paquetes.Paquetes;
 import utez.edu.mx.foodster.entities.servicios.Servicios;
+import utez.edu.mx.foodster.entities.usuarios.Usuarios;
 
 import java.sql.Timestamp;
 
@@ -26,6 +27,9 @@ public class Calificaciones {
     @ManyToOne
     @JoinColumn(name = "id_servicio", nullable = true)
     private Servicios servicios;
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    @ManyToOne
+    private Usuarios usuario;
     @ManyToOne
     @JoinColumn(name = "id_paquete", nullable = true)
     private Paquetes paquetes;
