@@ -87,11 +87,11 @@ public class MainSecurity {
                                 .requestMatchers("/swagger-ui/**").permitAll()
 
                                 // rutas de eventos
-
                                 .requestMatchers(HttpMethod.POST, apiPrefix + "/eventos/**").authenticated()
                                 .requestMatchers(HttpMethod.GET, apiPrefix + "/eventos/usuario/").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.CLIENTE)
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/eventos/personal/").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.PERSONAL)
                                 .requestMatchers(HttpMethod.GET, apiPrefix + "/eventos/usuario/**").hasAnyAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.GET, apiPrefix + "/eventos/personal/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.PERSONAL)
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/eventos/personal/**").hasAnyAuthority(RolesActuales.ADMIN)
                                 .requestMatchers(HttpMethod.PUT, apiPrefix + "/eventos/finalizar/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.PERSONAL)
                                 .requestMatchers(HttpMethod.PUT, apiPrefix + "/eventos/cancelar/**").hasAnyAuthority(RolesActuales.ADMIN, RolesActuales.CLIENTE)
                                 .requestMatchers(HttpMethod.DELETE, apiPrefix + "/eventos/").hasAuthority(RolesActuales.ADMIN)
@@ -99,7 +99,7 @@ public class MainSecurity {
                                 // rutas de usuarios
                                 .requestMatchers(HttpMethod.POST, apiPrefix + "/usuarios/").hasAuthority(RolesActuales.ADMIN)
                                 .requestMatchers(HttpMethod.PUT, apiPrefix + "/usuarios/").authenticated()
-                                .requestMatchers(HttpMethod.GET, apiPrefix + "/usuarios/**").authenticated()
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/usuarios/usuario/").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, apiPrefix + "/usuarios/**").hasAuthority(RolesActuales.ADMIN)
 
                                 // rutas de personal
@@ -145,7 +145,7 @@ public class MainSecurity {
                                 // rutas de servicios evento
                                 .requestMatchers(HttpMethod.POST, apiPrefix + "/servicios-evento/").hasAuthority(RolesActuales.ADMIN)
                                 .requestMatchers(HttpMethod.PUT, apiPrefix + "/servicios-evento/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.GET, apiPrefix + "/servicios-evento/**").authenticated()
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/servicios-evento/evento/**").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, apiPrefix + "/servicios-evento/**").hasAuthority(RolesActuales.ADMIN)
 
                                 // rutas de servicios paquete
@@ -156,7 +156,7 @@ public class MainSecurity {
                                 // rutas de personal evento
                                 .requestMatchers(HttpMethod.POST, apiPrefix + "/personal-evento/").hasAuthority(RolesActuales.ADMIN)
                                 .requestMatchers(HttpMethod.PUT, apiPrefix + "/personal-evento/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.GET, apiPrefix + "/personal-evento/**").authenticated()
+                                .requestMatchers(HttpMethod.GET, apiPrefix + "/personal-evento/evento/**").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, apiPrefix + "/personal-evento/**").hasAuthority(RolesActuales.ADMIN)
 
                                 // calificaciones

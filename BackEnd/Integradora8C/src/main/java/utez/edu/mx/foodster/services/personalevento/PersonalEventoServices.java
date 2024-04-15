@@ -2,23 +2,34 @@ package utez.edu.mx.foodster.services.personalevento;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import utez.edu.mx.foodster.entities.eventos.Eventos;
 import utez.edu.mx.foodster.entities.personalevento.PersonalEvento;
 import utez.edu.mx.foodster.entities.personalevento.PersonalEventoRepository;
+import utez.edu.mx.foodster.entities.usuarios.Usuarios;
+import utez.edu.mx.foodster.entities.usuarios.UsuariosRepository;
+import utez.edu.mx.foodster.utils.CurrentUserDetails;
 import utez.edu.mx.foodster.utils.Response;
+import utez.edu.mx.foodster.utils.RolesActuales;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
 public class PersonalEventoServices {
     private final PersonalEventoRepository repository;
+    private final CurrentUserDetails currentUserDetails;
+    private final UsuariosRepository usuariosRepository;
 
-    public PersonalEventoServices(PersonalEventoRepository repository) {
+    public PersonalEventoServices(PersonalEventoRepository repository, CurrentUserDetails currentUserDetails, UsuariosRepository usuariosRepository) {
         this.repository = repository;
+        this.currentUserDetails = currentUserDetails;
+        this.usuariosRepository = usuariosRepository;
     }
 
     @Transactional(readOnly = true)
@@ -38,7 +49,29 @@ public class PersonalEventoServices {
 
     @Transactional(readOnly = true)
     public Response<List<PersonalEvento>> getAllByIdEvento(String idEvento) {
-        return new Response<>(this.repository.findByIdEventoAndActive(idEvento, true), false, 200, "OK");
+        UserDetails userDetails = this.currentUserDetails.getCurrentUserDetails();
+        Usuarios usuario = this.usuariosRepository.findByCorreoAndActive(userDetails.getUsername(), true);
+        Set<String> authorities = currentUserDetails.getCurrentUserAuthorities();
+        if (usuario == null) {
+            return new Response<>(null, true, 400, "Usuario no encontrado");
+        }
+        List<PersonalEvento> personalEventos = this.repository.findByIdEventoAndActive(idEvento, true);
+        if (personalEventos.isEmpty()) {
+            return new Response<>(null, true, 400, "No hay personal asignado");
+        }
+        Eventos evento = personalEventos.get(0).getEventos();
+        Boolean esComensal = evento.getUsuario().getIdUsuario().equals(usuario.getIdUsuario());
+        Boolean esPersonalAsignado = false;
+        for (PersonalEvento personalEvento : personalEventos) {
+            if (personalEvento.getPersonal().getUsuarios().getIdUsuario().equals(usuario.getIdUsuario())) {
+                esPersonalAsignado = true;
+                break;
+            }
+        }
+        if (esComensal || esPersonalAsignado || authorities.contains(RolesActuales.ADMIN)) {
+            return new Response<>(personalEventos, false, 200, "OK");
+        }
+        return new Response<>(null, true, 400, "No autorizado");
     }
 
     @Transactional(readOnly = true)

@@ -67,6 +67,10 @@ public class EventosController {
     public ResponseEntity<Response<List<Eventos>>> getAllByPersonalIdUsuario(@PathVariable("uid") @NotBlank String idUsuario) {
         return new ResponseEntity<>(this.services.getAllByPersonalIdUsuario(idUsuario), HttpStatus.OK);
     }
+    @GetMapping("/personal/")
+    public ResponseEntity<Response<List<Eventos>>> getAllByPersonalIdUsuario() {
+        return new ResponseEntity<>(this.services.getAllByPersonalIdUsuario(), HttpStatus.OK);
+    }
 
     @PostMapping("/")
     public ResponseEntity<Response<Eventos>> insert(@RequestBody @Valid EventoConServicios dto) {

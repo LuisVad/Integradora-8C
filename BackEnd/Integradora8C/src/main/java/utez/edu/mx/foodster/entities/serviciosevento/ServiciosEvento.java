@@ -37,6 +37,5 @@ public class ServiciosEvento {
     @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE")
     private Boolean active;
 
-
 }
 

@@ -16,6 +16,7 @@ import utez.edu.mx.foodster.entities.paquetes.Paquetes;
 import utez.edu.mx.foodster.entities.paquetes.PaquetesRepository;
 import utez.edu.mx.foodster.entities.personal.Personal;
 import utez.edu.mx.foodster.entities.personal.PersonalRepository;
+import utez.edu.mx.foodster.entities.personalevento.PersonalEvento;
 import utez.edu.mx.foodster.entities.personalevento.PersonalEventoRepository;
 import utez.edu.mx.foodster.entities.servicios.Servicios;
 import utez.edu.mx.foodster.entities.servicios.ServiciosRepository;
@@ -25,11 +26,13 @@ import utez.edu.mx.foodster.entities.usuarios.UsuariosRepository;
 import utez.edu.mx.foodster.utils.CurrentUserDetails;
 import utez.edu.mx.foodster.utils.EventoEstados;
 import utez.edu.mx.foodster.utils.Response;
+import utez.edu.mx.foodster.utils.RolesActuales;
 
 import java.sql.SQLDataException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class EventosServices {
@@ -80,6 +83,7 @@ public class EventosServices {
     public Response<List<Eventos>> getAllByIdUsuario(String idUsuario) {
         return new Response<>(this.repository.findAllByIdUsuarioAndActive(idUsuario, true), false, 200, "OK");
     }
+
     @Transactional(readOnly = true)
     public Response<List<Eventos>> getAllByIdUsuario() {
         UserDetails userDetails = this.currentUserDetails.getCurrentUserDetails();
@@ -87,13 +91,24 @@ public class EventosServices {
         if (usuario != null) {
             return new Response<>(this.repository.findAllByIdUsuarioAndActive(usuario.getIdUsuario(), true), false, 200, "OK");
         } else {
-            return new Response<>(null, true, 404, "Usuario no encontrado");
+            return new Response<>(null, true, 404, "Los eventos asociados al usuario no se encontraron");
         }
     }
 
     @Transactional(readOnly = true)
     public Response<List<Eventos>> getAllByPersonalIdUsuario(String idUsuario) {
         return new Response<>(this.repository.findAllByPersonalIdUsuarioAndActive(idUsuario, true), false, 200, "OK");
+    }
+
+    @Transactional(readOnly = true)
+    public Response<List<Eventos>> getAllByPersonalIdUsuario() {
+        UserDetails userDetails = this.currentUserDetails.getCurrentUserDetails();
+        Usuarios usuario = this.usuariosRepository.findByCorreoAndActive(userDetails.getUsername(), true);
+        if (usuario != null) {
+            return new Response<>(this.repository.findAllByPersonalIdUsuarioAndActive(usuario.getIdUsuario(), true), false, 200, "OK");
+        } else {
+            return new Response<>(null, true, 404, "Usuario no encontrado");
+        }
     }
 
     @Transactional(readOnly = true)
@@ -182,24 +197,56 @@ public class EventosServices {
 
     @Transactional(rollbackFor = {SQLDataException.class})
     public Response<Eventos> setFinalizado(String id) {
-        Eventos evento  = this.repository.findByIdEventoAndActive(id, true);
+        UserDetails userDetails = this.currentUserDetails.getCurrentUserDetails();
+        Usuarios usuario = this.usuariosRepository.findByCorreoAndActive(userDetails.getUsername(), true);
+        Personal personal = this.personalRepository.findByIdUsuarioAndActive(usuario.getIdUsuario(), true);
+        List<PersonalEvento> personalEvento = this.personalEventoRepository.findByIdEventoAndActive(id, true);
+        Set<String> authorities = this.currentUserDetails.getCurrentUserAuthorities();
+        Eventos evento = this.repository.findByIdEventoAndActive(id, true);
         Timestamp now = new Timestamp(System.currentTimeMillis());
         if (evento != null && evento.getFechaHoraFin().before(now) && evento.getEstado().equals(EventoEstados.EN_PROCESO)) {
-            evento.setEstado(EventoEstados.FINALIZADO);
-            return new Response<>(this.repository.saveAndFlush(evento), false, 200, "OK");
+            for (PersonalEvento personalEventoEv : personalEvento) {
+                String idPersonal = personalEventoEv.getPersonal().getIdPersonal();
+                Boolean isEnEvento = idPersonal.equals(personal.getIdPersonal());
+                Boolean isChef = personalEventoEv.getPersonal().getCategoria().getNombre().equals(RolesActuales.CHEF);
+                if (isEnEvento && isChef || authorities.contains(RolesActuales.ADMIN)) {
+                    evento.setEstado(EventoEstados.FINALIZADO);
+                    return new Response<>(this.repository.saveAndFlush(evento), false, 200, "OK");
+                }
+            }
         }
         return new Response<>(null, true, 400, "No encontrado para finalizar");
     }
 
     @Transactional(rollbackFor = {SQLDataException.class})
     public Response<Eventos> setCancelado(String id) {
+        UserDetails userDetails = this.currentUserDetails.getCurrentUserDetails();
+        if (userDetails == null) {
+            return new Response<>(null, true, 400, "User details not found");
+        }
+
+        Usuarios usuario = this.usuariosRepository.findByCorreoAndActive(userDetails.getUsername(), true);
+        if (usuario == null) {
+            return new Response<>(null, true, 400, "Usuario no encontrado");
+        }
+
+        Set<String> authorities = this.currentUserDetails.getCurrentUserAuthorities();
+        if (authorities == null) {
+            return new Response<>(null, true, 400, "No tiene permisos");
+        }
+
         Eventos evento = this.repository.findByIdEventoAndActive(id, true);
+        if (evento == null) {
+            return new Response<>(null, true, 400, "Evento no encontrado");
+        }
+
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        if (evento != null && evento.getFechaHoraInicio().after(now) && evento.getEstado().equals(EventoEstados.EN_PROCESO)) {
+        if (evento.getFechaHoraInicio().after(now) && evento.getEstado().equals(EventoEstados.EN_PROCESO) && evento.getUsuario() != null && evento.getUsuario().getIdUsuario().equals(usuario.getIdUsuario()) || authorities.contains(RolesActuales.ADMIN)) {
             evento.setEstado(EventoEstados.CANCELADO);
             return new Response<>(this.repository.saveAndFlush(evento), false, 200, "OK");
         }
-        return new Response<>(null, true, 400, "No encontrado para cancelar");
+
+        return new Response<>(null, true, 400, "Event not found for cancellation");
     }
 
 

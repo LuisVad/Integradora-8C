@@ -15,9 +15,9 @@ import utez.edu.mx.foodster.utils.Response;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
-@RestController
-@RequestMapping("${apiPrefix}/tarjetas")
-@CrossOrigin(value = {"*"})
+//@RestController
+//@RequestMapping("${apiPrefix}/tarjetas")
+//@CrossOrigin(value = {"*"})
 public class TarjetasController {
 
     private final TarjetasService services;

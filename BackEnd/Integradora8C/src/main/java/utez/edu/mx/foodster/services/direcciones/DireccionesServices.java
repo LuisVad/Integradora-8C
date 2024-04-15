@@ -14,10 +14,12 @@ import utez.edu.mx.foodster.entities.usuarios.Usuarios;
 import utez.edu.mx.foodster.entities.usuarios.UsuariosRepository;
 import utez.edu.mx.foodster.utils.CurrentUserDetails;
 import utez.edu.mx.foodster.utils.Response;
+import utez.edu.mx.foodster.utils.RolesActuales;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class DireccionesServices {
@@ -79,7 +81,11 @@ public class DireccionesServices {
 
     @Transactional(rollbackFor = {SQLException.class})
     public Response<Direcciones> insert(DireccionesDto direcciones) {
-        Usuarios usuarios = this.usuariosRepository.findByIdUsuarioAndActive(direcciones.getIdUsuario(), true);
+        UserDetails userDetails = this.currentUserDetails.getCurrentUserDetails();
+        Set<String> authorities = this.currentUserDetails.getCurrentUserAuthorities();
+        Usuarios usuarios = authorities.contains(RolesActuales.ADMIN) ?
+                this.usuariosRepository.findByIdUsuarioAndActive(direcciones.getIdUsuario(), true)
+                : this.usuariosRepository.findByCorreoAndActive(userDetails.getUsername(), true);
         if (usuarios == null) {
             return new Response<>(null, true, 400, "Usuario no encontrado");
         }
