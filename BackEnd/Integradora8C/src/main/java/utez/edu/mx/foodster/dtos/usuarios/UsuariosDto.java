@@ -1,5 +1,6 @@
 package utez.edu.mx.foodster.dtos.usuarios;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,7 @@ public class UsuariosDto {
 
     @NotBlank(message = "El correo no puede ser nulo")
     @Size(min = 3, max = 255, message = "El correo debe tener entre 3 y 255 caracteres")
+    @Email(message = "El correo debe ser válido")
     private String correo;
 
     @NotBlank(message = "La contraseña no puede ser nula")

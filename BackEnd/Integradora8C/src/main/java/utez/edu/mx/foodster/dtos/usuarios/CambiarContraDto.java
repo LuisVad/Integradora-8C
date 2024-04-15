@@ -1,5 +1,6 @@
 package utez.edu.mx.foodster.dtos.usuarios;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import utez.edu.mx.foodster.validation.FieldMatch;
 @FieldMatch(first = "nuevaContrasena", second = "confirmarContrasena", message = "Las contraseñas deben coincidir")
 public class CambiarContraDto {
     @NotBlank(message = "El correo no puede ser nulo")
+    @Email(message = "El correo debe ser válido")
     private String correo;
     @NotBlank(message = "La contraseña no puede ser nula")
     private String contrasena;

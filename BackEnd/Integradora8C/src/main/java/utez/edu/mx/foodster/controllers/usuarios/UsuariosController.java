@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import utez.edu.mx.foodster.dtos.usuarios.CambiarContraDto;
 import utez.edu.mx.foodster.dtos.usuarios.UsuariosDto;
 import utez.edu.mx.foodster.dtos.usuarios.UsuariosPublicDto;
 import utez.edu.mx.foodster.entities.usuarios.Usuarios;
@@ -73,6 +74,10 @@ public class UsuariosController {
     @PutMapping("/")
     public ResponseEntity<Response<Usuarios>> update(@RequestBody @Valid UsuariosDto usuariosDto) {
         return new ResponseEntity<>(this.services.update(usuariosDto.toEntity()), HttpStatus.OK);
+    }
+    @PutMapping("/cambio-contrasena/")
+    public ResponseEntity<Response<Boolean>> changePassword(@RequestBody @Valid CambiarContraDto cambiarContraDto) {
+        return new ResponseEntity<>(this.services.changePassword(cambiarContraDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{uid}")

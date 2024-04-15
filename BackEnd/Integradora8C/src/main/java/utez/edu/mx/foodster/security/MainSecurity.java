@@ -98,7 +98,7 @@ public class MainSecurity {
 
                                 // rutas de usuarios
                                 .requestMatchers(HttpMethod.POST, apiPrefix + "/usuarios/").hasAuthority(RolesActuales.ADMIN)
-                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/usuarios/").authenticated()
+                                .requestMatchers(HttpMethod.PUT, apiPrefix + "/usuarios/**").authenticated()
                                 .requestMatchers(HttpMethod.GET, apiPrefix + "/usuarios/usuario/").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, apiPrefix + "/usuarios/**").hasAuthority(RolesActuales.ADMIN)
 

@@ -2,14 +2,12 @@ package utez.edu.mx.foodster.services.usuarios;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.foodster.dtos.usuarios.CambiarContraDto;
 import utez.edu.mx.foodster.dtos.usuarios.UsuariosPublicDto;
-import utez.edu.mx.foodster.entities.roles.Roles;
 import utez.edu.mx.foodster.entities.roles.RolesRepository;
 import utez.edu.mx.foodster.entities.usuarios.Usuarios;
 import utez.edu.mx.foodster.entities.usuarios.UsuariosRepository;
